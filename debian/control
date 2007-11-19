@@ -1,0 +1,14 @@
+Source: krb5-auth-dialog
+Section: gnome
+Priority: optional
+Maintainer: Andrew Mitchell <ajmitch@ubuntu.com>
+Build-Depends: debhelper (>= 5.0.0), cdbs, libkrb5-dev, libgnome2-dev, libgtk2.0-dev, libglade2-dev, intltool, libgnomeui-dev
+Standards-Version: 3.7.2
+
+Package: krb5-auth-dialog
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: dialog for reauthenticating kerberos tickets
+ krb5-auth-dialog is a simple dialog that monitors kerberos tickets, and 
+ pops up a dialog when they are about to expire. 
+ 
