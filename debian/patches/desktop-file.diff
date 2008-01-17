@@ -1,0 +1,13 @@
+diff --git a/src/krb5-auth-dialog.desktop.in b/src/krb5-auth-dialog.desktop.in
+index 223aaf9..911f12e 100644
+--- a/src/krb5-auth-dialog.desktop.in
++++ b/src/krb5-auth-dialog.desktop.in
+@@ -1,7 +1,6 @@
+ [Desktop Entry]
+ _Name=Network Authentication
+-_Comments=Kerberos Network Authentication Dialog
+-Exec=krb5-auth-dialog
++_Comment=Kerberos Network Authentication Dialog
+ Encoding=UTF-8
+ Exec=krb5-auth-dialog
+ Terminal=false
