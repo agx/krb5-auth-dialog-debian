@@ -1,6 +1,13 @@
-krb5-auth-dialog (0.6-0ubuntu1) edgy; urgency=low
+krb5-auth-dialog (0.6-1) unstable; urgency=low
 
-  * Initial revision
+  * Initial version based on the ubuntu package by Andrew Mitchell
+    (Closes: #461203)
+  * Changes:
+       * fix manpage section
+       * fix desktop file
+       * update FSF address
+       * use autotools-dev to update config.{sub,guess}
+       * use -Wl,--as-needed
+       * added watch file
 
- -- Andrew Mitchell <ajmitch@ubuntu.com>  Sat, 10 Jun 2006 23:11:43 +1200
-
+ -- Guido Guenther <agx@sigxcpu.org>  Thu, 17 Jan 2008 10:13:38 +0100
