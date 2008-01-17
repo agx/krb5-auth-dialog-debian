@@ -1,0 +1,10 @@
+diff --git a/src/krb5-auth-dialog.1.in b/src/krb5-auth-dialog.1.in
+index 7f83138..b0e7b38 100644
+--- a/src/krb5-auth-dialog.1.in
++++ b/src/krb5-auth-dialog.1.in
+@@ -1,4 +1,4 @@
+-.TH krb5-auth-dialog 2005/11/02 "GNOME" "System Administrator's Manual"
++.TH krb5-auth-dialog 1 2005/11/02 "GNOME" "System Administrator's Manual"
+ 
+ .SH NAME
+ krb5-auth-dialog \- Kerberos 5 credential checking
