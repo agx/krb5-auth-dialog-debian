@@ -1,0 +1,25 @@
+From 99b47991b67281627cda341f5e4be2604d3a8a43 Mon Sep 17 00:00:00 2001
+From: Guido Guenther <agx@sigxcpu.org>
+Date: Mon, 21 Apr 2008 15:36:22 +0200
+Subject: [PATCH] set a default icon
+
+so it shows up in the wm list
+---
+ src/krb5-auth-dialog.c |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/krb5-auth-dialog.c b/src/krb5-auth-dialog.c
+index 81f4f38..0bb2e6d 100644
+--- a/src/krb5-auth-dialog.c
++++ b/src/krb5-auth-dialog.c
+@@ -581,6 +581,7 @@ main (int argc, char *argv[])
+ 
+ 		xml = glade_xml_new (GLADEDIR "krb5-auth-dialog.glade", NULL, NULL);
+ 		dialog = glade_xml_get_widget (xml, "krb5_dialog");
++		gtk_window_set_default_icon_name ("gtk-dialog-authentication");
+ 
+ 		if (credentials_expiring (NULL))
+ 			g_timeout_add (CREDENTIAL_CHECK_INTERVAL * 1000, (GSourceFunc)credentials_expiring, NULL);
+-- 
+1.5.5
+
