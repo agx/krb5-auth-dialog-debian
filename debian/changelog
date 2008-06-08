@@ -1,3 +1,19 @@
+krb5-auth-dialog (0.7.git30891fc-1) unstable; urgency=low
+
+  * New "Upstream" Version:
+        * Based on upstream version 0.7 plus our changes at:
+    		http://honk.sigxcpu.org/git/krb5-auth-dialog.git
+        * use GtkSecureEntry to fetch password
+        * adds trayicon
+        * fix localization
+        * close dialog when credentials were acquired by other means
+        * use libnotify and gconf
+        * session handling via dbus
+        * use g_timeout_add_seconds to save battery power
+        * set a proper icon
+
+ -- Guido Guenther <agx@sigxcpu.org>  Sun, 08 Jun 2008 17:29:06 +0200
+
 krb5-auth-dialog (0.6-1) unstable; urgency=low
 
   * Initial version based on the ubuntu package by Andrew Mitchell
