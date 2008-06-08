@@ -7,4 +7,8 @@ include /usr/share/cdbs/1/class/gnome.mk
 include /usr/share/cdbs/1/class/autotools.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 
-DEB_CONFIGURE_EXTRA_FLAGS := --enable-network-manager
+DEB_BUILDDIR := build
+DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr --enable-network-manager --with-libnotify
+
+post-patches::
+	cd build && ../autogen.sh
