@@ -3,25 +3,26 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: krb5-auth-dialog 0.1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-08-18 17:20-0400\n"
-"PO-Revision-Date: 2004-08-19 17:18+0200\n"
-"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
-"Language-Team: Norsk bokmål <i18n-nb@lister.ping.uio.no>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/krb5-auth-dialog.glade.h:1
 msgid "Network Authentication"
-msgstr "Nettverksautentisering"
+msgstr ""
 
 #: src/krb5-auth-dialog.glade.h:2
 msgid "_Password:"
-msgstr "_Passord:"
+msgstr ""
 
 #: src/krb5-auth-dialog.glade.h:3
 msgid "_Renew Ticket"
@@ -29,7 +30,7 @@ msgstr ""
 
 #: src/krb5-auth-dialog.c:76 src/krb5-auth-dialog.c:84
 msgid "Password:"
-msgstr "Passord:"
+msgstr ""
 
 #: src/krb5-auth-dialog.c:96
 msgid "The password you entered is invalid"
@@ -158,7 +159,7 @@ msgstr ""
 #. test1.et:krb:KRB_SKDC_RETRY
 #: src/dummy-strings.c:31
 msgid "Can't send request"
-msgstr "Kan ikke sende forespørsel"
+msgstr ""
 
 #. test1.et:krb:KRB_SKDC_CANT
 #: src/dummy-strings.c:32
@@ -183,7 +184,7 @@ msgstr ""
 #. ss_err.et:ss:SS_ET_NO_INFO_DIR
 #: src/dummy-strings.c:36
 msgid "Command not found"
-msgstr "Kommando ikke funnet"
+msgstr ""
 
 #. ss_err.et:ss:SS_ET_COMMAND_NOT_FOUND
 #: src/dummy-strings.c:37
@@ -208,7 +209,7 @@ msgstr ""
 #. ss_err.et:ss:SS_ET_TABLE_NOT_FOUND
 #: src/dummy-strings.c:41
 msgid "No info available"
-msgstr "Ingen informasjon tilgjengelig"
+msgstr ""
 
 #. ss_err.et:ss:SS_ET_NO_HELP_FILE
 #: src/dummy-strings.c:42
@@ -442,9 +443,8 @@ msgstr ""
 
 #. pty_err.et:pty:PTY_OPEN_SLAVE_TOOSHORT
 #: src/dummy-strings.c:88
-#, fuzzy
 msgid "Usage: kpasswd [principal_name]."
-msgstr "Bruk: kpasswd [...]"
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_USAGE
 #: src/dummy-strings.c:89
@@ -460,7 +460,7 @@ msgstr ""
 #. kpasswd_strings.et:kpws:KPW_STR_WHILE_LOOKING_AT_CC
 #: src/dummy-strings.c:91
 msgid "Old Kerberos password is incorrect. Please try again."
-msgstr "Gammelt Kerberos-passord er ugyldig. Vennligst prøv igjen."
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_OLD_PASSWORD_INCORRECT
 #: src/dummy-strings.c:92
@@ -474,18 +474,18 @@ msgstr ""
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_GET_PRINC_INFO
 #: src/dummy-strings.c:94 src/dummy-strings.c:485
 msgid "New passwords do not match - password not changed.\n"
-msgstr "Nye passord er ikke like - passord ikke endret.\n"
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_NEW_PASSWORD_MISMATCH
 #: src/dummy-strings.c:95
 msgid "Kerberos password changed.\n"
-msgstr "Kerberos-passord endret.\n"
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_PASSWORD_CHANGED
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_PASSWORD_IN_DICTIONARY
 #: src/dummy-strings.c:96 src/dummy-strings.c:494
 msgid "Password not changed."
-msgstr "Passord ikke endret."
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_PASSWORD_NOT_CHANGED
 #: src/dummy-strings.c:97
@@ -501,18 +501,18 @@ msgstr ""
 #. kpasswd_strings.et:kpws:KPW_STR_UNPARSE_NAME
 #: src/dummy-strings.c:99
 msgid "Unable to identify user from password file."
-msgstr "Kan ikke identifisere bruker fra passordfil."
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_NOT_IN_PASSWD_FILE
 #: src/dummy-strings.c:100
 #, c-format
 msgid "Changing password for %s."
-msgstr "Endrer passord for %s."
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_CHANGING_PW_FOR
 #: src/dummy-strings.c:101
 msgid "Old password"
-msgstr "Gammelt passord"
+msgstr ""
 
 #. kpasswd_strings.et:kpws:KPW_STR_OLD_PASSWORD_PROMPT
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_WHILE_TRYING_TO_CHANGE
@@ -635,7 +635,7 @@ msgstr ""
 #. import_err.et:imp:IMPORT_EXTRA_DATA
 #: src/dummy-strings.c:123
 msgid "Proceed <y|n>?"
-msgstr "Fortsett <j/n>?"
+msgstr ""
 
 #. import_err.et:imp:IMPORT_CONFIRM
 #: src/dummy-strings.c:124
@@ -650,7 +650,7 @@ msgstr ""
 #. import_err.et:imp:IMPORT_IMPORT
 #: src/dummy-strings.c:126
 msgid "cannot open /dev/tty!!"
-msgstr "kan ikke åpne /dev/tty!!"
+msgstr ""
 
 #. import_err.et:imp:IMPORT_TTY
 #: src/dummy-strings.c:127
@@ -680,7 +680,7 @@ msgstr ""
 #. import_err.et:imp:IMPORT_GET_PARAMS
 #. kv5m_err.et:kv5m:KV5M_GSS_QUEUE
 #: src/dummy-strings.c:132 src/dummy-strings.c:385
-msgid "$Id: no.po,v 1.1 2004/08/19 15:19:47 kmaraas Exp $"
+msgid "$Id$"
 msgstr ""
 
 #. kdc5_err.et:kdc5:KDC5_RCSID
@@ -2410,12 +2410,12 @@ msgstr ""
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_NEW_PASSWORD_MISMATCH
 #: src/dummy-strings.c:486
 msgid "New password"
-msgstr "Nytt passord"
+msgstr ""
 
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_NEW_PASSWORD_PROMPT
 #: src/dummy-strings.c:487
 msgid "New password (again)"
-msgstr "Nytt passord (igjen)"
+msgstr ""
 
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_NEW_PASSWORD_AGAIN_PROMPT
 #: src/dummy-strings.c:488
@@ -2431,7 +2431,7 @@ msgstr ""
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_NO_POLICY_YET_Q_ERROR
 #: src/dummy-strings.c:490
 msgid "Password changed.\n"
-msgstr "Passord endret.\n"
+msgstr ""
 
 #. chpass_util_strings.et:ovku:CHPASS_UTIL_PASSWORD_CHANGED
 #: src/dummy-strings.c:491

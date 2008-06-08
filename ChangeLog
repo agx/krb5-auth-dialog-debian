@@ -1,3 +1,68 @@
+2008-03-22  Colin Walters  <walters@verbum.org>
+
+	* src/krb5-auth-dialog.c: Grab a name on the
+	session bus to be doubly sure we don't have
+	multiple copies.  Also don't connect to the
+	session manager, since it's not needed.
+
+2008-03-22  Colin Walters  <walters@verbum.org>
+
+	* MAINTAINERS: New file.
+	* src/krb5-auth-dialog.c: Connect to session bus
+	to be sure we exit when the session dies.
+
+2006-10-29  Christopher Aillon  <caillon@redhat.com>
+
+	* src/krb5-auth-dialog.c: Clean up the #ifdefs to
+	make things slightly more readable.
+	Refactor code slightly, removing an #ifdef in favor
+	of a wrapper.  Consolidate coding style.
+
+2006-07-24  Christopher Aillon  <caillon@redhat.com>
+
+	* configure.ac: Release 0.7
+
+2006-07-24  Christopher Aillon  <caillon@redhat.com>
+
+	* src/krb5-auth-dialog.c: Don't immediately retry
+	to reach the KDC if it is unavailable. That will
+	just loop forever (until the KDC becomes available).
+	Bail out; we'll check (once!) to see whether it's
+	there the next time our g_timeout callback gets
+	invoked.
+
+2006-04-18  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* configure.ac: Remove obsolete entry for no_NO
+	* po/no.po: And the translation
+
+2006-03-17  Christopher Aillon  <caillon@redhat.com>
+
+	* src/krb5-auth-dialog.c: Check to see whether credentials
+	are renewable; if so, renew them automatically.  Implement this
+	for the MIT implementation only.  (Fixes #331210)
+
+	* configure.ac: Add test to see whether we have krb5_get_renewed_creds
+
+2006-02-01  Nalin Dahyabhai <nalin@redhat.com>
+	* src/krb5-auth-dialog.c: keep track of whether or not the user
+	explicitly canceled our last request for information.  If she did,
+	then don't ask again while the expiration time remains unchanged.
+	Change recursion inside of renew_credentials() into a loop in its
+	calling function.
+
+2006-02-01  Nalin Dahyabhai <nalin@redhat.com>
+	* src/krb5-auth-dialog.c(krb5_gtk_prompter): rename to avoid polluting
+	the krb5 namespace.
+	* src/krb5-auth-dialog.c: don't use time() to figure out what time it
+	is -- we always compare against a krb5_timestamp, so use the libkrb5
+	routines which return the current time instead.
+
+2006-02-01  Nalin Dahyabhai <nalin@redhat.com>
+	* README: correct a typo
+	* src/krb5-auth-dialog.c(renew_credentials): fix a warning where we
+	were passing an int where a pointer was expected
+
 2006-01-31  Christopher Aillon  <caillon@redhat.com>
 
 	* configure.ac: Release 0.6

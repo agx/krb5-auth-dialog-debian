@@ -132,7 +132,7 @@ realm %s. %s."),	/* kpasswd_strings.et:kpws:KPW_STR_CANT_OPEN_ADMIN_SERVER */
 	N_("while releasing permanent lock"),	/* import_err.et:imp:IMPORT_RENAME_UNLOCK */
 	N_("while closing databases"),	/* import_err.et:imp:IMPORT_RENAME_CLOSE */
 	N_("while retrieving configuration parameters"),	/* import_err.et:imp:IMPORT_GET_PARAMS */
-	N_("$Id: dummy-strings.c,v 1.2 2005/10/31 21:55:46 caillon Exp $"),	/* kdc5_err.et:kdc5:KDC5_RCSID */
+	N_("$Id$"),	/* kdc5_err.et:kdc5:KDC5_RCSID */
 	N_("No server port found"),	/* kdc5_err.et:kdc5:KDC5_NOPORT */
 	N_("Network not initialized"),	/* kdc5_err.et:kdc5:KDC5_NONET */
 	N_("Short write while sending response"),	/* kdc5_err.et:kdc5:KDC5_IO_RESPONSE */
@@ -385,7 +385,7 @@ realm %s. %s."),	/* kpasswd_strings.et:kpws:KPW_STR_CANT_OPEN_ADMIN_SERVER */
 	N_("Bad magic number for passwd_phrase_element"),	/* kv5m_err.et:kv5m:KV5M_PASSWD_PHRASE_ELEMENT */
 	N_("Bad magic number for GSSAPI OID"),	/* kv5m_err.et:kv5m:KV5M_GSS_OID */
 	N_("Bad magic number for GSSAPI QUEUE"),	/* kv5m_err.et:kv5m:KV5M_GSS_QUEUE */
-	N_("$Id: dummy-strings.c,v 1.2 2005/10/31 21:55:46 caillon Exp $"),	/* kdb5_err.et:kdb5:KRB5_KDB_RCSID */
+	N_("$Id$"),	/* kdb5_err.et:kdb5:KRB5_KDB_RCSID */
 	N_("Entry already exists in database"),	/* kdb5_err.et:kdb5:KRB5_KDB_INUSE */
 	N_("Database store error"),	/* kdb5_err.et:kdb5:KRB5_KDB_UK_SERROR */
 	N_("Database read error"),	/* kdb5_err.et:kdb5:KRB5_KDB_UK_RERROR */
@@ -512,7 +512,7 @@ security administrator."),	/* chpass_util_strings.et:ovku:CHPASS_UTIL_PASSWORD_T
 	N_("New password was used previously. Please choose a different password."),	/* chpass_util_strings.et:ovku:CHPASS_UTIL_PASSWORD_REUSE */
 	N_("while trying to change password."),	/* chpass_util_strings.et:ovku:CHPASS_UTIL_WHILE_TRYING_TO_CHANGE */
 	N_("while reading new password."),	/* chpass_util_strings.et:ovku:CHPASS_UTIL_WHILE_READING_PASSWORD */
-	N_("$Header: /cvs/gnome/krb5-auth-dialog/src/dummy-strings.c,v 1.2 2005/10/31 21:55:46 caillon Exp $"),	/* kadm_err.et:kadm:KADM_RCSID */
+	N_("$Header$"),	/* kadm_err.et:kadm:KADM_RCSID */
 	N_("Cannot fetch local realm"),	/* kadm_err.et:kadm:KADM_NO_REALM */
 	N_("Unable to fetch credentials"),	/* kadm_err.et:kadm:KADM_NO_CRED */
 	N_("Bad key supplied"),	/* kadm_err.et:kadm:KADM_BAD_KEY */
