@@ -1,5 +1,6 @@
-INCLUDES =				\
-	-DGLADEDIR=\""$(datadir)/krb5-auth-dialog/"\"
+INCLUDES = \
+	-DGLADEDIR=\""$(gladedir)/"\" \
+	-DLOCALE_DIR=\""$(localedir)/"\"
 
 bin_PROGRAMS = krb5-auth-dialog
 man_MANS = krb5-auth-dialog.1
@@ -11,9 +12,29 @@ autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 
 krb5_auth_dialog_SOURCES =	\
 	krb5-auth-dialog.c      \
+	krb5-auth-dialog.h      \
+	krb5-auth-applet.c	\
+	krb5-auth-applet.h	\
+	krb5-auth-gconf.c	\
+	krb5-auth-gconf.h	\
+	krb5-auth-notify.c	\
+	krb5-auth-notify.h	\
+	krb5-auth-dbus.c	\
+	krb5-auth-dbus.h	\
 	dummy-strings.c
 
-krb5_auth_dialog_LDADD = @NETWORK_MANAGER_LIBS@ @KRB5_LIBS@ @GNOME_LIBS@
+krb5_auth_dialog_LDADD = \
+			../gtksecentry/libgtksecentry.a \
+			../secmem/libsecmem.a \
+			@NETWORK_MANAGER_LIBS@ \
+			@KRB5_LIBS@ \
+			@LIBNOTIFY_LIBS@ \
+			@DBUS_LIBS@ \
+			@GCONF_LIBS@ \
+			@GLADE_LIBS@ \
+			@GTK_LIBS@
+
+AM_CPPFLAGS = -I $(top_srcdir)/gtksecentry/ -I $(top_srcdir)/secmem/
 
 gladedir = $(datadir)/krb5-auth-dialog
 glade_DATA =			\
@@ -22,6 +43,16 @@ glade_DATA =			\
 EXTRA_DIST =		\
 	$(glade_DATA)   \
 	$(autostart_in_files) \
+	$(schema_SOURCES) \
 	krb5-auth-dialog.1.in
 
+schemadir = $(sysconfdir)/gconf/schemas
+schema_SOURCES = $(PACKAGE).schemas.in
+schema_DATA = $(PACKAGE).schemas
+
 DISTCLEANFILES = krb5-auth-dialog.desktop
+CLEANFILES = $(schema_DATA)
+
+%.schemas: $(srcdir)/%.schemas.in
+	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::MINIMUM_LIFETIME::,$(minimum_lifetime)," < $< > $@
+

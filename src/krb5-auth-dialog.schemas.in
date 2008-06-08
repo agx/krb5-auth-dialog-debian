@@ -1,0 +1,39 @@
+<gconfschemafile>
+    <schemalist>
+        <schema>
+            <key>/schemas/apps/::PACKAGE::/show_trayicon</key>
+            <applyto>/apps/::PACKAGE::/show_trayicon</applyto>
+            <owner>::PACKAGE::</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Display trayicon</short>
+		<long>Display the trayicon in the panel</long>
+            </locale>
+        </schema>
+	    
+        <schema>
+            <key>/schemas/apps/::PACKAGE::/prompt_minutes</key>
+            <applyto>/apps/::PACKAGE::/prompt_minutes</applyto>
+            <owner>::PACKAGE::</owner>
+            <type>int</type>
+            <default>::MINIMUM_LIFETIME::</default>
+            <locale name="C">
+                <short>Minutes before ticket expires</short>
+		<long>How many minutes before the ticket expires should
+		prompting for the new password start</long>
+            </locale>
+        </schema>
+
+        <schema>
+            <key>/schemas/apps/::PACKAGE::/principal</key>
+            <applyto>/apps/::PACKAGE::/principal</applyto>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>default principal</short>
+		<long>principal to use when no ticket cache is present</long>
+            </locale>
+        </schema>
+    </schemalist>
+</gconfschemafile>
