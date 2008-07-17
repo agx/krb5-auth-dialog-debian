@@ -212,7 +212,7 @@ krb5_auth_dialog_wrong_label_update_expiry (GtkWidget* label)
 
 /* Check for things we have to do while the password dialog is open */
 static gboolean
-krb5_auth_dialog_do_updates(gpointer data) 
+krb5_auth_dialog_do_updates (gpointer data)
 {
 	Krb5AuthApplet* applet = (Krb5AuthApplet*)data;
 	gboolean refreshable;
@@ -328,8 +328,8 @@ auth_dialog_prompter (krb5_context ctx,
 		errcode = KRB5_LIBOS_CANTREADPWD;
 
 		krb5_auth_dialog_setup (applet, (gchar *) prompts[i].prompt, prompts[i].hidden);
-		entry = glade_xml_get_widget(applet->pw_xml, "krb5_entry");
-		gtk_widget_grab_focus(entry);
+		entry = glade_xml_get_widget (applet->pw_xml, "krb5_entry");
+		gtk_widget_grab_focus (entry);
 
 		source_id = g_timeout_add_seconds (5, (GSourceFunc)krb5_auth_dialog_do_updates, applet);
 		response = gtk_dialog_run (GTK_DIALOG (applet->pw_dialog));
@@ -404,7 +404,7 @@ credentials_expiring (gpointer *data)
 	Krb5AuthApplet* applet = (Krb5AuthApplet*) data;
 
 	KA_DEBUG("Checking expiry: %d", applet->pw_prompt_secs);
-	if (credentials_expiring_real (applet, &renewable) && is_online) {
+	if (credentials_expiring_real (applet, &renewable) && is_online && !applet->show_trayicon) {
 		give_up = canceled && (creds_expiry == canceled_creds_expiry);
 		if (!give_up) {
 			do {
@@ -614,16 +614,16 @@ ka_destroy_cache (GtkMenuItem  *menuitem, gpointer data)
 }
 
 
-static void 
+static void
 ka_error_dialog(int err)
 {
 	const char* msg = error_message(err);
 	GtkWidget *dialog = gtk_message_dialog_new (NULL,
-		      		GTK_DIALOG_DESTROY_WITH_PARENT,
-		      		GTK_MESSAGE_ERROR,
-		      		GTK_BUTTONS_CLOSE,
-		      		_("Couldn't acquire kerberos ticket: '%s'"), msg);
- 	gtk_dialog_run (GTK_DIALOG (dialog));
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE,
+				_("Couldn't acquire kerberos ticket: '%s'"), msg);
+	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 }
 
@@ -645,7 +645,7 @@ ka_grab_credentials (Krb5AuthApplet* applet)
 			    break;
 		    case 0: /* success */
 		    case KRB5_LIBOS_CANTREADPWD: /* canceled */
-		    	    retry = FALSE;
+			    retry = FALSE;
 			    break;
 		    case KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN:
 		    default:
@@ -670,6 +670,7 @@ ka_create_gtk_secure_entry (GladeXML *xml, gchar *func_name, gchar *name,
 	if (!strcmp(name, "krb5_entry")) {
 		entry = gtk_secure_entry_new ();
 		gtk_secure_entry_set_activates_default(GTK_SECURE_ENTRY(entry), TRUE);
+		gtk_widget_set(entry, "invisible-char", 0x25cf, NULL);
 		gtk_widget_show (entry);
 	} else {
 		g_warning("Don't know anything about widget %s", name);
@@ -726,22 +727,22 @@ main (int argc, char *argv[])
 		g_error_free (error);
 		return 1;
 	}
-	textdomain(PACKAGE);
-	bind_textdomain_codeset(PACKAGE, "UTF-8");
-	bindtextdomain(PACKAGE, LOCALE_DIR);
+	textdomain (PACKAGE);
+	bind_textdomain_codeset (PACKAGE, "UTF-8");
+	bindtextdomain (PACKAGE, LOCALE_DIR);
 	ka_secmem_init();
 
-	if(!ka_dbus_connect (&status))
+	if (!ka_dbus_connect (&status))
 		exit(status);
 
 	if (run_always && !run_auto) {
 		always_run = TRUE;
 	}
 	if (using_krb5 () || always_run) {
-		applet = ka_create_applet();
+		applet = ka_create_applet ();
 		if (!applet)
 			return 1;
-		if (!ka_gconf_init(applet, argc, argv))
+		if (!ka_gconf_init (applet, argc, argv))
 			return 1;
 
 		/* setup the pw dialog */
@@ -751,7 +752,7 @@ main (int argc, char *argv[])
 		applet->pw_dialog = glade_xml_get_widget (applet->pw_xml, "krb5_dialog");
 
 		g_set_application_name (_("Network Authentication"));
-		gtk_window_set_default_icon_name(applet->icons[1]);
+		gtk_window_set_default_icon_name (applet->icons[1]);
 
 #ifdef ENABLE_NETWORK_MANAGER
 		nm_context = libnm_glib_init ();

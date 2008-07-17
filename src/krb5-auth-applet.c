@@ -1,7 +1,7 @@
 /* Krb5 Auth Applet -- Acquire and release kerberos tickets
- *      
+ *
  * (C) 2008 Guido Guenther <agx@sigxcpu.org>
- *      
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -28,57 +28,66 @@
 #include "krb5-auth-notify.h"
 #endif
 
+#define NOTIFY_SECONDS 300
 
 /* update the tray icon's tooltip and icon */
-int 
+int
 ka_update_status(Krb5AuthApplet* applet, krb5_timestamp expiry)
 {
 	gchar* expiry_text;
-	int interval = expiry - time(0);
+	int now = time(0);
+	int remaining = expiry - now;
+	static int last_warn = 0;
 	static gboolean expiry_notified = FALSE;
 
-	if (interval > 0) {
+	if (remaining > 0) {
 		int hours, minutes;
-		if (interval >= 3600) {
-			hours = interval / 3600;
-			minutes = (interval % 3600) / 60;
+		if (remaining >= 3600) {
+			hours = remaining / 3600;
+			minutes = (remaining % 3600) / 60;
 			expiry_text = g_strdup_printf (_("Your credentials expire in %.2d:%.2dh"), hours, minutes);
 		} else {
-			minutes = interval / 60;
+			minutes = remaining / 60;
 			expiry_text = g_strdup_printf (ngettext(
 							"Your credentials expire in %d minute",
 							"Your credentials expire in %d minutes",
 							minutes), minutes);
 		}
-        	gtk_status_icon_set_from_icon_name (applet->tray_icon, applet->icons[1]);
+		gtk_status_icon_set_from_icon_name (applet->tray_icon, applet->icons[1]);
 #ifdef HAVE_LIBNOTIFY
 		if (expiry_notified) {
 			ka_send_event_notification (applet, NOTIFY_URGENCY_NORMAL,
 						_("Network credentials valid"),
 						_("Your Kerberos credentials have been refreshed."), NULL);
 			expiry_notified = FALSE;
+		} else if (remaining < applet->pw_prompt_secs && (now - last_warn) > NOTIFY_SECONDS) {
+			ka_send_event_notification (applet, NOTIFY_URGENCY_NORMAL,
+						_("Network credentials expiring"),
+						expiry_text, NULL);
+			last_warn = now;
 		}
 #endif
 	} else {
 		expiry_text = g_strdup (_("Your credentials have expired"));
-        	gtk_status_icon_set_from_icon_name (applet->tray_icon, applet->icons[0]);
+		gtk_status_icon_set_from_icon_name (applet->tray_icon, applet->icons[0]);
 #ifdef HAVE_LIBNOTIFY
 		if (!expiry_notified) {
 			ka_send_event_notification (applet, NOTIFY_URGENCY_NORMAL,
 						_("Network credentials expired"),
 						_("Your Kerberos credentails have expired."), NULL);
 			expiry_notified = TRUE;
+			last_warn = 0;
 		}
 #endif
 	}
 
-        gtk_status_icon_set_tooltip(applet->tray_icon, expiry_text);
-	g_free(expiry_text);
+	gtk_status_icon_set_tooltip (applet->tray_icon, expiry_text);
+	g_free (expiry_text);
 	return 0;
 }
 
 
-static void 
+static void
 ka_menu_add_separator_item (GtkWidget* menu)
 {
         GtkWidget* menu_item;
@@ -90,23 +99,23 @@ ka_menu_add_separator_item (GtkWidget* menu)
 
 
 /* Free all resources and quit */
-static void 
+static void
 ka_quit_applet (GtkMenuItem* menuitem, gpointer user_data)
 {
 	Krb5AuthApplet* applet = (Krb5AuthApplet*) user_data;
-	
-	g_free(applet->principal);
-	g_free(applet);
-	gtk_main_quit();
+
+	g_free (applet->principal);
+	g_free (applet);
+	gtk_main_quit ();
 }
 
 
-static void 
+static void
 ka_about_dialog (GtkMenuItem* menuitem, gpointer user_data)
 {
 	gchar* authors[] = {  "Christopher Aillon <caillon@redhat.com>",
 			      "Colin Walters <walters@verbum.org>",
-    		              "Guido Günther <agx@sigxpcu.org>", 
+		              "Guido Günther <agx@sigxpcu.org>",
 			      NULL };
 	gtk_show_about_dialog (NULL,
                               "authors", authors,
@@ -133,7 +142,7 @@ ka_create_context_menu (Krb5AuthApplet* applet)
         gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
-	ka_menu_add_separator_item(menu);
+	ka_menu_add_separator_item (menu);
 
 	/* About item */
 	menu_item = gtk_image_menu_item_new_with_mnemonic (_("_About"));
@@ -142,7 +151,7 @@ ka_create_context_menu (Krb5AuthApplet* applet)
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
-	ka_menu_add_separator_item(menu);
+	ka_menu_add_separator_item (menu);
 
 	/* Quit */
 	menu_item = gtk_image_menu_item_new_with_mnemonic (_("_Quit"));
@@ -158,14 +167,14 @@ ka_create_context_menu (Krb5AuthApplet* applet)
 
 
 static void
-ka_tray_icon_on_menu (GtkStatusIcon* status_icon, guint button, 
+ka_tray_icon_on_menu (GtkStatusIcon* status_icon, guint button,
                        guint activate_time, gpointer user_data)
 {
 	Krb5AuthApplet* applet = (Krb5AuthApplet*) user_data;
-	
+
 	KA_DEBUG("Trayicon right clicked: %d", applet->pw_prompt_secs);
-	gtk_menu_popup (GTK_MENU (applet->context_menu), NULL, NULL, 
-	                gtk_status_icon_position_menu, applet->tray_icon, 
+	gtk_menu_popup (GTK_MENU (applet->context_menu), NULL, NULL,
+	                gtk_status_icon_position_menu, applet->tray_icon,
 			button, activate_time);
 }
 
@@ -193,33 +202,20 @@ ka_show_tray_icon (Krb5AuthApplet* applet)
 }
 
 
-static GtkStatusIcon* 
+static GtkStatusIcon*
 ka_create_tray_icon (Krb5AuthApplet* applet)
 {
-        GtkStatusIcon* tray_icon;
+	GtkStatusIcon* tray_icon;
 
-        tray_icon = gtk_status_icon_new();
-        g_signal_connect(G_OBJECT(tray_icon), "activate",
-                         G_CALLBACK(ka_tray_icon_on_click), applet);
-        g_signal_connect(G_OBJECT(tray_icon),
-                         "popup-menu",
-                         G_CALLBACK(ka_tray_icon_on_menu), applet);
+	tray_icon = gtk_status_icon_new ();
+	g_signal_connect (G_OBJECT(tray_icon), "activate",
+                          G_CALLBACK(ka_tray_icon_on_click), applet);
+	g_signal_connect (G_OBJECT(tray_icon),
+			  "popup-menu",
+			  G_CALLBACK(ka_tray_icon_on_menu), applet);
         gtk_status_icon_set_from_icon_name (tray_icon, applet->icons[0]);
         gtk_status_icon_set_tooltip (tray_icon, PACKAGE);
         return tray_icon;
-}
-
-
-static void 
-ka_err_dialog (const char* err)
-{
-	GtkWidget* dialog = gtk_message_dialog_new (NULL,
-		      		GTK_DIALOG_DESTROY_WITH_PARENT,
-		      		GTK_MESSAGE_ERROR,
-		      		GTK_BUTTONS_CLOSE,
-		      		err);
- 	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
 }
 
 
@@ -233,33 +229,19 @@ ka_setup_icons (Krb5AuthApplet* applet)
 
 
 /* create the tray icon applet */
-Krb5AuthApplet* 
+Krb5AuthApplet*
 ka_create_applet()
 {
-	const char* err;	
-	Krb5AuthApplet* applet = g_malloc0(sizeof(Krb5AuthApplet));
+	Krb5AuthApplet* applet = g_malloc0 (sizeof(Krb5AuthApplet));
 
-	if(!(ka_setup_icons(applet))) {
-		err = _("Failure to setup icons");
-		goto out;
-	}
-
-	if(!(applet->tray_icon = ka_create_tray_icon(applet))) {
-		err = _("Failure to create tray icon");
-		goto out;
-	}
-	// FIXME: handle with signal
+	if (!(ka_setup_icons (applet)))
+		g_error ("Failure to setup icons");
+	if (!(applet->tray_icon = ka_create_tray_icon (applet)))
+		g_error ("Failure to create tray icon");
+	if (!(applet->context_menu = ka_create_context_menu (applet)))
+		g_error ("Failure to create context menu");
 	ka_show_tray_icon (applet);
 
-	if(!(applet->context_menu = ka_create_context_menu(applet))) {
-	    	err = _("Failure to create context menu");
-		goto out;
-	}
-
 	return applet;
-out:
-	ka_err_dialog(err);
-	g_free(applet);
-	return  NULL;
 }
 

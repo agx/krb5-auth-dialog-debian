@@ -1,4 +1,4 @@
-NULL = 
+NULL =
 
 smallicondir=${datadir}/icons/hicolor/22x22/apps
 smallicon_DATA=		\
