@@ -43,16 +43,6 @@ glade_DATA =			\
 EXTRA_DIST =		\
 	$(glade_DATA)   \
 	$(autostart_in_files) \
-	$(schema_SOURCES) \
 	krb5-auth-dialog.1.in
 
-schemadir = $(sysconfdir)/gconf/schemas
-schema_SOURCES = $(PACKAGE).schemas.in
-schema_DATA = $(PACKAGE).schemas
-
 DISTCLEANFILES = krb5-auth-dialog.desktop
-CLEANFILES = $(schema_DATA)
-
-%.schemas: $(srcdir)/%.schemas.in
-	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::MINIMUM_LIFETIME::,$(minimum_lifetime)," < $< > $@
-

@@ -1,3 +1,56 @@
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 534867: should use g_timeout_add_seconds
+
+	* src/krb5-auth-dialog.c: Save power with
+	g_timeout_add_seconds.
+	Patch from from Guido Günther.
+
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 534736: make i18n work
+
+	* src/krb5-auth-dialog.c: Set up i18n correctly.
+	* src/Makefile.am: Pass in LOCALEDIR.
+	Patch from from Guido Günther.
+
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 534620: password field focus
+
+	* src/krb5-auth-dialog.c: Be sure we focus the
+	password field every time.
+	Patch from from Guido Günther.
+
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 534515: cleanups
+
+	* configure.in: Look for dbus-glib and not libgnome.
+	Patch from from Guido Günther.
+
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 534515: cleanups
+
+	* src/krb5-auth-dialog.c: Cleaner use of
+	gboolean.  Patch from from Guido Günther.
+
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 534515: cleanups
+
+	* src/krb5-auth-dialog.c: Use GOption instead of
+	libgnome.  Patch from Guido Günther.
+
+2008-06-09  Colin Walters  <walters@verbum.org>
+
+	Bug 529220: set dialog icon
+
+	* src/krb5-auth-dialog.c: Set an icon so we
+	look nicer in the window list.  Patch from
+	Guido Günther.
+
 2008-03-22  Colin Walters  <walters@verbum.org>
 
 	* src/krb5-auth-dialog.c: Grab a name on the

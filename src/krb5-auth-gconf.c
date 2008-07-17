@@ -1,7 +1,7 @@
 /* Krb5 Auth Applet -- Acquire and release kerberos tickets
- *      
+ *
  * (C) 2008 Guido Guenther <agx@sigxcpu.org>
- *      
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -29,10 +29,10 @@
 #define KA_GCONF_KEY_PROMPT_MINS	KA_GCONF_PATH "/prompt_minutes"
 #define KA_GCONF_KEY_SHOW_TRAYICON	KA_GCONF_PATH "/show_trayicon"
 
-static gboolean 
-ka_gconf_get_string(GConfClient* client, 
-		    const char* key,
-		    char** value)
+static gboolean
+ka_gconf_get_string (GConfClient* client,
+		     const char* key,
+		     char** value)
 {
 	GError*		error = NULL;
 	gboolean	success = FALSE;
@@ -56,7 +56,7 @@ ka_gconf_get_string(GConfClient* client,
 
 
 static gboolean
-ka_gconf_get_int(GConfClient* client, 
+ka_gconf_get_int (GConfClient* client,
 		    const char* key,
 		    int* value)
 {
@@ -83,7 +83,7 @@ ka_gconf_get_int(GConfClient* client,
 
 
 static gboolean
-ka_gconf_get_bool(GConfClient* client, 
+ka_gconf_get_bool (GConfClient* client,
 		    const char* key,
 		    gboolean* value)
 {
@@ -110,13 +110,13 @@ ka_gconf_get_bool(GConfClient* client,
 
 
 static gboolean
-ka_gconf_set_principal(GConfClient* client, Krb5AuthApplet* applet)
+ka_gconf_set_principal (GConfClient* client, Krb5AuthApplet* applet)
 {
-	g_free(applet->principal);
+	g_free (applet->principal);
 	applet->principal = NULL;
-	if(!ka_gconf_get_string(client, KA_GCONF_KEY_PRINCIPAL, &applet->principal)) {
-		applet->principal = g_strdup(g_get_user_name());
-  	}
+	if(!ka_gconf_get_string (client, KA_GCONF_KEY_PRINCIPAL, &applet->principal)) {
+		applet->principal = g_strdup (g_get_user_name());
+	}
 	KA_DEBUG("Setting principal to %s", applet->principal);
 	// FIXME: need to send set-principal signal
 	return TRUE;
@@ -124,11 +124,11 @@ ka_gconf_set_principal(GConfClient* client, Krb5AuthApplet* applet)
 
 
 static gboolean
-ka_gconf_set_prompt_mins(GConfClient* client, Krb5AuthApplet* applet)
+ka_gconf_set_prompt_mins (GConfClient* client, Krb5AuthApplet* applet)
 {
-	if(!ka_gconf_get_int(client, KA_GCONF_KEY_PROMPT_MINS, &applet->pw_prompt_secs)) {
+	if(!ka_gconf_get_int (client, KA_GCONF_KEY_PROMPT_MINS, &applet->pw_prompt_secs)) {
 		applet->pw_prompt_secs = MINUTES_BEFORE_PROMPTING;
-  	}
+	}
 	applet->pw_prompt_secs *= 60;
 	KA_DEBUG("Setting prompting timer to %d seconds", applet->pw_prompt_secs);
 	return TRUE;
@@ -136,11 +136,11 @@ ka_gconf_set_prompt_mins(GConfClient* client, Krb5AuthApplet* applet)
 
 
 static gboolean
-ka_gconf_set_show_trayicon(GConfClient* client, Krb5AuthApplet* applet)
+ka_gconf_set_show_trayicon (GConfClient* client, Krb5AuthApplet* applet)
 {
 	if(!ka_gconf_get_bool(client, KA_GCONF_KEY_SHOW_TRAYICON, &applet->show_trayicon)) {
 		applet->show_trayicon = TRUE;
-  	}
+	}
 	KA_DEBUG("Show trayicon: %s", (applet->show_trayicon ? "yes" : "no" ));
 	// FIXME: send show trayicon signal
 	ka_show_tray_icon(applet);
@@ -162,12 +162,12 @@ ka_gconf_key_changed_callback (GConfClient* client,
 		return;
 	KA_DEBUG("Key %s changed", key);
 
-	if (g_strcmp0(key, KA_GCONF_KEY_PRINCIPAL) == 0) {
-		ka_gconf_set_principal(client, applet);
-	} else if (g_strcmp0(key, KA_GCONF_KEY_PROMPT_MINS) == 0) {
-		ka_gconf_set_prompt_mins(client, applet);
-	} else if (g_strcmp0(key, KA_GCONF_KEY_SHOW_TRAYICON) == 0) {
-		ka_gconf_set_show_trayicon(client, applet);
+	if (g_strcmp0 (key, KA_GCONF_KEY_PRINCIPAL) == 0) {
+		ka_gconf_set_principal (client, applet);
+	} else if (g_strcmp0 (key, KA_GCONF_KEY_PROMPT_MINS) == 0) {
+		ka_gconf_set_prompt_mins (client, applet);
+	} else if (g_strcmp0 (key, KA_GCONF_KEY_SHOW_TRAYICON) == 0) {
+		ka_gconf_set_show_trayicon (client, applet);
 	} else
 		g_warning("Received notification for unknown gconf key %s", key);
 	return;
@@ -181,20 +181,20 @@ ka_gconf_init (Krb5AuthApplet* applet, int argc, char* argv[])
 	GConfClient* client;
 	gboolean success = FALSE;
 
-	client = gconf_client_get_default();
-	gconf_client_add_dir(client, KA_GCONF_PATH, GCONF_CLIENT_PRELOAD_ONELEVEL, &error);
+	client = gconf_client_get_default ();
+	gconf_client_add_dir (client, KA_GCONF_PATH, GCONF_CLIENT_PRELOAD_ONELEVEL, &error);
 	if (error)
 		goto out;
 
-	gconf_client_notify_add(client, KA_GCONF_PATH,
-				ka_gconf_key_changed_callback, applet, NULL, &error);
+	gconf_client_notify_add (client, KA_GCONF_PATH,
+				 ka_gconf_key_changed_callback, applet, NULL, &error);
 	if (error)
 		goto out;
 
 	/* setup defaults */
-	ka_gconf_set_principal(client, applet);
-	ka_gconf_set_prompt_mins(client, applet);
-	ka_gconf_set_show_trayicon(client, applet);
+	ka_gconf_set_principal (client, applet);
+	ka_gconf_set_prompt_mins (client, applet);
+	ka_gconf_set_show_trayicon (client, applet);
 
 	success = TRUE;
 out:
