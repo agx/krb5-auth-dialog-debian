@@ -1,3 +1,17 @@
+krb5-auth-dialog (0.7.hit7cc1d84-1) unstable; urgency=low
+
+  * New "Upstream" Version
+        * Based on upstream version 0.7 plus our changes at:
+    		http://honk.sigxcpu.org/git/krb5-auth-dialog.git
+        * don't popup the dialog if we have a tray icon
+        * set a more gnomeish invisible-char
+        * remove width_request from krb5_auth_message_label so the realm name
+          doesn't get cut off
+  * drop desktop-file.diff & man-section.diff since we have that in our
+    "upstream" git now
+
+ -- Guido Guenther <agx@sigxcpu.org>  Mon, 21 Jul 2008 01:16:40 -0230
+
 krb5-auth-dialog (0.7.git30891fc-1) unstable; urgency=low
 
   * New "Upstream" Version:
