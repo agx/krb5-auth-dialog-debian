@@ -1,3 +1,19 @@
+krb5-auth-dialog (0.7.jit26357da-1) experimental; urgency=low
+
+  * [6a45cdd] Imported Upstream version 0.7.jit26357da
+        * Based on upstream version 0.7 plus our changes at:
+    		http://honk.sigxcpu.org/git/krb5-auth-dialog.git
+  	* support pkinit
+        * add extra icon for "ticket is about to expire"
+        * add gconf schema
+  * [08f4d3e] build against heimdal for pkinit support
+  * [dc90dff] update description
+  * [168739c] new standards version
+  * [37e6092] depend on gconf2
+  * [fa542d6] drop quilt dependeny
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 18 Oct 2008 18:46:37 +0200
+
 krb5-auth-dialog (0.7.hit7cc1d84-1) unstable; urgency=low
 
   * New "Upstream" Version
