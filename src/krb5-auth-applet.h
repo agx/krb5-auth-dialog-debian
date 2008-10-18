@@ -35,7 +35,7 @@
 typedef struct {
 	GtkStatusIcon* tray_icon;	/* the tray icon */
 	GtkWidget* context_menu;	/* the tray icon's context menu */
-	const char* icons[2]; 		/* for expired and valid tickts */
+	const char* icons[3]; 		/* for invalid, expiring and valid tickts */
 	gboolean show_trayicon;		/* show the trayicon */
 
 	/* The password dialog */
@@ -49,6 +49,8 @@ typedef struct {
 	NotifyNotification* notification;/* notification messages */
 #endif /* HAVE_LIBNOTIFY */
 	char* principal;		/* the principal to request */
+	gboolean renewable;		/* credentials renewable? */
+	char* pk_userid;		/* "userid" for pkint */
 } Krb5AuthApplet;
 
 Krb5AuthApplet* ka_create_applet();
@@ -59,7 +61,7 @@ gboolean ka_show_tray_icon(Krb5AuthApplet* applet);
 
 #ifdef ENABLE_DEBUG
 #define KA_DEBUG(fmt,...) \
-    g_printf ("DEBUG: %s: " fmt "\n", __func__, __VA_ARGS__)
+    g_printf ("DEBUG: %s: " fmt "\n", __func__, ##__VA_ARGS__)
 #else
 #define KA_DEBUG(fmt,...) \
     do { } while (0)
