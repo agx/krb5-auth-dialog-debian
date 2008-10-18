@@ -22,7 +22,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 /*
@@ -2692,14 +2692,14 @@ gtk_secure_entry_new(void)
  *   be clamped to the range 0-65536.
  *
  * Creates a new #GtkSecureEntry widget with the given maximum length.
- * 
+ *
  * Note: the existence of this function is inconsistent
  * with the rest of the GTK+ API. The normal setup would
  * be to just require the user to make an extra call
  * to gtk_secure_entry_set_max_length() instead. It is not
  * expected that this function will be removed, but
  * it would be better practice not to use it.
- * 
+ *
  * Return value: a new #GtkSecureEntry.
  **/
 GtkWidget *
@@ -2772,7 +2772,7 @@ gtk_secure_entry_set_position(GtkSecureEntry * entry, gint position)
  * gtk_secure_entry_set_invisible_char:
  * @entry: a #GtkSecureEntry
  * @ch: a Unicode character
- * 
+ *
  * Sets the character to use in place of the actual text when
  * gtk_secure_entry_set_visibility() has been called to set text visibility
  * to %FALSE. i.e. this is the character used in "password mode" to
@@ -2780,7 +2780,7 @@ gtk_secure_entry_set_position(GtkSecureEntry * entry, gint position)
  * invisible char is an asterisk ('*').  If you set the invisible char
  * to 0, then the user will get no feedback at all; there will be
  * no text on the screen as they type.
- * 
+ *
  **/
 void
 gtk_secure_entry_set_invisible_char(GtkSecureEntry * entry, gunichar ch)
@@ -2803,7 +2803,7 @@ gtk_secure_entry_set_invisible_char(GtkSecureEntry * entry, gunichar ch)
  * for entries with visisbility set to false. See gtk_secure_entry_set_invisible_char().
  *
  * Return value: the current invisible char, or 0, if the entry does not
- *               show invisible text at all. 
+ *               show invisible text at all.
  **/
 gunichar
 gtk_secure_entry_get_invisible_char(GtkSecureEntry * entry)
@@ -2846,7 +2846,7 @@ gtk_secure_entry_select_region(GtkSecureEntry * entry,
  * @max: the maximum length of the entry, or 0 for no maximum.
  *   (other than the maximum length of entries.) The value passed in will
  *   be clamped to the range 0-65536.
- * 
+ *
  * Sets the maximum allowed length of the contents of the widget. If
  * the current contents are longer than the given length, then they
  * will be truncated to fit.
@@ -2896,7 +2896,7 @@ gtk_secure_entry_get_max_length(GtkSecureEntry * entry)
  * (For experts: if @setting is %TRUE, the entry calls
  * gtk_window_activate_default() on the window containing the entry, in
  * the default handler for the "activate" signal.)
- * 
+ *
  **/
 void
 gtk_secure_entry_set_activates_default(GtkSecureEntry * entry,
@@ -2914,9 +2914,9 @@ gtk_secure_entry_set_activates_default(GtkSecureEntry * entry,
 /**
  * gtk_secure_entry_get_activates_default:
  * @entry: a #GtkSecureEntry
- * 
+ *
  * Retrieves the value set by gtk_secure_entry_set_activates_default().
- * 
+ *
  * Return value: %TRUE if the entry will activate the default widget
  **/
 gboolean
@@ -2937,7 +2937,7 @@ gtk_secure_entry_get_activates_default(GtkSecureEntry * entry)
  * <emphasis>request</emphasis>, the size can still be affected by
  * how you pack the widget into containers. If @n_chars is -1, the
  * size reverts to the default entry size.
- * 
+ *
  **/
 void
 gtk_secure_entry_set_width_chars(GtkSecureEntry * entry, gint n_chars)
@@ -2954,9 +2954,9 @@ gtk_secure_entry_set_width_chars(GtkSecureEntry * entry, gint n_chars)
 /**
  * gtk_secure_entry_get_width_chars:
  * @entry: a #GtkSecureEntry
- * 
+ *
  * Gets the value set by gtk_secure_entry_set_width_chars().
- * 
+ *
  * Return value: number of chars to request space for, or negative if unset
  **/
 gint
@@ -2971,7 +2971,7 @@ gtk_secure_entry_get_width_chars(GtkSecureEntry * entry)
  * gtk_secure_entry_set_has_frame:
  * @entry: a #GtkSecureEntry
  * @setting: new value
- * 
+ *
  * Sets whether the entry has a beveled frame around it.
  **/
 void
@@ -2992,9 +2992,9 @@ gtk_secure_entry_set_has_frame(GtkSecureEntry * entry, gboolean setting)
 /**
  * gtk_secure_entry_get_has_frame:
  * @entry: a #GtkSecureEntry
- * 
+ *
  * Gets the value set by gtk_secure_entry_set_has_frame().
- * 
+ *
  * Return value: whether the entry has a beveled frame
  **/
 gboolean
@@ -3009,7 +3009,7 @@ gtk_secure_entry_get_has_frame(GtkSecureEntry * entry)
 /**
  * gtk_secure_entry_get_layout:
  * @entry: a #GtkSecureEntry
- * 
+ *
  * Gets the #PangoLayout used to display the entry.
  * The layout is useful to e.g. convert text positions to
  * pixel positions, in combination with gtk_secure_entry_get_layout_offsets().
@@ -3020,7 +3020,7 @@ gtk_secure_entry_get_has_frame(GtkSecureEntry * entry)
  * gtk_secure_entry_layout_index_to_text_index() and
  * gtk_secure_entry_text_index_to_layout_index() are needed to convert byte
  * indices in the layout to byte indices in the entry contents.
- * 
+ *
  * Return value: the #PangoLayout for this entry
  **/
 PangoLayout *
@@ -3040,12 +3040,12 @@ gtk_secure_entry_get_layout(GtkSecureEntry * entry)
  * gtk_secure_entry_layout_index_to_text_index:
  * @entry: a #GtkSecureEntry
  * @layout_index: byte index into the entry layout text
- * 
+ *
  * Converts from a position in the entry contents (returned
  * by gtk_secure_entry_get_text()) to a position in the
  * entry's #PangoLayout (returned by gtk_secure_entry_get_layout(),
  * with text retrieved via pango_layout_get_text()).
- * 
+ *
  * Return value: byte index into the entry contents
  **/
 gint
@@ -3077,11 +3077,11 @@ gtk_secure_entry_layout_index_to_text_index(GtkSecureEntry * entry,
  * gtk_secure_entry_text_index_to_layout_index:
  * @entry: a #GtkSecureEntry
  * @text_index: byte index into the entry contents
- * 
+ *
  * Converts from a position in the entry's #PangoLayout(returned by
  * gtk_secure_entry_get_layout()) to a position in the entry contents
  * (returned by gtk_secure_entry_get_text()).
- * 
+ *
  * Return value: byte index into the entry layout text
  **/
 gint
@@ -3119,7 +3119,7 @@ gtk_secure_entry_text_index_to_layout_index(GtkSecureEntry * entry,
  * Also useful to convert mouse events into coordinates inside the
  * #PangoLayout, e.g. to take some action if some part of the entry text
  * is clicked.
- * 
+ *
  * Note that as the user scrolls around in the entry the offsets will
  * change; you'll need to connect to the "notify::scroll_offset"
  * signal to track this. Remember when using the #PangoLayout
@@ -3130,7 +3130,7 @@ gtk_secure_entry_text_index_to_layout_index(GtkSecureEntry * entry,
  * gtk_secure_entry_layout_index_to_text_index() and
  * gtk_secure_entry_text_index_to_layout_index() are needed to convert byte
  * indices in the layout to byte indices in the entry contents.
- * 
+ *
  **/
 void
 gtk_secure_entry_get_layout_offsets(GtkSecureEntry * entry,

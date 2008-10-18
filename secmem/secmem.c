@@ -58,21 +58,21 @@ typedef union {
 #define log_error log_info
 #define log_bug log_fatal
 
-void 
+void
 log_info(char *template, ...)
 {
   va_list args;
-  
+
   va_start(args, template);
   vfprintf(stderr, template, args);
   va_end(args);
 }
 
-void 
+void
 log_fatal(char *template, ...)
 {
   va_list args;
-  
+
   va_start(args, template);
   vfprintf(stderr, template, args);
   va_end(args);
