@@ -5,7 +5,7 @@ LDFLAGS += -Wl,--as-needed
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/gnome.mk
 include /usr/share/cdbs/1/class/autotools.mk
-#include /usr/share/cdbs/1/rules/patchsys-quilt.mk
+include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 
 DEB_BUILDDIR := build
 DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr --enable-network-manager --with-libnotify
