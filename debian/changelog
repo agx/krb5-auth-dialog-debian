@@ -1,3 +1,12 @@
+krb5-auth-dialog (0.8-1) experimental; urgency=low
+
+  * [88b8041] Imported Upstream version 0.8
+  * [453e157] set more gnomeish invisible char
+  * [a81f793] released version doesn't need to run autogen.sh
+  * [ce03b8f] build-dep on quilt
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 10 Jan 2009 16:28:24 +0100
+
 krb5-auth-dialog (0.7.jit26357da-1) experimental; urgency=low
 
   * [6a45cdd] Imported Upstream version 0.7.jit26357da
