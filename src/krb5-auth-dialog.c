@@ -810,7 +810,6 @@ ka_create_gtk_secure_entry (GladeXML *xml, gchar *func_name, gchar *name,
 	if (!strcmp(name, "krb5_entry")) {
 		entry = gtk_secure_entry_new ();
 		gtk_secure_entry_set_activates_default(GTK_SECURE_ENTRY(entry), TRUE);
-		gtk_widget_set(entry, "invisible-char", 0x25cf, NULL);
 		gtk_widget_show (entry);
 	} else {
 		g_warning("Don't know anything about widget %s", name);
