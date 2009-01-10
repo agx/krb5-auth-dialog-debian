@@ -1,6 +1,6 @@
 AC_INIT(src/krb5-auth-dialog.c)
 
-AM_INIT_AUTOMAKE(krb5-auth-dialog, 0.7)
+AM_INIT_AUTOMAKE(krb5-auth-dialog, 0.8)
 AM_CONFIG_HEADER(config.h)
 
 AM_MAINTAINER_MODE
@@ -18,7 +18,7 @@ AC_PROG_INTLTOOL
 AM_PROG_LEX
 AC_PROG_YACC
 
-ALL_LINGUAS="nb"
+ALL_LINGUAS="nb de"
 AM_GLIB_GNU_GETTEXT
 
 GTK_REQUIRED="2.4.0"

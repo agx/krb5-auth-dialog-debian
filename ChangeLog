@@ -1,3 +1,135 @@
+Sat Jan 10 15:37:58 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* configure.ac: release 0.8
+
+Fri Jan  9 21:38:39 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* configure.ac: add German translation
+
+Fri Jan  9 21:37:46 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	intltool-*.in not contained in this package
+	* Makefile.am: remove intltool-*.in 
+
+Fri Jan  9 21:35:24 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	add missing files that contain translations
+	* po/POTFILES.in: add missing C files
+	* po/POTFILES.skip: don't worry about etpo/
+
+Fri Jan  9 21:30:56 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/Makefile.am (EXTRA_DIST): fix schema_in_files typo
+
+Sun Jan  4 16:58:17 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	add gconf schema
+	*  src/Makefile.am: process, install and cleanup schema file
+	*  src/krb5-auth-dialog.schemas.in: new file
+
+Sun Jan  4 16:51:33 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	move HAVE_LIBNOTIFY check into krb5-auth-notify.c and simplify
+	ka_status_update
+	* src/krb5-auth-applet.c (ka_tooltip_text): new function
+	  (ka_select_icon): new function
+	  (ka_update_status): drop urgency, use ka_tooltip_text and
+	  ka_select_icon
+	* src/krb5-auth-notify.c (ka_send_event_notification): define
+	  empty function when building without libnotify
+	* src/krb5-auth-notify.h: don't include notify.h
+
+Sun Jan  4 16:43:32 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	add "expiring" tray icon
+	* icons/krb5-expiring-ticket.png: new icon
+	* icons/Makefile.am (smallicon_DATA): add new icon
+	* src/krb5-auth-applet.[ch] (ka_icons): new enum, new icon
+	  (ka_update_status): use ka_icons
+	  (ka_create_applet): call gtk_window_set_default_icon_name
+	* src/krb5-auth-dialog.c (main): don't call
+	  gtk_window_set_default_icon_name
+
+Sun Jan  4 16:37:35 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-applet.c (ka_update_status): don't show a tooltip
+	about ticket expiry if ticket is renewable
+
+Sun Jan  4 16:28:35 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	pkinit support
+	* README: document pkinit gconf keys
+	* configure.ac: check for heimdal's pkinit support
+	* krb5-auth-applet.h (Krb5AuthApplet): add pk_userid
+	* krb5-auth-dialog.c (ka_krb5_cc_clear_mcred): new function
+	  (set_options_from_creds): call
+	  krb5_get_init_creds_opt_set_default_flags
+	  (ka_auth_pkinit): new function
+	  (grab_credentials): call ka_auth_pkinit
+	  (ka_renew_credentials); simplify
+	  (ka_get_tgt_from_ccache): likewise
+	* krb5-auth-gconf.c (ka_gconf_set_pk_userid): new function
+
+Sun Jan  4 16:21:20 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	use get_error_message() when possible
+	* configure.ac: check for krb5_get_error_message
+	* src/krb5-auth-dialog.c (get_error_message): new function
+	  (ka_error_dialog): check for KRB5_LIBOS_PWDINTR
+
+Sun Jan  4 16:18:19 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb-auth-dialog.[ch]: separate ticket renewal and interactive
+	  ticket acquisition
+
+Sun Jan  4 16:15:57 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krbt-auth-{applet,dialog}.c don't popup the dialog if we have a
+	  tray icon
+
+Sun Jan  4 14:50:59 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	use GtkSecureEntry instead of GtkEntry for the password entry
+	* src/Makefile.am (AM_CPPFLAGS): add secmem/, gtksecentry/ to include
+	  path
+	* src/krb5-auth-dialog.c: use gtk_secure_entry_get_text instead of
+	  gtk_entry_get_text
+	* src/krb5-auth-dialog.glade (krb5_auth_dialog_setup): use custom widget
+	  (ka_create_gtk_secure_entry,ka_secmem_init): new functions
+	  (main): call ka_secmem_init, set custom glade handler for password
+	  entry field
+
+Sun Jan  4 14:48:14 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	move dbus handling into a separate file
+	* src/krb5-auth-dbus.[ch]: new file
+	* src/krb5-auth-dialog.c: remove dbus related code
+	* src/Makefile.am (krb5_auth_dialog_SOURCES): add krb5-auth-dbus.[ch]
+
+Sun Jan  4 14:39:16 CET 2009 Guido Günther<agx@sigxcpu.org>
+
+	add gtksecentry/secmem from gpg pinentry
+	* Makefile.am (SUBDIRS): add gtksecentry
+	* acinclude.m4: add GNUPG_CHECK_TYPEDEF, GNUPG_CHECK_MLOCK
+	* gtksecentry/{Makefile.am,gtksecentry.c,gtksecentry.h}: new files
+	* secmem/{Makfile.am,Manifest,memory.h,secmem{-util.h,.c},util.[ch]}:
+	  new files
+	* configure.ac: checks for secmem
+	* src/Makefile.am (krb5_auth_dialog_LDADD): add libgtksecentry.a,
+	  libsecmem.a
+
+Sun Jan  4 14:28:06 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	add a tray icon
+	* configure.ac: check for libnotify, dbus, gconf
+	* Makefile.am, icons/krb-{no-,}valid-ticket.png: add icons
+	* src/krb5-auth-applet.[ch]: new files
+	* src/krb5-auth-gconf.[ch]: new files
+	* src/krb5-auth-notify.[ch]: new files
+	* src/Makefile.am: expand krb5_auth_dialog_SOURCES and
+	  krb5_auth_dialog_LDADD
+	* README: document gconf keys
+
 2008-09-26  Guido Guenther  <agx@sigxcpu.org>
 
 	* src/krb5-auth-dialog.glade: remove width_request from
