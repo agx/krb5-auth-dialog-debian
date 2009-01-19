@@ -1,1 +1,2 @@
 0001-set-a-more-gnomeisch-invisible-char.patch
+0002-don-t-try-pkinit-if-pk_userid-is-non-null-but-empty.patch
