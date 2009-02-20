@@ -1,0 +1,238 @@
+From: guidog <guidog@517b70f8-ed25-0410-8bf6-f5db08f7b76e>
+Date: Mon, 12 Jan 2009 18:13:29 +0000
+Subject: [PATCH] move icons to $(datadir)/krb5-auth-dialog
+
+and add this to the icon search path. Fixes installations with prefix !=
+/usr
+
+git-svn-id: svn+ssh://svn.gnome.org/svn/krb5-auth-dialog/trunk@121 517b70f8-ed25-0410-8bf6-f5db08f7b76e
+---
+ icons/Makefile.am      |    2 +-
+ icons/Makefile.in      |    2 +-
+ src/Makefile.am        |    8 ++++----
+ src/Makefile.in        |   47 +++++++++++++++++++++++------------------------
+ src/krb5-auth-applet.c |    3 +++
+ src/krb5-auth-dialog.c |    3 ++-
+ 6 files changed, 34 insertions(+), 31 deletions(-)
+
+diff --git a/icons/Makefile.am b/icons/Makefile.am
+index d13dbbf..e2e3987 100644
+--- a/icons/Makefile.am
++++ b/icons/Makefile.am
+@@ -1,6 +1,6 @@
+ NULL =
+ 
+-smallicondir=${datadir}/icons/hicolor/22x22/apps
++smallicondir=${pkgdatadir}/icons/hicolor/22x22/apps
+ smallicon_DATA=		\
+ 	krb-valid-ticket.png	\
+ 	krb-no-valid-ticket.png	\
+diff --git a/icons/Makefile.in b/icons/Makefile.in
+index e509150..0f8f6a3 100644
+--- a/icons/Makefile.in
++++ b/icons/Makefile.in
+@@ -231,7 +231,7 @@ target_alias = @target_alias@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ NULL = 
+-smallicondir = ${datadir}/icons/hicolor/22x22/apps
++smallicondir = ${pkgdatadir}/icons/hicolor/22x22/apps
+ smallicon_DATA = \
+ 	krb-valid-ticket.png	\
+ 	krb-no-valid-ticket.png	\
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 18ab709..568f3bc 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,5 +1,5 @@
+ INCLUDES = \
+-	-DGLADEDIR=\""$(gladedir)/"\" \
++	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
+ 	-DLOCALE_DIR=\""$(localedir)/"\"
+ 
+ bin_PROGRAMS = krb5-auth-dialog
+@@ -43,12 +43,12 @@ krb5_auth_dialog_LDADD = \
+ 
+ AM_CPPFLAGS = -I $(top_srcdir)/gtksecentry/ -I $(top_srcdir)/secmem/
+ 
+-gladedir = $(datadir)/krb5-auth-dialog
+-glade_DATA =			\
++pkgdatadir = $(datadir)/krb5-auth-dialog
++pkgdata_DATA =			\
+ 	krb5-auth-dialog.glade
+ 
+ EXTRA_DIST =		\
+-	$(glade_DATA)   \
++	$(pkgdata_DATA)   \
+ 	$(schema_in_files) \
+ 	$(autostart_in_files) \
+ 	krb5-auth-dialog.1.in
+diff --git a/src/Makefile.in b/src/Makefile.in
+index d7ca9ac..55bd3c3 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -16,7 +16,6 @@
+ 
+ 
+ VPATH = @srcdir@
+-pkgdatadir = $(datadir)/@PACKAGE@
+ pkglibdir = $(libdir)/@PACKAGE@
+ pkgincludedir = $(includedir)/@PACKAGE@
+ am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
+@@ -46,7 +45,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_HEADER = $(top_builddir)/config.h
+ CONFIG_CLEAN_FILES = krb5-auth-dialog.1
+ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
+-	"$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(gladedir)" \
++	"$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(pkgdatadir)" \
+ 	"$(DESTDIR)$(schemadir)"
+ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+ PROGRAMS = $(bin_PROGRAMS)
+@@ -81,12 +80,13 @@ am__vpath_adj = case $$p in \
+   esac;
+ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+ autostartDATA_INSTALL = $(INSTALL_DATA)
+-gladeDATA_INSTALL = $(INSTALL_DATA)
++pkgdataDATA_INSTALL = $(INSTALL_DATA)
+ schemaDATA_INSTALL = $(INSTALL_DATA)
+-DATA = $(autostart_DATA) $(glade_DATA) $(schema_DATA)
++DATA = $(autostart_DATA) $(pkgdata_DATA) $(schema_DATA)
+ ETAGS = etags
+ CTAGS = ctags
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
++pkgdatadir = $(datadir)/krb5-auth-dialog
+ ACLOCAL = @ACLOCAL@
+ ALL_LINGUAS = @ALL_LINGUAS@
+ AMTAR = @AMTAR@
+@@ -264,7 +264,7 @@ target_alias = @target_alias@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ INCLUDES = \
+-	-DGLADEDIR=\""$(gladedir)/"\" \
++	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
+ 	-DLOCALE_DIR=\""$(localedir)/"\"
+ 
+ man_MANS = krb5-auth-dialog.1
+@@ -299,12 +299,11 @@ krb5_auth_dialog_LDADD = \
+ 			@GTK_LIBS@
+ 
+ AM_CPPFLAGS = -I $(top_srcdir)/gtksecentry/ -I $(top_srcdir)/secmem/
+-gladedir = $(datadir)/krb5-auth-dialog
+-glade_DATA = \
++pkgdata_DATA = \
+ 	krb5-auth-dialog.glade
+ 
+ EXTRA_DIST = \
+-	$(glade_DATA)   \
++	$(pkgdata_DATA)   \
+ 	$(schema_in_files) \
+ 	$(autostart_in_files) \
+ 	krb5-auth-dialog.1.in
+@@ -479,22 +478,22 @@ uninstall-autostartDATA:
+ 	  echo " rm -f '$(DESTDIR)$(autostartdir)/$$f'"; \
+ 	  rm -f "$(DESTDIR)$(autostartdir)/$$f"; \
+ 	done
+-install-gladeDATA: $(glade_DATA)
++install-pkgdataDATA: $(pkgdata_DATA)
+ 	@$(NORMAL_INSTALL)
+-	test -z "$(gladedir)" || $(MKDIR_P) "$(DESTDIR)$(gladedir)"
+-	@list='$(glade_DATA)'; for p in $$list; do \
++	test -z "$(pkgdatadir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)"
++	@list='$(pkgdata_DATA)'; for p in $$list; do \
+ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+ 	  f=$(am__strip_dir) \
+-	  echo " $(gladeDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(gladedir)/$$f'"; \
+-	  $(gladeDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(gladedir)/$$f"; \
++	  echo " $(pkgdataDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgdatadir)/$$f'"; \
++	  $(pkgdataDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgdatadir)/$$f"; \
+ 	done
+ 
+-uninstall-gladeDATA:
++uninstall-pkgdataDATA:
+ 	@$(NORMAL_UNINSTALL)
+-	@list='$(glade_DATA)'; for p in $$list; do \
++	@list='$(pkgdata_DATA)'; for p in $$list; do \
+ 	  f=$(am__strip_dir) \
+-	  echo " rm -f '$(DESTDIR)$(gladedir)/$$f'"; \
+-	  rm -f "$(DESTDIR)$(gladedir)/$$f"; \
++	  echo " rm -f '$(DESTDIR)$(pkgdatadir)/$$f'"; \
++	  rm -f "$(DESTDIR)$(pkgdatadir)/$$f"; \
+ 	done
+ install-schemaDATA: $(schema_DATA)
+ 	@$(NORMAL_INSTALL)
+@@ -591,7 +590,7 @@ check-am: all-am
+ check: check-am
+ all-am: Makefile $(PROGRAMS) $(MANS) $(DATA)
+ installdirs:
+-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(gladedir)" "$(DESTDIR)$(schemadir)"; do \
++	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(schemadir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+ install: install-am
+@@ -640,7 +639,7 @@ info: info-am
+ 
+ info-am:
+ 
+-install-data-am: install-autostartDATA install-gladeDATA install-man \
++install-data-am: install-autostartDATA install-man install-pkgdataDATA \
+ 	install-schemaDATA
+ 
+ install-dvi: install-dvi-am
+@@ -678,7 +677,7 @@ ps: ps-am
+ ps-am:
+ 
+ uninstall-am: uninstall-autostartDATA uninstall-binPROGRAMS \
+-	uninstall-gladeDATA uninstall-man uninstall-schemaDATA
++	uninstall-man uninstall-pkgdataDATA uninstall-schemaDATA
+ 
+ uninstall-man: uninstall-man1
+ 
+@@ -690,15 +689,15 @@ uninstall-man: uninstall-man1
+ 	dvi-am html html-am info info-am install install-am \
+ 	install-autostartDATA install-binPROGRAMS install-data \
+ 	install-data-am install-dvi install-dvi-am install-exec \
+-	install-exec-am install-gladeDATA install-html install-html-am \
+-	install-info install-info-am install-man install-man1 \
+-	install-pdf install-pdf-am install-ps install-ps-am \
++	install-exec-am install-html install-html-am install-info \
++	install-info-am install-man install-man1 install-pdf \
++	install-pdf-am install-pkgdataDATA install-ps install-ps-am \
+ 	install-schemaDATA install-strip installcheck installcheck-am \
+ 	installdirs maintainer-clean maintainer-clean-generic \
+ 	mostlyclean mostlyclean-compile mostlyclean-generic \
+ 	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
+ 	uninstall-am uninstall-autostartDATA uninstall-binPROGRAMS \
+-	uninstall-gladeDATA uninstall-man uninstall-man1 \
++	uninstall-man uninstall-man1 uninstall-pkgdataDATA \
+ 	uninstall-schemaDATA
+ 
+ @INTLTOOL_DESKTOP_RULE@
+diff --git a/src/krb5-auth-applet.c b/src/krb5-auth-applet.c
+index c915240..99b4007 100644
+--- a/src/krb5-auth-applet.c
++++ b/src/krb5-auth-applet.c
+@@ -254,6 +254,9 @@ ka_create_tray_icon (Krb5AuthApplet* applet)
+ int
+ ka_setup_icons (Krb5AuthApplet* applet)
+ {
++	/* Add application specific icons to search path */
++	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
++					   KA_DATA_DIR G_DIR_SEPARATOR_S "icons");
+ 	applet->icons[val_icon] = "krb-valid-ticket";
+ 	applet->icons[exp_icon] = "krb-expiring-ticket";
+ 	applet->icons[inv_icon] = "krb-no-valid-ticket";
+diff --git a/src/krb5-auth-dialog.c b/src/krb5-auth-dialog.c
+index d6de3d7..0189d4d 100644
+--- a/src/krb5-auth-dialog.c
++++ b/src/krb5-auth-dialog.c
+@@ -887,7 +887,8 @@ main (int argc, char *argv[])
+ 
+ 		/* setup the pw dialog */
+ 		glade_set_custom_handler (&ka_create_gtk_secure_entry, NULL);
+-		applet->pw_xml = glade_xml_new (GLADEDIR "krb5-auth-dialog.glade", NULL, NULL);
++		applet->pw_xml = glade_xml_new (KA_DATA_DIR G_DIR_SEPARATOR_S
++						"krb5-auth-dialog.glade", NULL, NULL);
+ 		applet->pw_wrong_label = glade_xml_get_widget (applet->pw_xml, "krb5_wrong_label");
+ 		applet->pw_dialog = glade_xml_get_widget (applet->pw_xml, "krb5_dialog");
+ 
+-- 

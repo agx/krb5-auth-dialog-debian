@@ -1,2 +1,3 @@
 0001-set-a-more-gnomeisch-invisible-char.patch
 0002-don-t-try-pkinit-if-pk_userid-is-non-null-but-empty.patch
+0003-move-icons-to-datadir-krb5-auth-dialog.patch
