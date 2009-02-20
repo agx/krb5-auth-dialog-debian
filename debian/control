@@ -12,7 +12,7 @@ Vcs-Browser: http://git.debian.org/git/users/agx/krb5-auth-dialog.git
 
 Package: krb5-auth-dialog
 Architecture: any
-Depends: ${shlibs:Depends}, gconf2
+Depends: ${shlibs:Depends}, ${misc:depends}, gconf2
 Description: tray applet for reauthenticating kerberos tickets
  krb5-auth-dialog is a simple tray applet that monitors kerberos tickets. It
  pops up reminders when the ticket is about to expire. Tickets can be refreshed
