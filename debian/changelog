@@ -1,3 +1,11 @@
+krb5-auth-dialog (0.8-3) unstable; urgency=low
+
+  * upload to unstable
+  * [8600023] add ${misc:depends}
+  * [858f4d8] move icons to $(datadir)/krb5-auth-dialog
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 20 Feb 2009 16:51:12 +0100
+
 krb5-auth-dialog (0.8-2) experimental; urgency=low
 
   * [30f663e] add Vcs-{Git,Browser} fields
