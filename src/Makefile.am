@@ -1,5 +1,5 @@
 INCLUDES = \
-	-DGLADEDIR=\""$(gladedir)/"\" \
+	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
 	-DLOCALE_DIR=\""$(localedir)/"\"
 
 bin_PROGRAMS = krb5-auth-dialog
@@ -24,8 +24,6 @@ krb5_auth_dialog_SOURCES =	\
 	krb5-auth-applet.h	\
 	krb5-auth-gconf.c	\
 	krb5-auth-gconf.h	\
-	krb5-auth-notify.c	\
-	krb5-auth-notify.h	\
 	krb5-auth-dbus.c	\
 	krb5-auth-dbus.h	\
 	dummy-strings.c
@@ -41,17 +39,28 @@ krb5_auth_dialog_LDADD = \
 			@GLADE_LIBS@ \
 			@GTK_LIBS@
 
+BUILT_SOURCES = \
+	krb5-auth-applet-dbus-glue.h
+
+krb5-auth-applet-dbus-glue.h: $(srcdir)/krb5-auth-applet-dbus.xml
+	dbus-binding-tool                 \
+		--mode=glib-server        \
+		--prefix=krb5_auth_dialog \
+		$< > $@
+
 AM_CPPFLAGS = -I $(top_srcdir)/gtksecentry/ -I $(top_srcdir)/secmem/
 
-gladedir = $(datadir)/krb5-auth-dialog
-glade_DATA =			\
+pkgdatadir = $(datadir)/krb5-auth-dialog
+pkgdata_DATA =			\
 	krb5-auth-dialog.glade
 
 EXTRA_DIST =		\
-	$(glade_DATA)   \
+	$(pkgdata_DATA)   \
 	$(schema_in_files) \
 	$(autostart_in_files) \
 	krb5-auth-dialog.1.in
 
 CLEANFILES = $(schema_DATA)
-DISTCLEANFILES = krb5-auth-dialog.desktop
+DISTCLEANFILES = \
+	krb5-auth-dialog.desktop 	\
+	krb5-auth-applet-dbus-glue.h

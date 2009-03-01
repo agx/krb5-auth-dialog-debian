@@ -1,3 +1,71 @@
+Sat Feb 28 16:41:54 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	add DBus interface to acquire TGT
+	* src/krb5-auth-dbus.[ch] (ka_dbus_acquire_tgt, ka_dbus_service): new
+	  functions
+	* src/Makefile.am: generate krb5-auth-applet-dbus-glue.h via
+	  dbus-binding-tool
+	* src/krb5-auth-applet-dbus.xml: new file
+	* README: example dbus call
+
+Sat Feb 28 16:35:45 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-applet.[ch] (ka_check_credentials): new function to
+	  check if a principal matches our default
+	  (ka_grab_credentials): return TRUE on success
+
+Sat Feb 28 14:27:57 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	Turn Krb5AuthApplet into a GObject named KaApplet
+	* src/krb5-auth-applet.[ch]: declare and define KaApplet,
+	  KaAppletPrivate
+	  (ka_applet_{set,get}_property): new functions to access properties
+	  (ka_applet_{dispose,finalize,{class,}_init}: new functions
+	  (ka_applet_get_show_trayicon, ka_applet_set_tgt_renewable,
+	   ka_applet_get_tgt_renewable, ka_applet_get_pw_prompt_secs,
+	   ka_applet_run_pw_dialog, ka_applet_get_pwdialog_xml,
+	   ka_applet_hide_pw_dialog, ka_applet_get_pw_label,
+	   ka_applet_set_pw_dialog_persist): new functions
+	* src/krb5-auth-dialog.c: use the above instead of accessing KaApplet
+	  private data
+	* src/krb5-auth-gconf.c: likewise
+	* src/krb5-auth-dbus.c: update copyright
+	* src/krb5-auth-notify.[ch] (ka_send_event_notification): moved from
+	  to src/krb5-auth-applet.c
+
+Sat Feb 28 14:18:35 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	add .gitignore files
+	* .gitignore: new file
+	* etpo/.gitignore: likewise
+	* po/.gitignore: likewise
+	* src/.gitignore: likewise
+
+Mon Jan 19 22:12:37 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-dialog.c: don't try pkinit if pk_userid is non-null
+	but empty
+	* src/krb5-auth-gconf.c: improve debug output for empty strings
+
+Mon Jan 12 00:46:14 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* update NEWS 
+
+Mon Jan 12 00:36:45 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	move icons to $(datadir)/krb5-auth-dialog to fix missing tray icon
+	when prefix != /usr
+	* icons/Makefile.am (smallicondir): move to $(pkgdatadir)
+	* src/Makefile.am: rename glade_DATA to pkgdata_DATA, GLADEDIR to
+	  KA_DATA_DIR
+	* src/krb5-auth-applet.c (ka_create_tray_icon): extend icon search
+	  path by $(KA_DATA_DIR)/icons
+	* src/krb5-auth-dialog.c (main): use $(KA_DATA_DIR)
+
+Sun Jan 11 22:59:34 CET 2009 Guido Günther <agx@sigxcpu.org>
+
+	* AUTHORS, MAINTAINERS: add myself 
+
 Sat Jan 10 15:37:58 CET 2009 Guido Günther <agx@sigxcpu.org>
 
 	* configure.ac: release 0.8
