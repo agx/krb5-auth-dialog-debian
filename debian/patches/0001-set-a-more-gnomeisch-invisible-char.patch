@@ -7,10 +7,10 @@ Subject: [PATCH] set a more gnomeisch invisible-char
  1 files changed, 1 insertions(+), 0 deletions(-)
 
 diff --git a/src/krb5-auth-dialog.c b/src/krb5-auth-dialog.c
-index 3beaa8b..c8fc27c 100644
+index dfd5ef5..6f4f3ea 100644
 --- a/src/krb5-auth-dialog.c
 +++ b/src/krb5-auth-dialog.c
-@@ -810,6 +810,7 @@ ka_create_gtk_secure_entry (GladeXML *xml, gchar *func_name, gchar *name,
+@@ -882,6 +882,7 @@ ka_create_gtk_secure_entry (GladeXML *xml, gchar *func_name, gchar *name,
  	if (!strcmp(name, "krb5_entry")) {
  		entry = gtk_secure_entry_new ();
  		gtk_secure_entry_set_activates_default(GTK_SECURE_ENTRY(entry), TRUE);
