@@ -1,3 +1,14 @@
+krb5-auth-dialog (0.8+svn128-1) unstable; urgency=low
+
+  * [d0f7048] Imported Upstream version 0.8+svn128
+      * dbus interface
+  * [7d35a63] reenable autogen.sh for SVN snapshot
+  * [0a0e716] drop patches applied upstream:
+      * 0002-don-t-try-pkinit-if-pk_userid-is-non-null-but-empty.patch
+      * 0003-move- icons-to-datadir-krb5-auth-dialog.patch
+
+ -- Guido Günther <agx@sigxcpu.org>  Sun, 01 Mar 2009 15:27:18 +0100
+
 krb5-auth-dialog (0.8-3) unstable; urgency=low
 
   * upload to unstable
