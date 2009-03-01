@@ -10,5 +10,5 @@ include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 DEB_BUILDDIR := build
 DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr --enable-network-manager --with-libnotify
 
-#post-patches::
-#	cd build && ../autogen.sh
+post-patches::
+	cd build && ../autogen.sh
