@@ -38,6 +38,7 @@
 
 #include "krb5-auth-dialog.h"
 #include "krb5-auth-applet.h"
+#include "krb5-auth-pwdialog.h"
 #include "krb5-auth-gconf.h"
 #include "krb5-auth-dbus.h"
 
@@ -56,6 +57,7 @@ static krb5_timestamp canceled_creds_expiry;
 static gboolean canceled;
 static gboolean invalid_auth;
 static gboolean always_run;
+static gboolean is_online = TRUE;
 
 static int grab_credentials (KaApplet* applet);
 static int ka_renew_credentials (KaApplet* applet);
@@ -158,6 +160,7 @@ ka_krb5_cc_clear_mcred(krb5_creds* mcred)
 #endif
 }
 
+
 /* ***************************************************************** */
 /* ***************************************************************** */
 
@@ -197,50 +200,29 @@ out:
 }
 
 
-static gchar* minutes_to_expiry_text (int minutes)
+/* time in seconds the tgt will be still valid */
+int
+ka_tgt_valid_seconds()
 {
-	gchar *expiry_text;
-	gchar *tmp;
+	krb5_timestamp now;
 
-	if (minutes > 0) {
-		expiry_text = g_strdup_printf (ngettext("Your credentials expire in %d minute",
-		                                        "Your credentials expire in %d minutes",
-		                                        minutes),
-		                               minutes);
-	} else {
-		expiry_text = g_strdup (_("Your credentials have expired"));
-		tmp = g_strdup_printf ("<span foreground=\"red\">%s</span>", expiry_text);
-		g_free (expiry_text);
-		expiry_text = tmp;
-	}
+	if (krb5_timeofday(kcontext, &now))
+		return 0;
 
-	return expiry_text;
+	return (creds_expiry - now);
 }
 
-
-static gboolean
-krb5_auth_dialog_wrong_label_update_expiry (GtkWidget* label)
+/* return credential cache filename, strip "FILE:" prefix if necessary */
+static const char*
+ka_ccache_filename (void)
 {
-	int minutes_left;
-	krb5_timestamp now;
-	gchar *expiry_text;
-	gchar *expiry_markup;
+	const gchar *ccache_name;
 
-	g_return_val_if_fail (label!= NULL, FALSE);
-
-	if (krb5_timeofday(kcontext, &now) != 0) {
-		return TRUE;
-	}
-
-	minutes_left = (creds_expiry - now) / 60;
-	expiry_text = minutes_to_expiry_text (minutes_left);
-
-	expiry_markup = g_strdup_printf ("<span size=\"smaller\" style=\"italic\">%s</span>", expiry_text);
-	gtk_label_set_markup (GTK_LABEL (label), expiry_markup);
-	g_free (expiry_text);
-	g_free (expiry_markup);
-
-	return TRUE;
+	ccache_name = krb5_cc_default_name (kcontext);
+	if (g_str_has_prefix (ccache_name, "FILE:"))
+		return &(ccache_name[5]);
+	else
+		return ccache_name;
 }
 
 
@@ -249,97 +231,29 @@ static gboolean
 krb5_auth_dialog_do_updates (gpointer data)
 {
 	KaApplet* applet = KA_APPLET(data);
+	KaPwDialog* pwdialog = ka_applet_get_pwdialog(applet);
 
-	g_return_val_if_fail (applet != NULL, FALSE);
+	g_return_val_if_fail (pwdialog != NULL, FALSE);
 	/* Update creds_expiry and close the applet if we got the creds by other means (e.g. kinit) */
 	if (!credentials_expiring_real(applet))
-		ka_applet_hide_pw_dialog(applet, FALSE);
+		ka_pwdialog_hide(pwdialog, FALSE);
 
 	/* Update the expiry information in the dialog */
-	krb5_auth_dialog_wrong_label_update_expiry (ka_applet_get_pw_label(applet));
+	ka_pwdialog_status_update (pwdialog);
 	return TRUE;
 }
 
 
-static void
-krb5_auth_dialog_setup (KaApplet *applet,
-                        const gchar *krb5prompt,
-                        gboolean hide_password)
-{
-	GtkWidget *entry;
-	GtkWidget *label;
-	gchar *wrong_text;
-	gchar *wrong_markup;
-	gchar *prompt;
-	int pw4len;
-
-	if (krb5prompt == NULL) {
-		prompt = g_strdup (_("Please enter your Kerberos password."));
-	} else {
-		/* Kerberos's prompts are a mess, and basically impossible to
-		 * translate.  There's basically no way short of doing a lot of
-		 * string parsing to translate them.  The most common prompt is
-		 * "Password for $uid:".  We special case that one at least.  We
-		 * cannot do any of the fancier strings (like challenges),
-		 * though. */
-		pw4len = strlen ("Password for ");
-		if (strncmp (krb5prompt, "Password for ", pw4len) == 0) {
-			gchar *uid = (gchar *) (krb5prompt + pw4len);
-			prompt = g_strdup_printf (_("Please enter the password for '%s'"), uid);
-		} else {
-			prompt = g_strdup (krb5prompt);
-		}
-	}
-
-	/* Clear the password entry field */
-	entry = glade_xml_get_widget (ka_applet_get_pwdialog_xml(applet),
-                                      "krb5_entry");
-	gtk_secure_entry_set_text (GTK_SECURE_ENTRY (entry), "");
-
-	/* Use the prompt label that krb5 provides us */
-	label = glade_xml_get_widget (ka_applet_get_pwdialog_xml(applet),
-                                      "krb5_message_label");
-	gtk_label_set_text (GTK_LABEL (label), prompt);
-
-	/* Add our extra message hints, if any */
-	wrong_text = NULL;
-
-	if (ka_applet_get_pw_label(applet)) {
-		if (invalid_auth) {
-			wrong_text = g_strdup (_("The password you entered is invalid"));
-		} else {
-			krb5_timestamp now;
-			int minutes_left;
-
-			if (krb5_timeofday(kcontext, &now) == 0)
-				minutes_left = (creds_expiry - now) / 60;
-			else
-				minutes_left = 0;
-			wrong_text = minutes_to_expiry_text (minutes_left);
-		}
-	}
-
-	if (wrong_text) {
-		wrong_markup = g_strdup_printf ("<span size=\"smaller\" style=\"italic\">%s</span>", wrong_text);
-		gtk_label_set_markup (GTK_LABEL (ka_applet_get_pw_label(applet)), wrong_markup);
-		g_free(wrong_text);
-		g_free(wrong_markup);
-	} else {
-		gtk_label_set_text (GTK_LABEL (ka_applet_get_pw_label(applet)), "");
-	}
-	g_free (prompt);
-}
-
-
 static krb5_error_code
-auth_dialog_prompter (krb5_context ctx,
+auth_dialog_prompter (krb5_context ctx G_GNUC_UNUSED,
                       void *data,
-                      const char *name,
-                      const char *banner,
+                      const char *name G_GNUC_UNUSED,
+                      const char *banner G_GNUC_UNUSED,
                       int num_prompts,
                       krb5_prompt prompts[])
 {
-	KaApplet* applet = KA_APPLET(data);
+	KaApplet *applet = KA_APPLET(data);
+	KaPwDialog *pwdialog = ka_applet_get_pwdialog(applet);
 	krb5_error_code errcode;
 	int i;
 
@@ -353,27 +267,22 @@ auth_dialog_prompter (krb5_context ctx,
 		int response;
 		guint32 source_id;
 
-		GtkWidget *entry;
-
 		errcode = KRB5_LIBOS_CANTREADPWD;
 
-		krb5_auth_dialog_setup (applet, (gchar *) prompts[i].prompt, prompts[i].hidden);
-		entry = glade_xml_get_widget (ka_applet_get_pwdialog_xml(applet), "krb5_entry");
-		gtk_widget_grab_focus (entry);
-
 		source_id = g_timeout_add_seconds (5, (GSourceFunc)krb5_auth_dialog_do_updates, applet);
-		response = ka_applet_run_pw_dialog (applet);
+		ka_pwdialog_setup (pwdialog, (gchar *) prompts[i].prompt, invalid_auth);
+		response = ka_pwdialog_run (pwdialog);
 		switch (response)
 		{
 			case GTK_RESPONSE_OK:
-				password = gtk_secure_entry_get_text (GTK_SECURE_ENTRY (entry));
+				password = ka_pwdialog_get_password(pwdialog);
 				password_len = strlen (password);
 				break;
+			case GTK_RESPONSE_DELETE_EVENT:
 			case GTK_RESPONSE_CANCEL:
 				canceled = TRUE;
 				break;
 			case GTK_RESPONSE_NONE:
-			case GTK_RESPONSE_DELETE_EVENT:
 				break;
 			default:
 				g_warning ("Unknown Response: %d", response);
@@ -393,14 +302,13 @@ auth_dialog_prompter (krb5_context ctx,
 		errcode = 0;
 	}
 cleanup:
-	ka_applet_hide_pw_dialog (applet, TRUE);
+	ka_pwdialog_hide (pwdialog, TRUE);
 	/* Reset this, so we know the next time we get a TRUE value, it is accurate. */
 	invalid_auth = FALSE;
 
 	return errcode;
 }
 
-static gboolean is_online = TRUE;
 
 #ifdef ENABLE_NETWORK_MANAGER
 static void
@@ -472,7 +380,7 @@ out:
 
 static void
 set_options_from_creds(const KaApplet* applet,
-		       krb5_context context,
+		       krb5_context context G_GNUC_UNUSED,
 		       krb5_creds *in,
 		       krb5_get_init_creds_opt *out)
 {
@@ -506,10 +414,10 @@ set_options_from_creds(const KaApplet* applet,
 }
 
 
+#ifdef ENABLE_PKINIT
 static krb5_error_code
 ka_auth_pkinit(KaApplet* applet, krb5_creds* creds, const char* pk_userid)
 {
-#ifdef ENABLE_PKINIT
 	krb5_get_init_creds_opt *opts = NULL;
 	krb5_error_code retval;
 
@@ -538,16 +446,33 @@ ka_auth_pkinit(KaApplet* applet, krb5_creds* creds, const char* pk_userid)
 	                                      NULL, auth_dialog_prompter, applet,
 		                              0, NULL, opts);
 out:
-	krb5_get_init_creds_opt_free(kcontext, opts);
+	if (opts)
+		krb5_get_init_creds_opt_free(kcontext, opts);
 	return retval;
-#else  /* ENABLE_PKINIT */
-	return 0;
+}
 #endif /* ! ENABLE_PKINIT */
+
+static krb5_error_code
+ka_auth_password(KaApplet* applet, krb5_creds* creds)
+{
+	krb5_error_code retval;
+	krb5_get_init_creds_opt *opts = NULL;
+
+	retval = krb5_get_init_creds_opt_alloc (kcontext, &opts);
+	if (retval)
+		goto out;
+	set_options_from_creds (applet, kcontext, creds, opts);
+	retval = krb5_get_init_creds_password(kcontext, creds, kprincipal,
+					      NULL, auth_dialog_prompter, applet,
+					      0, NULL, opts);
+out:
+	if (opts)
+		krb5_get_init_creds_opt_free(kcontext, opts);
+	return retval;
 }
 
-
-krb5_error_code
-ka_parse_name(KaApplet* applet, krb5_context kcontext, krb5_principal* kprinc)
+static krb5_error_code
+ka_parse_name(KaApplet* applet, krb5_context krbcontext, krb5_principal* kprinc)
 {
 	krb5_error_code ret;
 	gchar *principal = NULL;
@@ -555,10 +480,70 @@ ka_parse_name(KaApplet* applet, krb5_context kcontext, krb5_principal* kprinc)
 	g_object_get(applet, "principal", &principal,
 			     NULL);
 
-	ret = krb5_parse_name(kcontext, principal,
+	ret = krb5_parse_name(krbcontext, principal,
 			      kprinc);
 
 	g_free(principal);
+	return ret;
+}
+
+
+static void
+ccache_changed_cb (GFileMonitor *monitor G_GNUC_UNUSED,
+                   GFile *file,
+                   GFile *other_file G_GNUC_UNUSED,
+                   GFileMonitorEvent event_type,
+                   gpointer data)
+{
+	KaApplet *applet = KA_APPLET(data);
+	gchar *ccache_name = g_file_get_path(file);
+
+	switch (event_type) {
+		case G_FILE_MONITOR_EVENT_DELETED:
+		case G_FILE_MONITOR_EVENT_CREATED:
+		case G_FILE_MONITOR_EVENT_CHANGED:
+			KA_DEBUG ("%s changed", ccache_name);
+			credentials_expiring ((gpointer)applet);
+			break;
+		default:
+			KA_DEBUG ("%s unhandled event: %d", ccache_name, event_type);
+	}
+	g_free (ccache_name);
+}
+
+
+static gboolean
+monitor_ccache(KaApplet* applet)
+{
+	const gchar *ccache_name;
+	GFile *ccache;
+	GFileMonitor *monitor;
+	GError *err = NULL;
+	gboolean ret = FALSE;
+
+	ccache_name = ka_ccache_filename ();
+	g_return_val_if_fail (ccache_name != NULL, FALSE);
+
+	ccache = g_file_new_for_path (ccache_name);
+	monitor = g_file_monitor_file (ccache, G_FILE_MONITOR_NONE, NULL, &err);
+	g_assert ((!monitor && err) || (monitor && !err));
+	if (!monitor) {
+		/* cache disappeared? */
+		if (err->code == G_FILE_ERROR_NOENT)
+			credentials_expiring ((gpointer)applet);
+		else
+			g_warning ("Failed to monitor %s: %s", ccache_name, err->message);
+		goto out;
+	} else {
+		/* g_file_monitor_set_rate_limit(monitor, 10*1000); */
+		g_signal_connect (monitor, "changed", G_CALLBACK (ccache_changed_cb), applet);
+		KA_DEBUG ("Monitoring %s", ccache_name);
+		ret = TRUE;
+	}
+out:
+	g_object_unref (ccache);
+	if (err)
+		g_error_free (err);
 	return ret;
 }
 
@@ -567,14 +552,11 @@ ka_parse_name(KaApplet* applet, krb5_context kcontext, krb5_principal* kprinc)
 static int
 grab_credentials (KaApplet* applet)
 {
-	krb5_error_code retval;
+	krb5_error_code retval = KRB5_KDC_UNREACH;
 	krb5_creds my_creds;
 	krb5_ccache ccache;
-	krb5_get_init_creds_opt *opt = NULL;
 	gchar *pk_userid = NULL;
-
-	g_object_get(applet, "pk-userid", &pk_userid,
-			     NULL);
+	gboolean pw_auth = TRUE;
 
 	memset(&my_creds, 0, sizeof(my_creds));
 
@@ -588,21 +570,19 @@ grab_credentials (KaApplet* applet)
 	if (retval)
 		goto out2;
 
-#if ENABLE_PKINIT
-	if (pk_userid && strlen(pk_userid)) { /* try pkinit */
-#else
-	if (0) {
-#endif
+	g_object_get(applet, "pk-userid", &pk_userid, NULL);
+#ifdef ENABLE_PKINIT
+	/* pk_userid set: try pkinit */
+	if (pk_userid && strlen(pk_userid)) {
 		retval = ka_auth_pkinit(applet, &my_creds, pk_userid);
-	} else {
-		retval = krb5_get_init_creds_opt_alloc (kcontext, &opt);
-		if (retval)
-			goto out;
-		set_options_from_creds (applet, kcontext, &my_creds, opt);
-		retval = krb5_get_init_creds_password(kcontext, &my_creds, kprincipal,
-						      NULL, auth_dialog_prompter, applet,
-						      0, NULL, opt);
+		/* other error than: "no token found" - no need to try password auth: */
+		if (retval != HX509_PKCS11_NO_TOKEN && retval != HX509_PKCS11_NO_SLOT)
+			pw_auth = FALSE;
 	}
+#endif /* ENABLE_PKINIT */
+	if (pw_auth)
+		retval = ka_auth_password(applet, &my_creds);
+
 	creds_expiry = my_creds.times.endtime;
 	if (canceled)
 		canceled_creds_expiry = creds_expiry;
@@ -615,7 +595,7 @@ grab_credentials (KaApplet* applet)
 #endif
 				/* Invalid password/pin, try again. */
 				invalid_auth = TRUE;
-				goto out;
+				break;
 			default:
 				KA_DEBUG("Auth failed with %d: %s", retval,
 				         get_error_message(kcontext, retval));
@@ -630,15 +610,11 @@ grab_credentials (KaApplet* applet)
 	retval = krb5_cc_store_cred(kcontext, ccache, &my_creds);
 	if (retval)
 		goto out;
-
 out:
-	if (opt)
-		krb5_get_init_creds_opt_free(kcontext, opt);
 	krb5_free_cred_contents (kcontext, &my_creds);
 	krb5_cc_close (kcontext, ccache);
 out2:
 	g_free(pk_userid);
-
 	return retval;
 }
 
@@ -735,7 +711,7 @@ out:
 }
 
 static gboolean
-using_krb5()
+using_krb5(void)
 {
 	krb5_error_code err;
 	gboolean have_tgt = FALSE;
@@ -756,7 +732,8 @@ using_krb5()
 
 
 void
-ka_destroy_cache (GtkMenuItem  *menuitem, gpointer data)
+ka_destroy_cache (GtkMenuItem  *menuitem G_GNUC_UNUSED,
+		  gpointer data)
 {
 	KaApplet *applet = KA_APPLET(data);
 	krb5_ccache  ccache;
@@ -792,7 +769,6 @@ ka_error_dialog(int err)
 gboolean
 ka_check_credentials (KaApplet *applet, const char* newprincipal)
 {
-	gboolean renewable;
 	gboolean success = FALSE;
 	int retval;
 	char* principal;
@@ -843,39 +819,78 @@ ka_grab_credentials (KaApplet* applet)
 	int retval;
 	gboolean retry;
 	int success = FALSE;
+	KaPwDialog *pwdialog = ka_applet_get_pwdialog(applet);
 
-	ka_applet_set_pw_dialog_persist(applet, TRUE);
+	ka_pwdialog_set_persist(pwdialog, TRUE);
 	do {
-		retry = TRUE;
 		retval = grab_credentials (applet);
 		if (invalid_auth)
 			continue;
-		switch (retval) {
-		    case 0: /* success */
-			    success = TRUE;
-		    case KRB5_LIBOS_PWDINTR:     /* canceled (heimdal) */
-		    case KRB5_LIBOS_CANTREADPWD: /* canceled (mit) */
-			    retry = FALSE;
-			    break;
-		    case KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN:
-		    default:
-			    ka_error_dialog(retval);
-			    retry = FALSE;
-			    break;
+		if (canceled)
+			break;
+		if (retval) {
+			ka_error_dialog(retval);
+			break;
+		} else {
+			success = TRUE;
+			break;
 		}
-	} while(retry);
+	} while(TRUE);
 
-	ka_applet_set_pw_dialog_persist(applet, FALSE);
+	ka_pwdialog_set_persist(pwdialog, FALSE);
 	credentials_expiring_real(applet);
 
 	return success;
 }
 
 
+static void
+ka_secmem_init (void)
+{
+	/* Initialize secure memory.  1 is too small, so the default size
+	will be used.  */
+	secmem_init (1);
+	secmem_set_flags (SECMEM_WARN);
+	drop_privs ();
+
+	if (atexit (secmem_term))
+		g_error("Couln't register atexit handler");
+}
+
+
+static gboolean
+ka_nm_init(void)
+{
+#ifdef ENABLE_NETWORK_MANAGER
+	libnm_glib_ctx *nm_context;
+	guint32 nm_callback_id;
+
+	nm_context = libnm_glib_init ();
+	if (!nm_context) {
+		g_warning ("Could not initialize libnm_glib");
+	} else {
+		nm_callback_id = libnm_glib_register_callback (nm_context, network_state_cb, &is_online, NULL);
+		if (nm_callback_id == 0) {
+			libnm_glib_shutdown (nm_context);
+			nm_context = NULL;
+
+			g_warning ("Could not connect to NetworkManager, connection status will not be managed!");
+		}
+	}
+#endif /* ENABLE_NETWORK_MANAGER */
+	return TRUE;
+}
+
+
 static GtkWidget*
-ka_create_gtk_secure_entry (GladeXML *xml, gchar *func_name, gchar *name,
-				gchar *s1, gchar *s2, gint i1, gint i2,
-				gpointer user_data)
+ka_create_gtk_secure_entry (GladeXML *xml G_GNUC_UNUSED,
+			    gchar *func_name G_GNUC_UNUSED,
+			    gchar *name,
+			    gchar *s1 G_GNUC_UNUSED,
+			    gchar *s2 G_GNUC_UNUSED,
+			    gint i1 G_GNUC_UNUSED,
+			    gint i2 G_GNUC_UNUSED,
+			    gpointer user_data G_GNUC_UNUSED)
 {
 	GtkWidget* entry = NULL;
 
@@ -890,26 +905,13 @@ ka_create_gtk_secure_entry (GladeXML *xml, gchar *func_name, gchar *name,
 }
 
 
-static void
-ka_secmem_init ()
-{
-	/* Initialize secure memory.  1 is too small, so the default size
-	will be used.  */
-	secmem_init (1);
-	secmem_set_flags (SECMEM_WARN);
-	drop_privs ();
-
-	if (atexit (secmem_term))
-		g_error("Couln't register atexit handler");
-}
-
-
 int
 main (int argc, char *argv[])
 {
 	KaApplet *applet;
 	GOptionContext *context;
 	GError *error = NULL;
+	GladeXML *xml;
 
 	guint status = 0;
 	gboolean run_auto = FALSE, run_always = FALSE;
@@ -923,10 +925,6 @@ main (int argc, char *argv[])
   		{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 	};
 
-#ifdef ENABLE_NETWORK_MANAGER
-	libnm_glib_ctx *nm_context;
-	guint32 nm_callback_id;	
-#endif
 	context = g_option_context_new ("- Kerberos 5 credential checking");
 	g_option_context_add_main_entries (context, options, NULL);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
@@ -951,35 +949,24 @@ main (int argc, char *argv[])
 	}
 	if (using_krb5 () || always_run) {
 		g_set_application_name (_("Network Authentication"));
-		glade_set_custom_handler (&ka_create_gtk_secure_entry, NULL);
 
-		applet = ka_applet_create ();
+		glade_set_custom_handler (&ka_create_gtk_secure_entry, NULL);
+		xml = glade_xml_new (KA_DATA_DIR G_DIR_SEPARATOR_S
+				     PACKAGE ".glade", NULL, NULL);
+		applet = ka_applet_create (xml);
 		if (!applet)
 			return 1;
 		if (!ka_gconf_init (applet, argc, argv))
 			return 1;
-
-#ifdef ENABLE_NETWORK_MANAGER
-		nm_context = libnm_glib_init ();
-		if (!nm_context) {
-			g_warning ("Could not initialize libnm_glib");
-		} else {
-			nm_callback_id = libnm_glib_register_callback (nm_context, network_state_cb, &is_online, NULL);
-			if (nm_callback_id == 0) {
-				libnm_glib_shutdown (nm_context);
-				nm_context = NULL;
-
-				g_warning ("Could not connect to NetworkManager, connection status will not be managed!");
-			}
-		}
-#endif /* ENABLE_NETWORK_MANAGER */
+		ka_nm_init();
 
 		if (credentials_expiring ((gpointer)applet)) {
 			g_timeout_add_seconds (CREDENTIAL_CHECK_INTERVAL, (GSourceFunc)credentials_expiring, applet);
+			monitor_ccache (applet);
 		}
 		ka_dbus_service(applet);
 		gtk_main ();
+		g_object_unref(xml);
 	}
-
 	return 0;
 }

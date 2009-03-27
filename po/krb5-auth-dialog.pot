@@ -694,7 +694,7 @@ msgstr ""
 #. import_err.et:imp:IMPORT_GET_PARAMS
 #. kv5m_err.et:kv5m:KV5M_GSS_QUEUE
 #: ../src/dummy-strings.c:135 ../src/dummy-strings.c:388
-msgid "$Id: krb5-auth-dialog.pot 115 2009-01-10 13:25:51Z guidog $"
+msgid "$Id$"
 msgstr ""
 
 #. kdc5_err.et:kdc5:KDC5_RCSID
