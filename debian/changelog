@@ -1,3 +1,14 @@
+krb5-auth-dialog (0.8+svn136-1) unstable; urgency=low
+
+  * [89329f6] Imported Upstream snapshot 0.8+svn136
+  * Patches:
+      - [6e6af1c] 0001-set-a-more-gnomeisch-invisible-char: rediff
+      - [f162ecd] 0002-add-dbus-service-file: add dbus service file to fire up
+        krb5-auth-dialog when an application requests a ticket but
+        krb5-auth-dialog isn't running
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 28 Mar 2009 13:41:12 +0100
+
 krb5-auth-dialog (0.8+svn128-1) unstable; urgency=low
 
   * [d0f7048] Imported Upstream version 0.8+svn128
