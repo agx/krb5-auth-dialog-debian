@@ -1,3 +1,10 @@
+krb5-auth-dialog (0.8+svn136-2) unstable; urgency=low
+
+  * [cf0e693] allow to set ticket flags via preferences dialog (Closes:
+    #521251)
+
+ -- Guido Günther <agx@sigxcpu.org>  Thu, 02 Apr 2009 16:54:35 +0200
+
 krb5-auth-dialog (0.8+svn136-1) unstable; urgency=low
 
   * [89329f6] Imported Upstream snapshot 0.8+svn136
