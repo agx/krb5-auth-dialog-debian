@@ -22,93 +22,8 @@
 #include <gconf/gconf-client.h>
 
 #include "krb5-auth-applet.h"
+#include "krb5-auth-gconf-tools.h"
 #include "krb5-auth-gconf.h"
-
-#define KA_GCONF_PATH			"/apps/" PACKAGE
-#define KA_GCONF_KEY_PRINCIPAL		KA_GCONF_PATH "/principal"
-#define KA_GCONF_KEY_PK_USERID		KA_GCONF_PATH "/pk_userid"
-#define KA_GCONF_KEY_PROMPT_MINS	KA_GCONF_PATH "/prompt_minutes"
-#define KA_GCONF_KEY_SHOW_TRAYICON	KA_GCONF_PATH "/show_trayicon"
-
-static gboolean
-ka_gconf_get_string (GConfClient* client,
-		     const char* key,
-		     char** value)
-{
-	GError*		error = NULL;
-	gboolean	success = FALSE;
-	GConfValue*	gc_value;
-
-	g_return_val_if_fail (key != NULL, FALSE);
-	g_return_val_if_fail (*value == NULL, FALSE);
-
-	if ((gc_value = gconf_client_get (client, key, &error))) {
-		if (gc_value->type == GCONF_VALUE_STRING) {
-			*value = g_strdup (gconf_value_get_string (gc_value));
-			success = TRUE;
-		} else if (error) {
-				g_print (error->message);
-				g_error_free (error);
-		}
-		gconf_value_free (gc_value);
-	}
-	return success;
-}
-
-
-static gboolean
-ka_gconf_get_int (GConfClient* client,
-		    const char* key,
-		    int* value)
-{
-	GError*		error = NULL;
-	gboolean	success = FALSE;
-	GConfValue*	gc_value;
-
-	g_return_val_if_fail (key != NULL, FALSE);
-	g_return_val_if_fail (value != NULL, FALSE);
-
-	if ((gc_value = gconf_client_get (client, key, &error)))
-	{
-		if (gc_value->type == GCONF_VALUE_INT) {
-			*value = gconf_value_get_int (gc_value);
-			success = TRUE;
-		} else if (error) {
-				g_print (error->message);
-				g_error_free (error);
-		}
-		gconf_value_free (gc_value);
-	}
-	return success;
-}
-
-
-static gboolean
-ka_gconf_get_bool (GConfClient* client,
-		    const char* key,
-		    gboolean* value)
-{
-	GError*		error = NULL;
-	gboolean	success = FALSE;
-	GConfValue*	gc_value;
-
-	g_return_val_if_fail (key != NULL, FALSE);
-	g_return_val_if_fail (value != NULL, FALSE);
-
-	if ((gc_value = gconf_client_get (client, key, &error)))
-	{
-		if (gc_value->type == GCONF_VALUE_BOOL) {
-			*value = gconf_value_get_bool (gc_value);
-			success = TRUE;
-		} else if (error) {
-				g_print (error->message);
-				g_error_free (error);
-		}
-		gconf_value_free (gc_value);
-	}
-	return success;
-}
-
 
 static gboolean
 ka_gconf_set_principal (GConfClient* client, KaApplet* applet)
@@ -164,6 +79,45 @@ ka_gconf_set_show_trayicon (GConfClient* client, KaApplet* applet)
 }
 
 
+static gboolean
+ka_gconf_set_tgt_forwardable (GConfClient* client, KaApplet* applet)
+{
+	gboolean forwardable = FALSE;
+
+	if(!ka_gconf_get_bool(client, KA_GCONF_KEY_FORWARDABLE, &forwardable)) {
+		forwardable = TRUE;
+	}
+	g_object_set(applet, "tgt-forwardable", forwardable, NULL);
+	return TRUE;
+}
+
+
+static gboolean
+ka_gconf_set_tgt_renewable (GConfClient* client, KaApplet* applet)
+{
+	gboolean renewable = FALSE;
+
+	if(!ka_gconf_get_bool(client, KA_GCONF_KEY_RENEWABLE, &renewable)) {
+		renewable = TRUE;
+	}
+	g_object_set(applet, "tgt-renewable", renewable, NULL);
+	return TRUE;
+}
+
+
+static gboolean
+ka_gconf_set_tgt_proxiable (GConfClient* client, KaApplet* applet)
+{
+	gboolean proxiable = FALSE;
+
+	if(!ka_gconf_get_bool(client, KA_GCONF_KEY_PROXIABLE, &proxiable)) {
+		proxiable = TRUE;
+	}
+	g_object_set(applet, "tgt-proxiable", proxiable, NULL);
+	return TRUE;
+}
+
+
 static void
 ka_gconf_key_changed_callback (GConfClient* client,
                                guint cnxn_id G_GNUC_UNUSED,
@@ -186,6 +140,12 @@ ka_gconf_key_changed_callback (GConfClient* client,
 		ka_gconf_set_show_trayicon (client, applet);
 	} else if (g_strcmp0 (key, KA_GCONF_KEY_PK_USERID) == 0) {
 		ka_gconf_set_pk_userid (client, applet);
+	} else if (g_strcmp0 (key, KA_GCONF_KEY_FORWARDABLE) == 0) {
+		ka_gconf_set_tgt_forwardable (client, applet);
+	} else if (g_strcmp0 (key, KA_GCONF_KEY_RENEWABLE) == 0) {
+		ka_gconf_set_tgt_renewable (client, applet);
+	} else if (g_strcmp0 (key, KA_GCONF_KEY_PROXIABLE) == 0) {
+		ka_gconf_set_tgt_proxiable (client, applet);
 	} else
 		g_warning("Received notification for unknown gconf key %s", key);
 	return;
@@ -216,6 +176,9 @@ ka_gconf_init (KaApplet* applet,
 	ka_gconf_set_prompt_mins (client, applet);
 	ka_gconf_set_show_trayicon (client, applet);
 	ka_gconf_set_pk_userid(client, applet);
+	ka_gconf_set_tgt_forwardable(client, applet);
+	ka_gconf_set_tgt_renewable(client, applet);
+	ka_gconf_set_tgt_proxiable(client, applet);
 
 	success = TRUE;
 out:
