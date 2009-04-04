@@ -43,6 +43,9 @@ enum
   KA_PROP_PK_USERID,
   KA_PROP_TRAYICON,
   KA_PROP_PW_PROMPT_MINS,
+  KA_PROP_TGT_FORWARDABLE,
+  KA_PROP_TGT_PROXIABLE,
+  KA_PROP_TGT_RENEWABLE,
 };
 
 struct _KaApplet {
@@ -73,6 +76,9 @@ struct _KaAppletPrivate
 	char* principal;		/* the principal to request */
 	gboolean renewable;		/* credentials renewable? */
 	char* pk_userid;		/* "userid" for pkint */
+	gboolean tgt_forwardable;	/* request a forwardable ticket */
+	gboolean tgt_renewable;		/* request a renewable ticket */
+	gboolean tgt_proxiable;		/* request a proxiable ticket */
 };
 
 static void
@@ -106,6 +112,21 @@ ka_applet_set_property (GObject      *object,
 	KA_DEBUG ("%s: %d", pspec->name, self->priv->pw_prompt_secs/60);
 	break;
 
+    case KA_PROP_TGT_FORWARDABLE:
+	self->priv->tgt_forwardable = g_value_get_boolean (value);
+	KA_DEBUG ("%s: %s", pspec->name, self->priv->tgt_forwardable ? "True" : "False");
+	break;
+
+    case KA_PROP_TGT_PROXIABLE:
+	self->priv->tgt_proxiable = g_value_get_boolean (value);
+	KA_DEBUG ("%s: %s", pspec->name, self->priv->tgt_proxiable ? "True" : "False");
+	break;
+
+    case KA_PROP_TGT_RENEWABLE:
+	self->priv->tgt_renewable = g_value_get_boolean (value);
+	KA_DEBUG ("%s: %s", pspec->name, self->priv->tgt_renewable ? "True" : "False");
+	break;
+
     default:
 	/* We don't have any other property... */
 	G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -137,6 +158,18 @@ ka_applet_get_property (GObject    *object,
 
     case KA_PROP_PW_PROMPT_MINS:
 	g_value_set_uint (value, self->priv->pw_prompt_secs / 60);
+	break;
+
+    case KA_PROP_TGT_FORWARDABLE:
+	g_value_set_boolean (value, self->priv->tgt_forwardable);
+	break;
+
+    case KA_PROP_TGT_PROXIABLE:
+	g_value_set_boolean (value, self->priv->tgt_proxiable);
+	break;
+
+    case KA_PROP_TGT_RENEWABLE:
+	g_value_set_boolean (value, self->priv->tgt_renewable);
 	break;
 
     default:
@@ -203,7 +236,7 @@ ka_applet_class_init(KaAppletClass *klass)
 
 	pspec = g_param_spec_string ("principal",
 				     "Principal",
-				     "Get/Set Kerberos Principal",
+				     "Get/Set Kerberos principal",
 				     "",
 				     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
 	g_object_class_install_property (object_class,
@@ -211,7 +244,7 @@ ka_applet_class_init(KaAppletClass *klass)
                                          pspec);
 
 	pspec = g_param_spec_string ("pk-userid",
-				     "PKinit Identifier",
+				     "PKinit identifier",
 				     "Get/Set Pkinit identifier",
 				     "",
 				     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
@@ -229,12 +262,39 @@ ka_applet_class_init(KaAppletClass *klass)
                                          pspec);
 
 	pspec = g_param_spec_uint   ("pw-prompt-mins",
-				     "Password Prompting Interval",
-				     "Password Prompting Interval in Minutes",
+				     "Password prompting interval",
+				     "Password prompting interval in minutes",
 				     0, G_MAXUINT, MINUTES_BEFORE_PROMPTING,
 				     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
 	g_object_class_install_property (object_class,
                                          KA_PROP_PW_PROMPT_MINS,
+                                         pspec);
+
+	pspec = g_param_spec_boolean("tgt-forwardable",
+				     "Forwardable ticket",
+				     "wether to request forwardable tickets",
+				     FALSE,
+				     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+	g_object_class_install_property (object_class,
+                                         KA_PROP_TGT_FORWARDABLE,
+                                         pspec);
+
+	pspec = g_param_spec_boolean("tgt-proxiable",
+				     "Proxiable ticket",
+				     "wether to request proxiable tickets",
+				     FALSE,
+				     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+	g_object_class_install_property (object_class,
+                                         KA_PROP_TGT_PROXIABLE,
+                                         pspec);
+
+	pspec = g_param_spec_boolean("tgt-renewable",
+				     "Renewable ticket",
+				     "wether to request renewable tickets",
+				     FALSE,
+				     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+	g_object_class_install_property (object_class,
+                                         KA_PROP_TGT_RENEWABLE,
                                          pspec);
 }
 
@@ -372,6 +432,13 @@ ka_applet_menu_add_separator_item (GtkWidget* menu)
 	gtk_widget_show (menu_item);
 }
 
+static void
+ka_applet_cb_preferences (GtkWidget* menuitem G_GNUC_UNUSED,
+                          gpointer user_data G_GNUC_UNUSED)
+{
+	g_spawn_command_line_async ("krb5-auth-dialog-preferences", NULL);
+}
+
 
 /* Free all resources and quit */
 static void
@@ -420,6 +487,14 @@ ka_applet_create_context_menu (KaApplet* applet)
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
 	ka_applet_menu_add_separator_item (menu);
+
+	/* Preferences */
+	menu_item = gtk_image_menu_item_new_with_mnemonic (_("_Preferences"));
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (ka_applet_cb_preferences), applet);
+	image = gtk_image_new_from_stock (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+
 
 	/* About item */
 	menu_item = gtk_image_menu_item_new_with_mnemonic (_("_About"));
