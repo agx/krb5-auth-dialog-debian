@@ -1,3 +1,14 @@
+krb5-auth-dialog (0.8+svn141-1) unstable; urgency=low
+
+  * [61675c0] Imported Upstream version 0.8+svn141
+  * [fea8c76] drop patches merges upstream:
+       - 0002-add-dbus-service-file.patch
+       - 0003-add-preferences-dialog.patch
+  * [d58c012] rediff 0001-set-a-more-gnomeisch-invisible-char.patch
+  * [b720589] temporarily depend on libssl-dev to work around #522663
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 04 Apr 2009 15:04:42 +0200
+
 krb5-auth-dialog (0.8+svn136-2) unstable; urgency=low
 
   * [cf0e693] allow to set ticket flags via preferences dialog (Closes:
