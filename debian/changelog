@@ -1,3 +1,14 @@
+krb5-auth-dialog (0.9~rc1-1) unstable; urgency=low
+
+  * [d6eee4e] Imported Upstream version 0.9~rc1
+      * pkinit anchors configurable
+      * preference dialog cleanups
+      * fixes empty principal if gconf value is empty
+  * [e442822] bump standards version
+  * [1f1694f] debian/control: it has kind of a homepage now
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 18 Apr 2009 01:13:07 +0200
+
 krb5-auth-dialog (0.8+svn141-1) unstable; urgency=low
 
   * [61675c0] Imported Upstream version 0.8+svn141
