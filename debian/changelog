@@ -1,3 +1,14 @@
+krb5-auth-dialog (0.9+0gitec60300-1) unstable; urgency=low
+
+  * [9d5cdf2] Imported Upstream version 0.9+0gitec60300
+      * don't show notifications before being embedded in the panel
+      * fix principal changes in prefs dialog need restart
+  * [32955a0] drop 0001-set-a-more-gnomeisch-invisible-char.patch fixed
+              upstream
+  * [b8c3795] no need for a patch system at the moment
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 24 Apr 2009 11:47:29 +0200
+
 krb5-auth-dialog (0.9~rc1-1) unstable; urgency=low
 
   * [d6eee4e] Imported Upstream version 0.9~rc1
