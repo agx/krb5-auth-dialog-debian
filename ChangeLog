@@ -1,3 +1,49 @@
+Fri Apr 24 10:48:30 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-pwdialog.c: query current invisiable char from
+	GtkEntry and set it for GtkSecureEntry too. Patch by Matthias Clasen.
+	(BZ: #538339)
+
+Fri Apr 24 10:46:20 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* gtksecentry/gtksecentry.c: don't install "gtk-entry-select-on-focus"
+	settings property since it clashes with the one from GtkEntry. Allows
+	to have GtkEntry and GtkSecureEntry in the same process.
+	(https://bugs.g10code.com/gnupg/issue1029).
+
+Fri Apr 24 09:39:16 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* AUTHORS: add Matthias Clasen
+
+Fri Apr 24 09:35:59 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-applet.c: Don't show notification before the applet is
+	  embedded in the panel (based on a patch for 0.8 by Matthias Clasen)
+
+Do Apr 23 18:35:32 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* configure.ac: release 0.9
+
+Do Apr 23 11:19:46 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* Update NEWS 
+
+Thu Apr 23 11:17:28 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	Always reparse the principal name in grab_credentials. When
+	acquireing credentials interacively we want to be sure we use the
+	current principal name from gconf.
+	* src/krb5-auth-dialog.c (ka_parse_name): Always parse principal
+	  property.
+	  (grab_credentials): Call ka_parse_name unconditionally.
+
+Thu Apr 23 11:14:37 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	drop "Password:" label from dialog. It's in the kerberos prompt and
+	confusing if prompted for a PIN.
+	* src/krb5-auth-dialog.glade: drop password label 
+	* src/krb5-auth-dialog.c (ka_pwdialog_setup): colon terminate prompts
+
 Sat Apr 18 00:19:02 CEST 2009 Guido Günther <agx@sigxcpu.org>
 
 	* src/krb5-auth-gconf.c (ka_gconf_set_principal): handle length zero
