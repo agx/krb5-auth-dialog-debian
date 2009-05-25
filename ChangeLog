@@ -1,3 +1,154 @@
+Mon May 25 18:32:49 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* configure.ac: release 0.10
+	* NEWS: likewise
+
+Fri May 22 18:07:31 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/Makefile.am: add missing line continuation
+
+Wed May 20 16:33:54 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	allow to turn off notifcations
+	* src/krb5-auth-applet.c: add action to notifications
+	  (ka_send_event_notification): only show notification when
+	  corresponding gconf key is set
+	* src/krb5-auth-dialog.schemas.in: add schema entries
+	* src/krb5-auth-gconf-tools.c (ka_gconf_set_bool): new function
+	* src/src/krb5-auth-gconf-tools.c (ka_gconf_set_*): fix defaults
+	  (ka_gconf_init); return GconfClient
+	* src/krb5-auth-gconf-tools.h: define gconf keys
+	BZ: #579850
+
+Fri May 15 19:10:57 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* po/krb5-auth-dialog.pot: update translatable strings
+	* po/de.po: likewise
+	* po/nb.po: likewise
+	* po/sv.po: likewise
+
+Fri May 15 19:08:22 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* etpo/lexer.l: better match the output to the handcrafted version we
+	  shipped before.
+
+Fri May 15 19:06:09 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	Reduce number of translations by filtering the error messages
+	extracted from Kerberos com_err .et files.
+	* etpo/Makefile.am: add rule for generating dummy-stings.c
+	* src/dummy-strings.c: regenerate
+
+Fri May 15 19:04:11 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/potfiles.in: mark GtKBuilder ui files as glade
+	  so they get picked up by intltool
+
+Wed May 13 22:10:45 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-dialog.c (ka_error_dialog): translate Kerberos error
+	  messages.
+
+Wed May 13 20:46:03 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* etpo/lexer.c: update regex for newer com_err
+
+Tue May 12 00:31:56 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	merge schema translations and use gconftool to install the schema
+	* configure.ac: Check for gcontool and add AM_GCONF_SOURCE_2.
+	* po/POTFILES.in: Add src/krb5-auth-dialog.schemas.in.
+	* preferences/Makefile.am: Remove schemadir.
+	* src/Makefile.am: Add INTLTOOL_SCHEMAS_RULE and add
+	  install-data-local target to install via gconftool.
+	* src/krb5-auth-dialog.schemas.in: Don't use ::PACKAGE:: since .in is
+	  transformed by intltool now.
+	BZ: #581906 - patch by Christian Persch
+
+Mon May 11 00:46:24 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	cleanup CFLAGS handling, terminate all lists with $(NULL)
+	* configure.ac: don't set CFLAGS
+	* src/Makefile.am (krb5_auth_dialog_{CPP,C}FLAGS): set instead of
+	  CFLAGS
+	* preferences/Makefile.am (krb5_auth_dialog_preferenes_{CPP,C}FLAGS):
+	  likewise
+	BZ: #581901 - based on a patch by Christian Persch
+
+Sun May 10 22:20:38 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	update .gitignore files
+	* src/.gitignore: add DBUS service file
+	* preferences/.gitignore: new file
+
+Sun May 10 22:10:11 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	make checking for deprecated symbols easy
+	* src/Makefile.am: add $(DISABLE_DEPRECATED)
+	* preferences/Makefile.am: likewise
+	* configure.ac: add GNOME_MAINTAINER_MODE_DEFINES commented out
+
+Sun May 10 21:49:14 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	Use po/LINGUAS instead of putting the list in configure.ac
+	* configure.ac: remove ALL_LINGUAS and require intltool >= 0.35
+	* po/LINGUAS: new file
+	* autogen.sh: require intltool >= 0.35
+	BZ: #581907 - patch by Christian Persch
+
+Sun May 10 21:36:48 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-gconf-tools.c: fix -Wformat-security warnings
+	* src/krb5-auth-gconf.c: likewise
+	* etopo/lexer.l: likewise
+	BZ: #581902 - patch by Christian Persch
+
+Thu May  7 10:39:32 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	Switch from Libglade to GtkBuilder
+	* src/krb5-auth-dialog.xml: new file
+	* preferences/krb5-auth-dialog-preferences.xml: likewise
+	* src/krb5-auth-dialog.glade: remove
+	* preferences/krb5-auth-dialog-preferences.glade: likewise
+	* src/krb5-auth-{applet,pwdialog}.[ch]: use GtkBuilder instead of
+	  glade
+	* configure.ac: drop libglade check
+	* po/POTFILES.in: look for krb5-auth-dialog{,-preferences}.xml instead
+	  of .glade
+	* {src,preferences,etpo}/Makefile.am: drop libglade
+
+Sun May  3 17:33:22 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	fix build with GLib < 2.18
+	* configure.ac: check for gio
+	* src/Makefile.am: add GIO to LDADD
+	* src/krb5-auth-dialog.c: add missing gio.h include
+
+Sun May  3 17:31:36 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-dialog-preferences.c (ka_preferences_dialog_response):
+	  Fix compilation with GTK+ < 2.14.
+
+Sun May  3 16:43:22 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* Makefile.am: ship MAINTAINERS
+
+Sun May  3 16:42:16 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* .gitignore: ignore more generated files 
+
+Sun May  3 16:38:42 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	Remove cvs ignore files
+	* .cvsignore: remove 
+	* etpo/.cvsignore: likewise
+	* po/.cvsignore: likewise
+	* src/.cvsignore: likewise
+
+Sun May  3 16:36:31 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* configure.ac: add sv to ALL_LINGUAS 
+
 Thu Apr 30 18:07:32 CEST 2009 Guido Günther <agx@sigxcpu.org>
 
 	* configure.ac: release 0.9.1 

@@ -1,4 +1,4 @@
-AC_INIT([krb5-auth-dialog], [0.9.1])
+AC_INIT([krb5-auth-dialog], [0.10])
 AC_CONFIG_SRCDIR(src/krb5-auth-dialog.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
@@ -6,36 +6,47 @@ AM_CONFIG_HEADER(config.h)
 
 AM_MAINTAINER_MODE
 
+IT_PROG_INTLTOOL([0.35.0])
+
 GETTEXT_PACKAGE=krb5-auth-dialog
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
 
+AM_GLIB_GNU_GETTEXT
 
 AC_PROG_CC
 AC_ISC_POSIX
 AC_HEADER_STDC
 AM_PROG_LIBTOOL
-AC_PROG_INTLTOOL
 AM_PROG_LEX
 AC_PROG_YACC
 
+AM_PROG_CC_C_O
+
 KA_COMPILE_WARNINGS([maximum])
 
-ALL_LINGUAS="nb de"
-AM_GLIB_GNU_GETTEXT
-
-GTK_REQUIRED="2.4.0"
-GLADE_REQUIRED="2.4.0"
+GTK_REQUIRED="2.16.0"
 DBUS_REQUIRED="0.60"
 GCONF_REQUIRED="2.8"
 LIBNOTIFY_REQUIRED="0.4"
 GIO_UNIX_REQUIRED="0.0"
+GIO_REQUIRED="0.0"
+
+dnl check for deprecated symbols:
+dnl GNOME_MAINTAINER_MODE_DEFINES
 
 PKG_CHECK_MODULES(GTK, gtk+-2.0 >= $GTK_REQUIRED)
-PKG_CHECK_MODULES(GLADE, libglade-2.0 >= $GLADE_REQUIRED)
 PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_REQUIRED)
 PKG_CHECK_MODULES(GCONF, gconf-2.0 >= $GCONF_REQUIRED)
 PKG_CHECK_MODULES(GIO_UNIX, gio-unix-2.0 >= $GIO_UNIX_REQUIRED)
+PKG_CHECK_MODULES(GIO, gio-2.0 >= $GIO_REQUIRED)
+
+AM_GCONF_SOURCE_2
+
+AC_PATH_PROG([GCONFTOOL], [gconftool-2], [no])
+if test "$GCONFTOOL" = "no"; then
+  AC_MSG_ERROR([gconftool-2 not found])
+fi
 
 dnl --enable-debug=(yes|no)
 AC_ARG_ENABLE(debug,
@@ -196,17 +207,6 @@ AC_DEFINE_UNQUOTED(MINUTES_BEFORE_PROMPTING,[$minimum_lifetime],
 		    fresh credentials.])
 AC_SUBST(minimum_lifetime)
 
-CFLAGS="\
-	$GTK_CFLAGS \
-	$GLADE_CFLAGS \
-	$DBUS_CFLAGS \
-	$GCONF_CFLAGS \
-	$KRB5_CFLAGS \
-	$NETWORK_MANAGER_CFLAGS \
-	$LIBNOTIFY_CFLAGS \
-	$WARN_CFLAGS \
-	$CFLAGS"
-
 AC_OUTPUT([
 Makefile
 krb5-auth-dialog.spec
@@ -228,10 +228,9 @@ AC_MSG_NOTICE([Libraries])
 AC_MSG_NOTICE([])
 AC_MSG_NOTICE([         kerberos: $KRB5_CFLAGS $KRB5_LIBS])
 AC_MSG_NOTICE([              gtk: $GTK_CFLAGS $GTK_LIBS])
-AC_MSG_NOTICE([            glade: $GLADE_CFLAGS $GLADE_LIBS])
 AC_MSG_NOTICE([             dbus: $DBUS_CFLAGS $DBUS_LIBS])
 AC_MSG_NOTICE([            gconf: $GCONF_CFLAGS $GCONF_LIBS])
-AC_MSG_NOTICE([         gio-unix: $GIO_UNIX_CFLAGS $GIO_UNIX_LIBS])
+AC_MSG_NOTICE([         gio-unix: $GIO_UNIX_CFLAGS $GIO_UNIX_LIBS $GIO_CFLAGS $GIO_LIBS])
 if test "$with_libnotify" = "yes" ; then
 AC_MSG_NOTICE([        libnotify: $LIBNOTIFY_CFLAGS $LIBNOTIFY_LIBS])
 else
