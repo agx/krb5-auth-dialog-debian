@@ -53,6 +53,8 @@ error_code|ec		{ yylval.sval = g_strdup(yytext);
 <QUOTED>\n		{ yylval.sval = g_strdup(yytext);
 			  return LITERAL; };
 <*>^#.*$		{ };
+<*>^(error_table_base|index)[ \t]+[0-9]+$ { };
+<*>^(prefix|id|error_table_manager)[ \t]+.*$ { };
 %%
 
 /* Complete list of filenames, an iterator for that list, and the contents of
@@ -102,15 +104,15 @@ yywrap(void)
 static void
 header(void)
 {
-	const char *boilerplate = "const char *dummy = {\n";
-	printf(boilerplate);
+	const char *boilerplate = "#include <glib/gi18n.h>\n\nconst char *dummy[] = {\n";
+	printf("%s", boilerplate);
 }
 
 static void
 tail(void)
 {
-	const char *boilerplate = "};\n";
-	printf(boilerplate);
+	const char *boilerplate = "\tNULL\n};\n";
+	printf("%s", boilerplate);
 }
 
 int

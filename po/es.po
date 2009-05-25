@@ -1,55 +1,150 @@
-# Norwegian bokmål translation of krb5-auth-dialog
-# Copyright (C) 2005 Red Hat, Inc.
-# This file is distributed under the same license as the krb5-auth-dialog package.
-# Kjartan Maraas <kmaraas@gnome.org>, 2005-2007.
+# translation of krb5-auth-dialog.master.po to Español
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 #
+# Jorge González <jorgegonz@svn.gnome.org>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: krb5-auth-dialog 0.5\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-15 18:57+0200\n"
-"PO-Revision-Date: 2007-11-02 13:30+0100\n"
-"Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
-"Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
+"Project-Id-Version: krb5-auth-dialog.master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=krb5-"
+"auth-dialog&component=general\n"
+"POT-Creation-Date: 2009-05-22 16:10+0000\n"
+"PO-Revision-Date: 2009-05-24 15:58+0200\n"
+"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
 
-#: ../src/krb5-auth-dialog.c:813
-#, c-format
-msgid "Couldn't acquire kerberos ticket: '%s'"
+#: ../src/krb5-auth-dialog.schemas.in.h:1
+msgid "Forwardable ticket"
 msgstr ""
 
-#: ../src/krb5-auth-dialog.c:980 ../src/krb5-auth-dialog.desktop.in.h:2
+#: ../src/krb5-auth-dialog.schemas.in.h:2
+msgid "Kerberos principal"
+msgstr "Principal de Kerberos"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:3
+msgid "Notify user when ticket becomes valid"
+msgstr "Notificar al usuario cuando un tique se convierta en válido"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:4
+msgid "Notify user when ticket has expired"
+msgstr "Notificar al usuario cuando un tique ha caducad"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:5
+msgid "Notify user when ticket is about to expire"
+msgstr "Notificar al usuario cuando un tique va a caducar"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:6
+msgid "PKINIT CA certificates"
+msgstr "Certificados PKINT CA"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:7
+msgid "PKINIT identifier"
+msgstr "Identificador PKINT"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:8
+msgid "PKINIT trust anchors"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:9
+msgid "Prompt minutes before expiry"
+msgstr "Mostrar minutos antes de caducar"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:10
+msgid "Proxiable ticket"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:11
+msgid "Renewable ticket"
+msgstr "Tique renovable"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:12
+msgid "Requested tickets should be forwardable"
+msgstr "Los tiques solicitados deberán ser reenviables"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:13
+msgid "Requested tickets should be proxiable"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:14
+msgid "Requested tickets should be renewable"
+msgstr "Los tiques solicitados deberán ser renovables"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:15
+msgid "Show a trayicon in the status area of the panel"
+msgstr "Mostrar un icono en la bandeja del sistema en el área del panel"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:16
+msgid "Show trayicon"
+msgstr "Mostrar icono en la bandeja"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:17
+msgid ""
+"Start prompting/displaying notifications that many minutes before expiry"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:18
+msgid "The kerberos principal to acquire the ticket for"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:19
+msgid "The principal's public/private/certificate identifier when using PKINIT"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:20
+msgid "ticket expired notification"
+msgstr "notificación de tique caducado"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:21
+msgid "ticket expiring notification"
+msgstr "notificación de caducidad de tique"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:22
+msgid "valid ticket notification"
+msgstr "tique de notificación válido"
+
+#: ../src/krb5-auth-dialog.xml.h:1 ../src/krb5-auth-dialog.c:979
+#: ../src/krb5-auth-dialog.desktop.in.h:2
 #: ../preferences/krb5-auth-dialog-preferences.desktop.in.h:1
 msgid "Network Authentication"
-msgstr "Nettverksautentisering"
+msgstr "Autenticación de red"
 
-#: ../src/krb5-auth-pwdialog.c:173 ../src/krb5-auth-applet.c:346
+#: ../src/krb5-auth-dialog.xml.h:2
+msgid "_Renew Ticket"
+msgstr "_Renovar tique"
+
+#: ../src/krb5-auth-dialog.c:812
+#, c-format
+msgid "Couldn't acquire kerberos ticket: '%s'"
+msgstr "No se pudo obtener el tique de Kerberos: «%s»"
+
+#: ../src/krb5-auth-pwdialog.c:173 ../src/krb5-auth-applet.c:351
 #, c-format
 msgid "Your credentials expire in %d minute"
 msgid_plural "Your credentials expire in %d minutes"
-msgstr[0] "Påloggingsinformasjonen utløper om %d minutt"
-msgstr[1] "Påloggingsinformasjonen utløper om %d minutter"
+msgstr[0] "Sus credenciales caducan en %d minuto"
+msgstr[1] "Sus credenciales caducan en %d minutos"
 
-#: ../src/krb5-auth-pwdialog.c:178 ../src/krb5-auth-applet.c:351
+#: ../src/krb5-auth-pwdialog.c:178 ../src/krb5-auth-applet.c:356
 msgid "Your credentials have expired"
-msgstr "Påloggingsinformasjonen har gått ut"
+msgstr "Sus credenciales han caducado"
 
 #: ../src/krb5-auth-pwdialog.c:199
-#, fuzzy
 msgid "Please enter your Kerberos password:"
-msgstr "Vennligst skriv inn ditt Kerberos-passord."
+msgstr "Introduzca su contraseña de Kerberos:"
 
 #: ../src/krb5-auth-pwdialog.c:210
-#, fuzzy, c-format
+#, c-format
 msgid "Please enter the password for '%s':"
-msgstr "Vennligst oppgi passord for «%s»"
+msgstr "Introduzca la contraseña para «%s»:"
 
 #: ../src/krb5-auth-pwdialog.c:230
 msgid "The password you entered is invalid"
-msgstr "Passordet du oppga er ugyldig"
+msgstr "La contraseña que ha introducido no es válida"
 
 #: ../src/dummy-strings.c:5
 msgid "ASN.1 failed call to system time library"
@@ -118,42 +213,42 @@ msgstr ""
 #. asn1_err.et:asn1:ASN1_MISSING_EOC
 #: ../src/dummy-strings.c:18
 msgid "No error"
-msgstr ""
+msgstr "Sin errores"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_NONE
 #: ../src/dummy-strings.c:19
 msgid "Client's entry in database has expired"
-msgstr ""
+msgstr "Ha caducado la entrada del cliente en la base de datos"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_NAME_EXP
 #: ../src/dummy-strings.c:20
 msgid "Server's entry in database has expired"
-msgstr ""
+msgstr "Ha caducado la entrada del servidor en la base de datos"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_SERVICE_EXP
 #: ../src/dummy-strings.c:21
 msgid "Requested protocol version not supported"
-msgstr ""
+msgstr "La versión del protocolo solicitado no está soportada"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_BAD_PVNO
 #: ../src/dummy-strings.c:22
 msgid "Client's key is encrypted in an old master key"
-msgstr ""
+msgstr "La clave del cliente está cifrada en una clave maestra antigua"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_C_OLD_MAST_KVNO
 #: ../src/dummy-strings.c:23
 msgid "Server's key is encrypted in an old master key"
-msgstr ""
+msgstr "La clave del servidor está cifrada en una clave maestra antigua"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_S_OLD_MAST_KVNO
 #: ../src/dummy-strings.c:24
 msgid "Client not found in Kerberos database"
-msgstr ""
+msgstr "No se encontró el cliente en la base de datos de Kerberos"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_C_PRINCIPAL_UNKNOWN
 #: ../src/dummy-strings.c:25
 msgid "Server not found in Kerberos database"
-msgstr ""
+msgstr "No se encontró el servidor en la base de datos de Kerberos"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_S_PRINCIPAL_UNKNOWN
 #: ../src/dummy-strings.c:26
@@ -163,7 +258,7 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5KDC_ERR_PRINCIPAL_NOT_UNIQUE
 #: ../src/dummy-strings.c:27
 msgid "Client or server has a null key"
-msgstr ""
+msgstr "El cliente o el servidor tienen una clave vacía"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_NULL_KEY
 #: ../src/dummy-strings.c:28
@@ -303,7 +398,7 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5KRB_AP_ERR_BADVERSION
 #: ../src/dummy-strings.c:55
 msgid "Invalid message type"
-msgstr "Ugyldig meldingstype"
+msgstr ""
 
 #. krb5_err.et:krb5:KRB5KRB_AP_ERR_MSG_TYPE
 #: ../src/dummy-strings.c:56
@@ -388,9 +483,8 @@ msgstr ""
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_KDC_NOT_TRUSTED
 #: ../src/dummy-strings.c:72
-#, fuzzy
 msgid "Invalid signature"
-msgstr "Ugyldig meldingstype"
+msgstr "Firma no válida"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_INVALID_SIG
 #: ../src/dummy-strings.c:73
@@ -409,9 +503,8 @@ msgstr ""
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_CANT_VERIFY_CERTIFICATE
 #: ../src/dummy-strings.c:76
-#, fuzzy
 msgid "Invalid certificate"
-msgstr "Ugyldig meldingstype"
+msgstr ""
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_INVALID_CERTIFICATE
 #: ../src/dummy-strings.c:77
@@ -1354,200 +1447,140 @@ msgstr ""
 msgid "Bad magic number for GSSAPI QUEUE"
 msgstr ""
 
-#: ../src/krb5-auth-applet.c:342
-#, fuzzy, c-format
+#: ../src/krb5-auth-applet.c:347
+#, c-format
 msgid "Your credentials expire in %.2d:%.2dh"
-msgstr "Påloggingsinformasjonen utløper om %d minutt"
+msgstr ""
 
-#: ../src/krb5-auth-applet.c:441
-#, fuzzy
+#: ../src/krb5-auth-applet.c:443
+msgid "Don't show me this again"
+msgstr "No mostrar este mensaje de nuevo"
+
+#: ../src/krb5-auth-applet.c:480
 msgid "Network credentials valid"
-msgstr "Påloggingsinformasjonen har gått ut"
+msgstr ""
 
-#: ../src/krb5-auth-applet.c:442
-#, fuzzy
-msgid "Your Kerberos credentials have been refreshed."
-msgstr "Påloggingsinformasjonen har gått ut"
+#: ../src/krb5-auth-applet.c:481
+msgid "You've refreshed your Kerberos credentials."
+msgstr ""
 
-#: ../src/krb5-auth-applet.c:447
-#, fuzzy
+#: ../src/krb5-auth-applet.c:493
 msgid "Network credentials expiring"
-msgstr "Påloggingsinformasjonen har gått ut"
+msgstr ""
 
-#: ../src/krb5-auth-applet.c:454
-#, fuzzy
+#: ../src/krb5-auth-applet.c:507
 msgid "Network credentials expired"
-msgstr "Påloggingsinformasjonen har gått ut"
+msgstr ""
 
-#: ../src/krb5-auth-applet.c:455
-#, fuzzy
+#: ../src/krb5-auth-applet.c:508
 msgid "Your Kerberos credentails have expired."
-msgstr "Påloggingsinformasjonen har gått ut"
+msgstr ""
 
 #. kdestroy
-#: ../src/krb5-auth-applet.c:526
+#: ../src/krb5-auth-applet.c:581
 msgid "Remove Credentials _Cache"
 msgstr ""
 
 #. Preferences
-#: ../src/krb5-auth-applet.c:535
+#: ../src/krb5-auth-applet.c:590
 msgid "_Preferences"
-msgstr ""
+msgstr "Prefere_ncias"
 
 #. About item
-#: ../src/krb5-auth-applet.c:543
+#: ../src/krb5-auth-applet.c:598
 msgid "_About"
-msgstr ""
+msgstr "Acerca _de"
 
 #. Quit
-#: ../src/krb5-auth-applet.c:552
+#: ../src/krb5-auth-applet.c:607
 msgid "_Quit"
-msgstr ""
+msgstr "_Salir"
 
 #: ../src/krb5-auth-dialog.desktop.in.h:1
 msgid "Kerberos Network Authentication Dialog"
-msgstr "Dialog for nettverksautentisering via Kerberos"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:1
-msgid "Forwardable ticket"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:2
-msgid "Kerberos principal"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:3
-msgid "PKINIT CA certificates"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:4
-msgid "PKINIT identifier"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:5
-msgid "PKINIT trust anchors"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:6
-msgid "Prompt minutes before expiry"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:7
-msgid "Proxiable ticket"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:8
-#, fuzzy
-msgid "Renewable ticket"
-msgstr "Fo_rny billett"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:9
-msgid "Requested tickets should be forwardable"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:10
-msgid "Requested tickets should be proxiable"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:11
-msgid "Requested tickets should be renewable"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:12
-msgid "Show a trayicon in the status area of the panel"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:13
-msgid "Show trayicon"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:14
-msgid ""
-"Start prompting/displaying notifications that many minutes before expiry"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:15
-msgid "The kerberos principal to acquire the ticket for"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:16
-msgid "The principal's public/private/certificate identifier when using PKINIT"
-msgstr ""
+msgstr "Diálogo de autenticación de red de Kerberos"
 
 #: ../gtksecentry/gtksecentry.c:454
 msgid "Cursor Position"
-msgstr ""
+msgstr "Posición del cursor"
 
 #: ../gtksecentry/gtksecentry.c:456
 msgid "The current position of the insertion cursor in chars"
-msgstr ""
+msgstr "La posición actual del cursor de inserción en caracteres"
 
 #: ../gtksecentry/gtksecentry.c:463
 msgid "Selection Bound"
-msgstr ""
+msgstr "Límite de selección"
 
 #: ../gtksecentry/gtksecentry.c:465
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
+"La posición en caracteres del extremo opuesto de la selección desde el cursor"
 
 #: ../gtksecentry/gtksecentry.c:472
 msgid "Maximum length"
-msgstr ""
+msgstr "Longitud máxima"
 
 #: ../gtksecentry/gtksecentry.c:474
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr ""
+msgstr "Número máximo de caracteres para esta entrada. Cero si no hay máximo."
 
 #: ../gtksecentry/gtksecentry.c:482
 msgid "Has Frame"
-msgstr ""
+msgstr "Tiene marco"
 
 #: ../gtksecentry/gtksecentry.c:484
 msgid "FALSE removes outside bevel from entry"
-msgstr ""
+msgstr "FALSE quita el bisel exterior de la entrada"
 
 #: ../gtksecentry/gtksecentry.c:493
 msgid "Invisible character"
-msgstr ""
+msgstr "Carácter invisible"
 
 #: ../gtksecentry/gtksecentry.c:495
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
+"El carácter que se usará cuando se enmascaren los contenidos de la entrada "
+"(en «modo contraseña»)"
 
 #: ../gtksecentry/gtksecentry.c:504
 msgid "Activates default"
-msgstr ""
+msgstr "Activar predeterminado"
 
 #: ../gtksecentry/gtksecentry.c:506
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
+"Indica si se debe activar el widget predeterminado (como el botón "
+"predeterminado en un diálogo) cuando se pulse INTRO"
 
 #: ../gtksecentry/gtksecentry.c:511
 msgid "Width in chars"
-msgstr ""
+msgstr "Anchura en caracteres"
 
 #: ../gtksecentry/gtksecentry.c:513
 msgid "Number of characters to leave space for in the entry"
-msgstr ""
+msgstr "Número de caracteres para dejar de espacio en la entrada"
 
 #: ../gtksecentry/gtksecentry.c:521
 msgid "Scroll offset"
-msgstr ""
+msgstr "Desplazamiento del scroll"
 
 #: ../gtksecentry/gtksecentry.c:523
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
+"Número de píxeles de la entrada desplazados fuera de la pantalla hacia la "
+"izquierda"
 
 #: ../gtksecentry/gtksecentry.c:530
 msgid "Text"
-msgstr ""
+msgstr "Texto"
 
 #: ../gtksecentry/gtksecentry.c:532
 msgid "The contents of the entry"
-msgstr ""
+msgstr "El contenido de la entrada"
 
 #: ../secmem/util.c:106
 #, c-format
@@ -1560,35 +1593,36 @@ msgid ""
 "There was an error displaying help:\n"
 "%s"
 msgstr ""
+"Hubo un error al mostrar la ayuda:\n"
+"%s"
 
 #: ../preferences/krb5-auth-dialog-preferences.desktop.in.h:2
-#, fuzzy
 msgid "Set your Kerberos network authenticaion preferences"
-msgstr "Dialog for nettverksautentisering via Kerberos"
+msgstr "Establezca sus preferencias de autenticación de red en Kerberos"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:1
 msgid "    "
-msgstr ""
+msgstr "    "
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:2
 msgid "<b>Appearance</b>"
-msgstr ""
+msgstr "<b>Apariencia</b>"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:3
 msgid "<b>Kerberos User</b>"
-msgstr ""
+msgstr "<b>Usuario de Kerberos</b>"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:4
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>Notificaciones</b>"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:5
 msgid "<b>Ticket Options</b>"
-msgstr ""
+msgstr "<b>Opciones del tique</b>"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:6
 msgid "Applet"
-msgstr ""
+msgstr "Miniaplicación"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:7
 msgid "If checked, display the tray icon in the status bar."
@@ -1608,12 +1642,11 @@ msgstr ""
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:11
 msgid "Kerberos"
-msgstr ""
+msgstr "Kerberos"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:12
-#, fuzzy
 msgid "Kerberos Authentication Configuration"
-msgstr "Dialog for nettverksautentisering via Kerberos"
+msgstr "Configuración de autenticación de Kerberos"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:13
 msgid "Kerberos principal:"
@@ -1643,7 +1676,7 @@ msgstr ""
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:19
 msgid "Show tray icon"
-msgstr ""
+msgstr "Mostrar icono de la bandeja"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:20
 msgid ""
@@ -1661,11 +1694,11 @@ msgstr ""
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:23
 msgid "gtk-close"
-msgstr ""
+msgstr "gtk-close"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:24
 msgid "gtk-help"
-msgstr ""
+msgstr "gtk-help"
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:25
 msgid "minutes before expiry"
@@ -1676,75 +1709,5 @@ msgid "proxiable"
 msgstr ""
 
 #: ../preferences/krb5-auth-dialog-preferences.xml.h:27
-#, fuzzy
 msgid "renewable"
-msgstr "Fo_rny billett"
-
-#~ msgid "_Password:"
-#~ msgstr "_Passord:"
-
-#~ msgid "Repeated request"
-#~ msgstr "Gjentatt forespørsel"
-
-#~ msgid "Request is inconsistent"
-#~ msgstr "Forespørselen er inkonsistent"
-
-#~ msgid "Delta-T too big"
-#~ msgstr "Delta-T for stor"
-
-#~ msgid "Unauthorized request"
-#~ msgstr "Uautorisert forespørsel"
-
-#~ msgid "Protocol error"
-#~ msgstr "Protokollfeil"
-
-#~ msgid "Can't send request"
-#~ msgstr "Kan ikke sende forespørsel"
-
-#~ msgid "Command not found"
-#~ msgstr "Kommando ikke funnet"
-
-#~ msgid "No info available"
-#~ msgstr "Ingen informasjon tilgjengelig"
-
-#~ msgid "Usage: kpasswd [principal_name]."
-#~ msgstr "Bruk: kpasswd [hovednavn]."
-
-#~ msgid "Old Kerberos password is incorrect. Please try again."
-#~ msgstr "Gammelt Kerberos-passord er ugyldig. Vennligst prøv igjen."
-
-#~ msgid "New passwords do not match - password not changed.\n"
-#~ msgstr "Nye passord er ikke like - passord ikke endret.\n"
-
-#~ msgid "Kerberos password changed.\n"
-#~ msgstr "Kerberos-passord endret.\n"
-
-#~ msgid "Password not changed."
-#~ msgstr "Passord ikke endret."
-
-#~ msgid "Unable to identify user from password file."
-#~ msgstr "Kan ikke identifisere bruker fra passordfil."
-
-#~ msgid "Changing password for %s."
-#~ msgstr "Endrer passord for %s."
-
-#~ msgid "Old password"
-#~ msgstr "Gammelt passord"
-
-#~ msgid "Proceed <y|n>?"
-#~ msgstr "Fortsett <j/n>?"
-
-#~ msgid "cannot open /dev/tty!!"
-#~ msgstr "kan ikke åpne /dev/tty!!"
-
-#~ msgid "New password"
-#~ msgstr "Nytt passord"
-
-#~ msgid "New password (again)"
-#~ msgstr "Nytt passord (igjen)"
-
-#~ msgid "Password changed.\n"
-#~ msgstr "Passord endret.\n"
-
-#~ msgid "Validation error"
-#~ msgstr "Feil under validering"
+msgstr "renovable"

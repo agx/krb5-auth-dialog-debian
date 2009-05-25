@@ -31,6 +31,7 @@ ka_gconf_get_string (GConfClient* client,
 	gboolean	success = FALSE;
 	GConfValue*	gc_value;
 
+	g_return_val_if_fail (client != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (*value == NULL, FALSE);
 
@@ -39,7 +40,7 @@ ka_gconf_get_string (GConfClient* client,
 			*value = g_strdup (gconf_value_get_string (gc_value));
 			success = TRUE;
 		} else if (error) {
-				g_print (error->message);
+				g_print ("%s", error->message);
 				g_error_free (error);
 		}
 		gconf_value_free (gc_value);
@@ -57,6 +58,7 @@ ka_gconf_get_int (GConfClient* client,
 	gboolean	success = FALSE;
 	GConfValue*	gc_value;
 
+	g_return_val_if_fail (client != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
@@ -66,7 +68,7 @@ ka_gconf_get_int (GConfClient* client,
 			*value = gconf_value_get_int (gc_value);
 			success = TRUE;
 		} else if (error) {
-				g_print (error->message);
+				g_print ("%s", error->message);
 				g_error_free (error);
 		}
 		gconf_value_free (gc_value);
@@ -84,6 +86,7 @@ ka_gconf_get_bool (GConfClient* client,
 	gboolean	success = FALSE;
 	GConfValue*	gc_value;
 
+	g_return_val_if_fail (client != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
@@ -92,11 +95,32 @@ ka_gconf_get_bool (GConfClient* client,
 			*value = gconf_value_get_bool (gc_value);
 			success = TRUE;
 		} else if (error) {
-				g_print (error->message);
+				g_print ("%s", error->message);
 				g_error_free (error);
 		}
 		gconf_value_free (gc_value);
 	}
 	return success;
+}
+
+
+gboolean
+ka_gconf_set_bool (GConfClient* client,
+		    const char* key,
+		    gboolean value)
+{
+	GError*		error = NULL;
+
+	g_return_val_if_fail (client != NULL, FALSE);
+	g_return_val_if_fail (key != NULL, FALSE);
+
+	if(!gconf_client_set_bool (client, key, value, &error)) {
+		if (error) {
+			g_print ("%s", error->message);
+			g_error_free (error);
+		}
+		return FALSE;
+	}
+	return TRUE;
 }
 
