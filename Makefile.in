@@ -40,7 +40,8 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	ylwrap
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/m4/compiler-flags.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/compiler-flags.m4 \
+	$(top_srcdir)/m4/gnome-doc-utils.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -95,6 +96,8 @@ DBUS_CFLAGS = @DBUS_CFLAGS@
 DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
+DOC_USER_FORMATS = @DOC_USER_FORMATS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -118,6 +121,7 @@ GMSGFMT = @GMSGFMT@
 GREP = @GREP@
 GTK_CFLAGS = @GTK_CFLAGS@
 GTK_LIBS = @GTK_LIBS@
+HELP_DIR = @HELP_DIR@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -159,6 +163,7 @@ NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OMF_DIR = @OMF_DIR@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -241,13 +246,20 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 NULL = 
-SUBDIRS = secmem gtksecentry src po etpo icons preferences
+SUBDIRS = secmem gtksecentry src po etpo icons preferences help
 EXTRA_DIST = \
 	krb5-auth-dialog.spec \
 	MAINTAINERS           \
+	gnome-doc-utils.make  \
 	$(NULL)
 
-DISTCLEANFILES = intltool-extract intltool-merge intltool-update
+DISTCLEANFILES = \
+	intltool-extract \
+	intltool-merge \
+	intltool-update \
+	gnome-doc-utils.make \
+	$(NULL)
+
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

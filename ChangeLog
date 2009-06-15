@@ -1,3 +1,123 @@
+Fri Jun 13 18:33:23 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* configure.ac: release 0.11
+	* NEWS: likewise
+
+Sat Jun 13 18:25:40 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* preferences/krb5-auth-dialog-preferences.xml: fix typo
+
+Sat Jun 13 18:03:26 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/dummy-strings.c: add note for translators
+	* etpo/lexer.l: likewise
+
+Sat Jun 13 17:39:07 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-applet.c (ka_applet_create_context_menu): use
+	gtk_image_menu_item_new_from_stock for stock menu entries
+
+Sat Jun 13 17:14:34 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* po/krb5-auth-dialog.pot: remove 
+	* po/.gitignore: ignore generated krb5-auth-dialog.pot
+	BZ: #585635
+
+Fri Jun 12 18:30:03 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	add DBus API to destroy ccache
+	* src/krb5-auth-applet-dbus.xml: add method
+	* src/krb5-auth-dialog.h: rename ka_dbus_destroy_cache to
+	  ka_dbus_destroy_ccache, change return value
+	* src/krb5-auth-dialog.c: likewise
+	* src/krb5-auth-dbus.h (ka_dbus_destroy_ccache): new protoype
+	* src/krb5-auth-dbus.c (ka_dbus_destroy_ccache): new function
+	* src/krb5-auth-applet.c (ka_applet_cb_destroy_ccache): use it
+	  (ka_applet_create_context_menu): use it
+
+Fri Jun 12 22:36:35 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-applet: use _("translator-credits") in about dialog
+	* AUTHORS: add Christian Persch
+
+Fri Jun 12 11:51:20 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* preferences/krb5-auth-dialog-preferences.desktop.in: use
+	  krb-valid-ticket icon instead of abusing gtk-dialog-authentication
+	* preferences/krb5-auth-dialog-preferences.xml: likewise
+	* src/krb5-auth-dialog.xml: likewise
+	* src/krb5-auth-applet.c (ka_send_event_notificatyion): likewise
+	  (ka_applet_update_status): use icons in notifications
+	  (ka_applet_create): load uixml after calling
+	  gtk_icon_theme_append_search_path
+	  (ka_applet_setup_icons): use DATA_DIR instead of PKG_DATA_DIR
+	  (ka_applet_cb_about_dialog): add "logo-icon-name"
+	* src/krb5-auth-dialog.c: uixml parsing moved to ka_applet_create...
+	* src/krb5-auth-applet.h: ...so drop unused parameter
+
+Fri Jun 12 11:45:30 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	add scalable and 48x48 icons and move them from pkgdatadir to datadir.
+	Makes using different icon themes easier.
+	* configure.ac (AC_OUTPUT): add icon dirs
+	* src/Makefile.am (rb5_auth_dialog_CPPFLAGS): define DATADIR
+	* icons/*.png: move 22x22 icons from ...here
+	* icons/22x22: ..to here
+	* icons/scalable: new icons
+	* icons/48x48: likewise
+
+Tue Jun  2 00:01:16 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	launch prefs with full path
+	* src/Makefile.am: define BIN_DIR
+	* src/krb5-auth-applet.c (ka_applet_cb_preferences): use it
+
+Mon Jun  1 23:12:42 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-dialog (ka_error_dialog): set application name
+	  in error dialog
+
+Mon Jun  1 20:05:17 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	enable help in applet and prefs dialog
+	* src/krb5-auth-tools.c: new file
+	* src/krb5-auth-tools.h: likewise
+	* po/POTFILES.in: add src/krb5-auth-tools.h, remove duplicate
+	  src/krb5-auth-dialog.schemas.in
+	* preferences/Makefile.am (krb5_auth_dialog_sources): add
+	  krb5-auth-tools.[ch]
+	* src/Makefile.am (krb5_auth_dialog_preferences_SOURCES): add
+	  $(top_srcdir)/krb5-auth-tools.[ch]
+	* preferences/krb5-auth-dialog-preferences.c
+	  (ka_preferences_dialog_response): call ka_show_help
+	* preferences/krb5-auth-dialog-preferences.xml: show help button
+	* src/krb5-auth-applet.c (ka_applet_cb_show_help): new function
+	  (ka_applet_create_context_menu): add help menu entry
+
+Mon Jun  1 19:56:35 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	add user manual
+	* configure.ac: call GNOME_DOC_INIT
+	* Makefile.am: process help/
+	* acinclude.m4: include m4/gnome-doc-utils.m4
+	* .gitignore: ignore gnome-doc-utils.make
+	* help/C/figures/ka-expired.png: new file
+	* help/C/figures/ka-expiring.png: likewise
+	* help/C/figures/ka-valid.png: likewise
+	* help/C/figures/trayicon-expired.png: likewise
+	* help/C/figures/trayicon-expiring.png: likewise
+	* help/C/figures/trayicon-valid.png: likewise
+	* help/C/krb5-auth-dialog.xml: likewise
+	* help/C/legal.xml: likewise
+	* help/Makefile.am: likewise
+	* help/krb5-auth-dialog.omf.in: likewise
+	* m4/gnome-doc-utils.m4: likewise
+	* help/.gitignore: likewise
+
+Mon May 25 19:11:58 CEST 2009 Guido Günther <agx@sigxcpu.org>
+
+	* src/krb5-auth-applet.c: update about dialog 
+
 Mon May 25 18:32:49 CEST 2009 Guido Günther <agx@sigxcpu.org>
 
 	* configure.ac: release 0.10

@@ -40,6 +40,7 @@
 #include "krb5-auth-applet.h"
 #include "krb5-auth-pwdialog.h"
 #include "krb5-auth-dbus.h"
+#include "krb5-auth-tools.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include <libnm_glib.h>
@@ -48,6 +49,8 @@
 #ifdef HAVE_HX509_ERR_H
 # include <hx509_err.h>
 #endif
+
+#define KA_NAME _("Network Authentication")
 
 static krb5_context kcontext;
 static krb5_principal kprincipal;
@@ -784,11 +787,9 @@ using_krb5(void)
 }
 
 
-void
-ka_destroy_cache (GtkMenuItem  *menuitem G_GNUC_UNUSED,
-		  gpointer data)
+gboolean
+ka_destroy_ccache (KaApplet *applet)
 {
-	KaApplet *applet = KA_APPLET(data);
 	krb5_ccache  ccache;
 	const char* cache;
 	krb5_error_code ret;
@@ -798,18 +799,26 @@ ka_destroy_cache (GtkMenuItem  *menuitem G_GNUC_UNUSED,
 	ret = krb5_cc_destroy (kcontext, ccache);
 
 	credentials_expiring_real(applet);
+
+	if (ret)
+		return FALSE;
+	else
+		return TRUE;
 }
 
 
 static void
 ka_error_dialog(int err)
 {
-	const char* msg = get_error_message(kcontext, err);
+	const char *msg = get_error_message(kcontext, err);
 	GtkWidget *dialog = gtk_message_dialog_new (NULL,
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_ERROR,
 				GTK_BUTTONS_CLOSE,
-				_("Couldn't acquire kerberos ticket: '%s'"), _(msg));
+				"%s", KA_NAME);
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+				  _("Couldn't acquire kerberos ticket: '%s'"),
+				  _(msg));
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
 }
@@ -939,7 +948,6 @@ main (int argc, char *argv[])
 	KaApplet *applet;
 	GOptionContext *context;
 	GError *error = NULL;
-	GtkBuilder *xml;
 
 	guint status = 0;
 	gboolean run_auto = FALSE, run_always = FALSE;
@@ -976,12 +984,9 @@ main (int argc, char *argv[])
 		always_run = TRUE;
 	}
 	if (using_krb5 () || always_run) {
-		g_set_application_name (_("Network Authentication"));
+		g_set_application_name (KA_NAME);
 
-		xml = gtk_builder_new();
-		g_assert(gtk_builder_add_from_file(xml, KA_DATA_DIR G_DIR_SEPARATOR_S
-				                   PACKAGE ".xml", NULL));
-		applet = ka_applet_create (xml);
+		applet = ka_applet_create ();
 		if (!applet)
 			return 1;
 		ka_nm_init();
@@ -992,7 +997,6 @@ main (int argc, char *argv[])
 		}
 		ka_dbus_service(applet);
 		gtk_main ();
-		g_object_unref(xml);
 	}
 	return 0;
 }
