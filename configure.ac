@@ -1,4 +1,4 @@
-AC_INIT([krb5-auth-dialog], [0.10])
+AC_INIT([krb5-auth-dialog], [0.11])
 AC_CONFIG_SRCDIR(src/krb5-auth-dialog.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
@@ -24,6 +24,7 @@ AC_PROG_YACC
 AM_PROG_CC_C_O
 
 KA_COMPILE_WARNINGS([maximum])
+GNOME_DOC_INIT
 
 GTK_REQUIRED="2.16.0"
 DBUS_REQUIRED="0.60"
@@ -215,9 +216,13 @@ src/krb5-auth-dialog.1
 secmem/Makefile
 gtksecentry/Makefile
 icons/Makefile
+icons/22x22/Makefile
+icons/48x48/Makefile
+icons/scalable/Makefile
 etpo/Makefile
 po/Makefile.in
 preferences/Makefile
+help/Makefile
 ])
 
 AC_MSG_NOTICE([])

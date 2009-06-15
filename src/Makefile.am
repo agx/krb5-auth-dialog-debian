@@ -33,6 +33,8 @@ krb5_auth_dialog_SOURCES =	\
 	krb5-auth-gconf-tools.h	\
 	krb5-auth-dbus.c	\
 	krb5-auth-dbus.h	\
+	krb5-auth-tools.c	\
+	krb5-auth-tools.h	\
 	dummy-strings.c		\
 	$(NULL)
 
@@ -40,7 +42,9 @@ krb5_auth_dialog_CPPFLAGS = \
 	-I$(top_srcdir)/gtksecentry \
 	-I$(top_srcdir)/secmem \
 	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
+	-DDATA_DIR=\""$(datadir)"\" \
 	-DLOCALE_DIR=\""$(localedir)/"\" \
+	-DBIN_DIR=\""$(bindir)/"\" \
 	$(AM_CPPFLAGS) \
 	$(NULL)
 
