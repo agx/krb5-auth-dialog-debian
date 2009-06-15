@@ -1,3 +1,10 @@
+krb5-auth-dialog (0.11-1) unstable; urgency=low
+
+  * [27053b1] Imported Upstream version 0.11
+  * [0fd8db6] update build-deps
+
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 15 Jun 2009 18:43:06 +0200
+
 krb5-auth-dialog (0.10-1) unstable; urgency=low
 
   * [d911517] Imported Upstream version 0.10
