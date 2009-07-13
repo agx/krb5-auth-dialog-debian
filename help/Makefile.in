@@ -175,6 +175,7 @@ POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
 PO_IN_DATADIR_TRUE = @PO_IN_DATADIR_TRUE@
 RANLIB = @RANLIB@
+SC_PKCS11 = @SC_PKCS11@
 SED = @SED@
 SETCAP = @SETCAP@
 SET_MAKE = @SET_MAKE@
@@ -355,7 +356,7 @@ DOC_FIGURES = \
 	figures/trayicon-expiring.png \
 	$(NULL)
 
-DOC_LINGUAS = de \
+DOC_LINGUAS = de es sv \
 	$(NULL)
 
 all: all-am

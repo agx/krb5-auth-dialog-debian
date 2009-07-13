@@ -25,19 +25,21 @@
                (translators put your name and email here)
 -->
 <!-- =============Document Header ============================= -->
-<article id="index" lang="de">
+<article id="index" lang="sv">
  <!-- please do not change the id; for translations, change lang to -->
  <!-- appropriate code -->
 
  <articleinfo>
-  <title><application>Kerberos Netzwerkanmeldungsdialog</application>-Handbuch</title>
+  <title><application>Kerberos Network Authentication Dialog</application> Manual</title>
   <abstract role="description">
-   <para>Der <application>Kerberos Netzwerkanmeldungsdialog</application> ist ein kleiner Helfer, der Ihre Kerberos-Tickets überwacht und auffrischt.</para>
+   <para>
+    Kerberos Network Authentication Dialog is a small helper that monitors and refreshes your Kerberos ticket.
+   </para>
   </abstract>
   <copyright>
    <year>2009</year>
    <holder>Guido Günther</holder>
-  </copyright><copyright><year>2009</year><holder>Mario Blättermann (mariobl@gnome.org)</holder></copyright>
+  </copyright><copyright><year>2009</year><holder>Daniel Nylander (po@danielnylander.se)</holder></copyright>
 
   <!-- translators: uncomment this:
 
@@ -55,17 +57,17 @@
   </publisher>
 
     <legalnotice id="legalnotice">
-	<para>Das vorliegende Dokument kann gemäß den Bedingungen der GNU Free Documentation License (GFDL), Version 1.1 oder jeder späteren, von der Free Software Foundation veröffentlichten Version ohne unveränderbare Abschnitte sowie ohne Texte auf dem vorderen und hinteren Buchdeckel kopiert, verteilt und/oder modifiziert werden. Eine Kopie der GFDL finden Sie unter diesem <ulink type="help" url="ghelp:fdl">Link</ulink> oder in der mit diesem Handbuch gelieferten Datei COPYING-DOCS.</para>
-         <para>Dieses Handbuch ist Teil einer Sammlung von GNOME-Handbüchern, die unter der GFDL veröffentlicht werden. Wenn Sie dieses Handbuch getrennt von der Sammlung weiterverbreiten möchten, können Sie das tun, indem Sie eine Kopie der Lizenz zum Handbuch hinzufügen, wie es in Abschnitt 6 der Lizenz beschrieben ist.</para>
+	<para>Tillstånd att kopiera, distribuera och/eller modifiera detta dokument ges under villkoren i GNU Free Documentation License (GFDL), version 1.1 eller senare, utgivet av Free Software Foundation utan standardavsnitt och omslagstexter.  En kopia av GFDL finns att hämta på denna <ulink type="help" url="ghelp:fdl">länk</ulink> eller i filen COPYING-DOCS som medföljer denna handbok.</para>
+         <para>Denna handbok utgör en av flera GNOME-handböcker som distribueras under villkoren i GFDL.  Om du vill distribuera denna handbok separat från övriga handböcker kan du göra detta genom att lägga till en kopia av licensavtalet i handboken enligt instruktionerna i avsnitt 6 i licensavtalet.</para>
 
-	<para>Viele der Namen, die von Unternehmen verwendet werden, um ihre Produkte und Dienstleistungen von anderen zu unterscheiden, sind eingetragene Warenzeichen. An den Stellen, an denen diese Namen in einer GNOME-Dokumentation erscheinen, werden die Namen in Großbuchstaben oder mit einem großen Anfangsbuchstaben geschrieben, wenn das GNOME-Dokumentationsprojekt auf diese Warenzeichen hingewiesen wird.</para>
+	<para>Flera namn på produkter och tjänster är registrerade varumärken. I de fall dessa namn förekommer i GNOME-dokumentation - och medlemmarna i GNOME-dokumentationsprojektet är medvetna om dessa varumärken - är de skrivna med versaler eller med inledande versal.</para>
 
-	<para>DAS DOKUMENT UND VERÄNDERTE FASSUNGEN DES DOKUMENTS WERDEN UNTER DEN BEDINGUNGEN DER GNU FREE DOCUMENTATION LICENSE ZUR VERFÜGUNG GESTELLT MIT DEM WEITERGEHENDEN VERSTÄNDNIS, DASS: <orderedlist>
+	<para>DOKUMENTET OCH MODIFIERADE VERSIONER AV DOKUMENTET TILLHANDAHÅLLS UNDER VILLKOREN I GNU FREE DOCUMENTATION LICENSE ENDAST UNDER FÖLJANDE FÖRUTSÄTTNINGAR: <orderedlist>
 		<listitem>
-		  <para>DIESES DOKUMENT WIRD »WIE VORLIEGEND« GELIEFERT, OHNE GARANTIEN IRGENDEINER ART, SOWOHL AUSDRÜCKLICH GENANNTE ALS AUCH ANGEDEUTETE. DIES BEZIEHT SICH AUCH OHNE EINSCHRÄNKUNG AUF GARANTIEN, DASS DIESES DOKUMENT ODER VERÄNDERTE FASSUNGEN DIESES DOKUMENTS FREI VON HANDELSDEFEKTEN, FÜR EINEN BESTIMMTEN ZWECK GEEIGNET IST ODER DASS ES KEINE RECHTE DRITTER VERLETZT. DAS VOLLE RISIKO WAS QUALITÄT, GENAUIGKEIT UND LEISTUNG DES DOKUMENTS ODER VERÄNDERTE FASSUNGEN DES DOKUMENTS LIEGT BEI IHNEN. SOLLTE EIN DOKUMENT ODER EINE VERÄNDERTE FASSUNG DAVON FEHLER IRGENDEINER ART BEINHALTEN, TRAGEN SIE (NICHT DER URSPRUNGSAUTOR, DER AUTOR ODER EIN MITWIRKENDER) DIE KOSTEN FÜR NOTWENDIGE DIENSTLEISTUNGEN, REPARATUREN ODER FEHLERKORREKTUREN. DIESER HAFTUNGSAUSSCHLUSS IST EIN ESSENZIELLER TEIL DIESER LIZENZ. DIE VERWENDUNG EINES DOKUMENTS ODER EINER VERÄNDERTEN VERSION DES DOKUMENTS IST NICHT GESTATTET AUßER UNTER BEACHTUNG DIESES HAFTUNGSAUSSCHLUSSES UND</para>
+		  <para>DOKUMENTET TILLHANDAHÅLLS I "BEFINTLIGT SKICK" UTAN NÅGRA SOM HELST GARANTIER, VARE SIG UTTRYCKLIGA ELLER UNDERFÖRSTÅDDA, INKLUSIVE, MEN INTE BEGRÄNSAT TILL, GARANTIER ATT DOKUMENTET ELLER EN MODIFIERAD VERSION AV DOKUMENTET INTE INNEHÅLLER NÅGRA FELAKTIGHETER, ÄR LÄMPLIGT FÖR ETT VISST ÄNDAMÅL ELLER INTE STRIDER MOT LAG. HELA RISKEN VAD GÄLLER KVALITET, EXAKTHET OCH UTFÖRANDE AV DOKUMENTET OCH MODIFIERADE VERSIONER AV DOKUMENTET LIGGER HELT OCH HÅLLET PÅ ANVÄNDAREN. OM ETT DOKUMENT ELLER EN MODIFIERAD VERSION AV ETT DOKUMENT SKULLE VISA SIG INNEHÅLLA FELAKTIGHETER I NÅGOT HÄNSEENDE ÄR DET DU (INTE DEN URSPRUNGLIGA SKRIBENTEN, FÖRFATTAREN ELLER NÅGON ANNAN MEDARBETARE) SOM FÅR STÅ FÖR ALLA EVENTUELLA KOSTNADER FÖR SERVICE, REPARATIONER ELLER KORRIGERINGAR. DENNA GARANTIFRISKRIVNING UTGÖR EN VÄSENTLIG DEL AV DETTA LICENSAVTAL. DETTA INNEBÄR ATT ALL ANVÄNDNING AV ETT DOKUMENT ELLER EN MODIFIERAD VERSION AV ETT DOKUMENT BEVILJAS ENDAST UNDER DENNA ANSVARSFRISKRIVNING;</para>
 		</listitem>
 		<listitem>
-		  <para>UNTER KEINEN UMSTÄNDEN UND AUF BASIS KEINER RECHTSGRUNDLAGE, EGAL OB DURCH UNERLAUBTEN HANDLUNGEN (EINSCHLIEßLICH FAHRLÄSSIGKEIT), VERTRAG ODER ANDERWEITIG KANN DER AUTOR, URSPRUNGSAUTOR, EIN MITWIRKENDER ODER EIN VERTRIEBSPARTNER DIESES DOKUMENTS ODER EINER VERÄNDERTEN FASSUNG DES DOKUMENTS ODER EIN ZULIEFERER EINER DIESER PARTEIEN, HAFTBAR GEMACHT WERDEN FÜR DIREKTE, INDIREKTE, SPEZIELLE, VERSEHENTLICHE ODER FOLGESCHÄDEN JEGLICHER ART, EINSCHLIEßLICH UND OHNE EINSCHRÄNKUNGEN SCHÄDEN DURCH VERLUST VON KULANZ, ARBEITSAUSFALL, COMPUTERVERSAGEN ODER COMPUTERFEHLFUNKTIONEN ODER ALLE ANDEREN SCHÄDEN ODER VERLUSTE, DIE SICH AUS ODER IN VERBINDUNG MIT DER VERWENDUNG DES DOKUMENTS UND VERÄNDERTER FASSUNGEN DES DOKUMENTS ERGEBEN, AUCH WENN DIE OBEN GENANNTEN PARTEIEN ÜBER DIE MÖGLICHKEIT SOLCHER SCHÄDEN INFORMIERT WAREN.</para>
+		  <para>UNDER INGA OMSTÄNDIGHETER ELLER INOM RAMEN FÖR NÅGON LAGSTIFTNING, OAVSETT OM DET GÄLLER KRÄNKNING (INKLUSIVE VÅRDSLÖSHET), KONTRAKT ELLER DYLIKT, SKA FÖRFATTAREN, DEN URSPRUNGLIGA SKRIBENTEN ELLER ANNAN MEDARBETARE ELLER ÅTERFÖRSÄLJARE AV DOKUMENTET ELLER AV EN MODIFIERAD VERSION AV DOKUMENTET ELLER NÅGON LEVERANTÖR TILL NÅGON AV NÄMNDA PARTER STÄLLAS ANSVARIG GENTEMOT NÅGON FÖR NÅGRA DIREKTA, INDIREKTA, SÄRSKILDA ELLER OFÖRUTSEDDA SKADOR ELLER FÖLJDSKADOR AV NÅGOT SLAG, INKLUSIVE, MEN INTE BEGRÄNSAT TILL, SKADOR BETRÄFFANDE FÖRLORAD GOODWILL, HINDER I ARBETET, DATORHAVERI ELLER NÅGRA ANDRA TÄNKBARA SKADOR ELLER FÖRLUSTER SOM KAN UPPKOMMA PÅ GRUND AV ELLER RELATERAT TILL ANVÄNDNINGEN AV DOKUMENTET ELLER MODIFIERADE VERSIONER AV DOKUMENTET, ÄVEN OM PART SKA HA BLIVIT INFORMERAD OM MÖJLIGHETEN TILL SÅDANA SKADOR.</para>
 		</listitem>
 	  </orderedlist></para>
   </legalnotice>
@@ -109,16 +111,21 @@
   <revhistory>
    <revision>
     <revnumber>2.0</revnumber>
-    <date>Mai 2009</date>
+    <date>Maj 2009</date>
     <revdescription>
      <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
     </revdescription>
    </revision>
   </revhistory>
-  <releaseinfo>Dieses Handbuch beschreibt, wie Sie den Kerberos Netzwerkanmeldungsdialog dazu verwenden können, Ihre Kerberos-Tickets zu verwalten.</releaseinfo>
+  <releaseinfo>This manual describes how to use the Kerberos Network Authentication Dialog
+   to manage your Kerberos tickets.
+  </releaseinfo>
   <legalnotice>
-   <title>Rückmeldungen</title>
-   <para>Um einen Fehler zu melden oder einen Vorschlag zu dieser Anwendung oder zu diesem Handbuch zu machen, benutzen Sie das <ulink url="http://bugzilla.gnome.org" type="http">Fehlererfassungssystem von GNOME</ulink>.</para>
+   <title>Återkoppling</title>
+   <para>To report a bug or make a suggestion regarding this package or
+    this manual, use
+    <ulink url="http://bugzilla.gnome.org" type="http">GNOME's Bugzilla</ulink>.
+   </para>
    <!-- Translators may also add here feedback address for translations -->
   </legalnotice>
  </articleinfo>
@@ -126,30 +133,39 @@
  <!-- ============= Document Body ============================= -->
  <!-- ============= Introduction ============================== -->
  <section id="intro">
-  <title>Einführung</title>
+  <title>Introduktion</title>
   <indexterm>
-    <primary><application>Kerberos Netzwerkanmeldungsdialog</application></primary>
-    <secondary>Handbuch</secondary>
+    <primary><application>Kerberos Network Authentication Dialog</application></primary>
+    <secondary>Handbok</secondary>
     <tertiary>krb5-auth-dialog</tertiary>
   </indexterm>
 
-   <para>Der Kerberos Netzwerkanmeldungsdialog ist ein Applet für den <systemitem>GNOME-Desktop</systemitem>, welches Ihre Kerberos-Tickets überwacht und auffrischt. Erinnerungen werden angezeigt, sobald ein Ticket abzulaufen droht.</para>
+   <para>
+    Kerberos Network Authentication Dialog is an applet for the <systemitem>GNOME desktop</systemitem> that monitors
+    and refreshes your Kerberos ticket. It pops up reminders when the ticket
+    is about to expire.
+   </para>
    <para>
     Once you have acquired a Kerberos ticket - be it via GDM or via the applet itself - the applet will handle the ticket's renewal until it expires. It can also be used to destroy (remove) the credential cache, to acquire a ticket with different options or to switch to another principal.</para>
  </section>
 
 <section id="using">
-  <title>Benutzung</title>
-  <para>Der <application>Kerberos Netzwerkanmeldungsdialog</application> wird üblicherweise bereits beim Start von GNOME gestartet, aber Sie können den <application>Kerberos Netzwerkanmeldungsdialog</application> auch manuell folgendermaßen starten:</para>
+  <title>Användning</title>
+  <para>
+    <application>Kerberos Network Authentication Dialog</application> is usually started in GNOME startup, but
+    you can manually start <application>Kerberos Network Authentication Dialog</application> by doing:
+  </para>
   <variablelist>
     <varlistentry>
-      <term>Befehlszeile</term>
+      <term>Kommandorad</term>
       <listitem>
-	<para>Geben Sie <command>krb5-auth-dialog --always</command> ein und drücken Sie anschließend die <keycap>Eingabetaste</keycap>:</para>
+	<para>Skriv <command>krb5-auth-dialog --always</command> och tryck sedan på <keycap>Return</keycap>:</para>
       </listitem>
     </varlistentry>
   </variablelist>
-  <para>Das Symbol im Benachrichtigungsfeld zeigt einen der folgenden drei Zustände an:</para>
+  <para>
+    The tray icon will indicate one of tree states:
+  </para>
 
   <section id="trayicon-valid">
     <title>Valid Kerberos ticket</title>
@@ -168,7 +184,7 @@
 
   <section id="trayicon-expiring">
     <title>Kerberos ticket expiring</title>
-    <para>Das Kerberos-Ticket droht abzulaufen, aber ist noch immer dazu verwendbar, sich an Netzwerkdiensten zu legitimieren.</para>
+    <para>The Kerberos ticket is about to expire but it can still be used to authenticate to network services.</para>
     <figure>
       <title>Kerberos ticket expiring</title>
       <screenshot>
@@ -198,8 +214,10 @@
 </section>
 
 <section id="notify">
-  <title>Benachrichtigungen</title>
-  <para>Wenn der <application>Kerberos Netzwerkanmeldungsdialog</application> gestartet wurde, können die folgenden Benachrichtigungen angezeigt werden.</para>
+  <title>Notification Messages</title>
+  <para>
+    When Kerberos Network Authentication Dialog has started, the following notifications may be displayed.
+  </para>
 
  <section id="notify-valid">
     <title>Kerberos credentials valid</title>
@@ -248,7 +266,7 @@
 </section>
 
 <section id="preferences">
-  <title>Einstellungen</title>
+  <title>Preferences</title>
   <para>
     You can set preferences by selecting "Preferences" from the applets context menu or by selecting "Network Authentication" in the <application>Control Center</application>.
     <table frame="topbot" id="tbl-principal-prefs">
@@ -257,10 +275,10 @@
         <thead>
           <row>
             <entry colsep="0" rowsep="1">
-              <para>Dialogelement</para>
+              <para>Dialog Element</para>
             </entry>
             <entry colsep="0" rowsep="1">
-              <para>Beschreibung</para>
+              <para>Description</para>
             </entry>
           </row>
         </thead>
@@ -343,7 +361,7 @@
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Legt fest, ob das Benachrichtigungssymbol angezeigt werden soll oder nicht. Deaktivieren des Symbols deaktiviert auch die Benachrichtigungen, anstelle dessen wird ein Passwortdialog geöffnet.</para>
+              <para>Whether to show the tray icon. Disabling the tray icon will also disable notifications, the password dialog will be brought up instead.</para>
             </entry>
           </row>
 	</tbody>
