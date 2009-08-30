@@ -1,3 +1,13 @@
+krb5-auth-dialog (0.12-2) unstable; urgency=low
+
+  * [56734b5] new patch 0001-remove-unused-GtkImage-with-duplicate-id.patch:
+    remove unused GtkImage with duplicate id (BZ: #593389)
+  * [4028d00] use quilt patchsys
+  * [e65e98a] bump standards version
+  * [9ded61a] add README.source
+
+ -- Guido Günther <agx@sigxcpu.org>  Sun, 30 Aug 2009 19:33:35 +0200
+
 krb5-auth-dialog (0.12-1) unstable; urgency=low
 
   * [7dfce86] Imported Upstream version 0.12
