@@ -27,6 +27,7 @@
 #include "krb5-auth-gconf-tools.h"
 #include "krb5-auth-gconf.h"
 #include "krb5-auth-tools.h"
+#include "krb5-auth-tickets.h"
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
@@ -72,7 +73,7 @@ struct _KaAppletPrivate
 	const char* icons[3]; 		/* for invalid, expiring and valid tickts */
 	gboolean show_trayicon;		/* show the trayicon */
 
-	KaPwDialog* pwdialog;		/* the password dialog */
+	KaPwDialog *pwdialog;		/* the password dialog */
 	int	   pw_prompt_secs;	/* when to start prompting for a password */
 
 #ifdef HAVE_LIBNOTIFY
@@ -389,7 +390,16 @@ ka_show_notification (KaApplet *applet)
 {
 	/* wait for the panel to be settled before showing a bubble */
 	if (gtk_status_icon_is_embedded (applet->priv->tray_icon)) {
-		notify_notification_show (applet->priv->notification, NULL);
+		GError *error = NULL;
+		gboolean ret;
+
+		ret = notify_notification_show (applet->priv->notification, &error);
+		if (!ret) {
+			g_assert (error);
+			g_assert (error->message);
+			g_warning ("Failed to show notification: %s", error->message);
+			g_clear_error (&error);
+		}
 	} else {
 		g_timeout_add_seconds (5, (GSourceFunc)ka_show_notification, applet);
 	}
@@ -544,9 +554,29 @@ static void
 ka_applet_cb_preferences (GtkWidget* menuitem G_GNUC_UNUSED,
                           gpointer user_data G_GNUC_UNUSED)
 {
+	GError *error = NULL;
+
 	g_spawn_command_line_async (BIN_DIR
 				    G_DIR_SEPARATOR_S
-				    "krb5-auth-dialog-preferences", NULL);
+				    "krb5-auth-dialog-preferences",
+				    &error);
+	if (error) {
+		GtkWidget *message_dialog;
+
+		message_dialog = gtk_message_dialog_new (NULL,
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_ERROR,
+					GTK_BUTTONS_CLOSE,
+					_("There was an error launching the preferences dialog: %s"),
+					error->message);
+		gtk_window_set_resizable (GTK_WINDOW (message_dialog), FALSE);
+
+		g_signal_connect (message_dialog, "response",
+				  G_CALLBACK (gtk_widget_destroy),
+				  NULL);
+		gtk_widget_show (message_dialog);
+		g_error_free (error);
+	  }
 }
 
 
@@ -599,7 +629,7 @@ ka_applet_cb_about_dialog (GtkMenuItem* menuitem G_GNUC_UNUSED,
 				"Christopher Aillon <caillon@redhat.com>",
 				"Jonathan Blandford <jrb@redhat.com>",
 				"Colin Walters <walters@verbum.org>",
-				"Guido Günther <agx@sigxpcu.org>",
+				"Guido Günther <agx@sigxcpu.org>",
 				NULL };
 
 	gtk_about_dialog_set_url_hook (ka_about_dialog_url_hook, NULL, NULL);
@@ -637,6 +667,13 @@ ka_applet_cb_destroy_ccache(GtkMenuItem* menuitem G_GNUC_UNUSED,
 	ka_destroy_ccache(applet);
 }
 
+static void
+ka_applet_cb_show_tickets(GtkMenuItem* menuitem G_GNUC_UNUSED,
+			  gpointer user_data G_GNUC_UNUSED)
+{
+	ka_tickets_dialog_run();
+}
+
 
 /* The tray icon's context menu */
 static gboolean
@@ -657,6 +694,12 @@ ka_applet_create_context_menu (KaApplet* applet)
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
 	ka_applet_menu_add_separator_item (menu);
+
+	/* Ticket dialog */
+	menu_item = gtk_image_menu_item_new_with_mnemonic("_List Tickets");
+	g_signal_connect (G_OBJECT (menu_item), "activate",
+			  G_CALLBACK (ka_applet_cb_show_tickets), applet);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
 	/* Preferences */
 	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
@@ -796,6 +839,8 @@ KaApplet*
 ka_applet_create()
 {
 	KaApplet* applet = ka_applet_new();
+	GError *error = NULL;
+	gboolean ret;
 
 	if (!(ka_applet_setup_icons (applet)))
 		g_error ("Failure to setup icons");
@@ -808,14 +853,21 @@ ka_applet_create()
 	                  G_CALLBACK (ka_applet_cb_show_trayicon), NULL);
 
 	applet->priv->uixml = gtk_builder_new();
-	g_assert(gtk_builder_add_from_file(applet->priv->uixml,
-					   KA_DATA_DIR G_DIR_SEPARATOR_S
-				           PACKAGE ".xml", NULL));
+	ret = gtk_builder_add_from_file(applet->priv->uixml,
+					KA_DATA_DIR G_DIR_SEPARATOR_S
+				        PACKAGE ".xml", &error);
+	if (!ret) {
+		g_assert (error);
+		g_assert (error->message);
+		g_error ("Failed to load UI XML: %s", error->message);
+	}
 	applet->priv->pwdialog = ka_pwdialog_create(applet->priv->uixml);
 	g_return_val_if_fail (applet->priv->pwdialog != NULL, NULL);
 
 	applet->priv->gconf = ka_gconf_init (applet);
 	g_return_val_if_fail (applet->priv->gconf != NULL, NULL);
+
+	ka_tickets_dialog_create(applet->priv->uixml);
 
 	return applet;
 }

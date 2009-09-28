@@ -46,20 +46,26 @@
 /* Define to 1 if you have the `krb5_cc_clear_mcred' function. */
 #undef HAVE_KRB5_CC_CLEAR_MCRED
 
-/* Define to 1 if `flags' is member of `krb5_creds'. */
+/* Define to 1 if `krb5_creds' is a member of `flags'. */
 #undef HAVE_KRB5_CREDS_FLAGS
 
-/* Define to 1 if `flags.b.forwardable' is member of `krb5_creds'. */
+/* Define to 1 if `krb5_creds' is a member of `flags.b.forwardable'. */
 #undef HAVE_KRB5_CREDS_FLAGS_B_FORWARDABLE
 
-/* Define to 1 if `flags.b.proxiable' is member of `krb5_creds'. */
+/* Define to 1 if `krb5_creds' is a member of `flags.b.proxiable'. */
 #undef HAVE_KRB5_CREDS_FLAGS_B_PROXIABLE
 
-/* Define to 1 if `flags.b.renewable' is member of `krb5_creds'. */
+/* Define to 1 if `krb5_creds' is a member of `flags.b.renewable'. */
 #undef HAVE_KRB5_CREDS_FLAGS_B_RENEWABLE
 
-/* Define to 1 if `ticket_flags' is member of `krb5_creds'. */
+/* Define to 1 if `krb5_creds' is a member of `ticket_flags'. */
 #undef HAVE_KRB5_CREDS_TICKET_FLAGS
+
+/* Define to 1 if you have the `krb5_free_error_message' function. */
+#undef HAVE_KRB5_FREE_ERROR_MESSAGE
+
+/* Define to 1 if you have the `krb5_free_error_string' function. */
+#undef HAVE_KRB5_FREE_ERROR_STRING
 
 /* Define to 1 if you have the `krb5_get_error_message' function. */
 #undef HAVE_KRB5_GET_ERROR_MESSAGE
@@ -166,6 +172,9 @@
 
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION

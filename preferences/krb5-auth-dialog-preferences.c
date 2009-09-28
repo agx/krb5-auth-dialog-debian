@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Guido Guenther <agx@sigxcup.org>
+ * Copyright (C) 2009 Guido Guenther <agx@sigxcpu.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -735,10 +735,18 @@ ka_preferences_dialog_destroyed (GtkWidget *widget G_GNUC_UNUSED,
 static gboolean
 ka_preferences_dialog_init(KaPreferencesDialog* dialog)
 {
+  GError *error = NULL;
+  gboolean ret;
+
   dialog->xml = gtk_builder_new ();
 
-  g_assert(gtk_builder_add_from_file(dialog->xml, KA_DATA_DIR G_DIR_SEPARATOR_S
-                                     PACKAGE "-preferences.xml", NULL));
+  ret = gtk_builder_add_from_file(dialog->xml, KA_DATA_DIR G_DIR_SEPARATOR_S
+                                  PACKAGE "-preferences.xml", &error);
+  if (!ret) {
+      g_assert (error);
+      g_assert (error->message);
+      g_error ("Failed to load UI XML: %s", error->message);
+  }
 
   dialog->dialog = GTK_WIDGET(gtk_builder_get_object (dialog->xml, "krb5_auth_dialog_prefs"));
   g_assert (dialog->dialog);
@@ -824,6 +832,9 @@ main (int argc, char *argv[])
   textdomain (PACKAGE);
   bind_textdomain_codeset (PACKAGE, "UTF-8");
   bindtextdomain (PACKAGE, LOCALE_DIR);
+
+  gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+                                     DATA_DIR G_DIR_SEPARATOR_S "icons");
 
   ka_preferences_dialog_init(&dialog);
   gtk_main ();
