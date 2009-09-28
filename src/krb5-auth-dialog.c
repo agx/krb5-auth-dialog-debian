@@ -2,7 +2,7 @@
  * Copyright (C) 2004,2005,2006 Red Hat, Inc.
  * Authored by Christopher Aillon <caillon@redhat.com>
  *
- * Copyright (C) 2008,2009 Guido Guenther <agx@sigxcup.org>
+ * Copyright (C) 2008,2009 Guido Guenther <agx@sigxcpu.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@
 #include "krb5-auth-pwdialog.h"
 #include "krb5-auth-dbus.h"
 #include "krb5-auth-tools.h"
+#include "krb5-auth-tickets.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include <libnm_glib.h>
@@ -62,6 +63,10 @@ static gboolean is_online = TRUE;
 static int grab_credentials (KaApplet* applet);
 static int ka_renew_credentials (KaApplet* applet);
 static gboolean ka_get_tgt_from_ccache (krb5_context context, krb5_creds *creds);
+
+#ifdef ENABLE_NETWORK_MANAGER
+libnm_glib_ctx *nm_context;
+#endif
 
 /* YAY for different Kerberos implementations */
 static int
@@ -134,21 +139,40 @@ get_principal_realm_data(krb5_principal p)
 #endif
 }
 
-static const char*
+static void
+ka_krb5_free_error_message(krb5_context context, const char* msg)
+{
+#if defined(HAVE_KRB5_FREE_ERROR_MESSAGE)
+	krb5_free_error_message(context, msg);
+#elif defined(HAVE_KRB5_FREE_ERROR_STRING)
+	krb5_free_error_string(context, (char *) msg);
+#else
+#	error No way to free error string.
+#endif
+}
+
+/*
+ * Returns a descriptive error message or kerberos related error
+ * returned pointer must be freed using g_free().
+ */
+static char*
 ka_get_error_message(krb5_context context, krb5_error_code err)
 {
-	const char *msg = NULL;
-
+	char *msg = NULL;
 #if defined(HAVE_KRB5_GET_ERROR_MESSAGE)
-	msg = krb5_get_error_message(context, err);
+	const char *krberr;
+
+	krberr = krb5_get_error_message(context, err);
+	msg = g_strdup(krberr);
+	ka_krb5_free_error_message(context, krberr);
 #else
-	msg = error_message(err);
+#	error No detailed error message information
 #endif
 	if (msg == NULL)
-		return "unknown error";
-	else
-		return msg;
+		msg = g_strdup(_("unknown error"));
+	return msg;
 }
+
 
 static void
 ka_krb5_cc_clear_mcred(krb5_creds* mcred)
@@ -163,6 +187,17 @@ ka_krb5_cc_clear_mcred(krb5_creds* mcred)
 
 /* ***************************************************************** */
 /* ***************************************************************** */
+
+/* log a kerberos error messge */
+static void
+ka_log_error_message(const char* prefix, krb5_context context, krb5_error_code err)
+{
+	char *errmsg = ka_get_error_message(context, err);
+
+	g_warning("%s: %s", prefix, errmsg);
+	g_free (errmsg);
+}
+
 
 static gboolean
 credentials_expiring_real (KaApplet* applet)
@@ -213,17 +248,109 @@ ka_tgt_valid_seconds()
 	return (creds_expiry - now);
 }
 
+
 /* return credential cache filename, strip "FILE:" prefix if necessary */
 static const char*
 ka_ccache_filename (void)
 {
-	const gchar *ccache_name;
+	const gchar *name;
 
-	ccache_name = krb5_cc_default_name (kcontext);
-	if (g_str_has_prefix (ccache_name, "FILE:"))
-		return &(ccache_name[5]);
-	else
-		return ccache_name;
+	name = krb5_cc_default_name (kcontext);
+	if (g_str_has_prefix (name, "FILE:"))
+		return strchr(name,':')+1;
+	else {
+		g_warning ("Unsupported cache type for %s", name);
+		return NULL;
+	}
+}
+
+
+static void
+ka_format_time (time_t t, gchar *ts, size_t len)
+{
+	g_strlcpy(ts, ctime(&t)+ 4, len);
+	ts[15] = 0;
+}
+
+
+/* fill in service tickets data */
+gboolean
+ka_get_service_tickets (GtkListStore *tickets)
+{
+	krb5_cc_cursor cursor;
+	krb5_creds creds;
+	krb5_error_code ret;
+	GtkTreeIter iter;
+	krb5_ccache ccache;
+	char *name;
+	krb5_timestamp sec;
+	gchar start_time[128], end_time[128], end_time_markup[256];
+	gboolean retval = FALSE;
+
+	gtk_list_store_clear(tickets);
+
+	krb5_timeofday (kcontext, &sec);
+	ret = krb5_cc_default (kcontext, &ccache);
+	g_return_val_if_fail (!ret, FALSE);
+
+	ret = krb5_cc_start_seq_get (kcontext, ccache, &cursor);
+	if (ret) {
+		ka_log_error_message("krb5_cc_start_seq_get", kcontext, ret);
+
+		/* if the file doesn't exist, it's not an error if we can't
+		 * parse it */
+		if (!g_file_test(ka_ccache_filename (),
+				 G_FILE_TEST_EXISTS))
+			retval = TRUE;
+		goto out;
+	}
+
+	while ((ret = krb5_cc_next_cred (kcontext,
+					 ccache,
+					 &cursor,
+					 &creds)) == 0) {
+		if (creds.times.starttime)
+			ka_format_time(creds.times.starttime, start_time,
+				       sizeof(start_time));
+		else
+			ka_format_time(creds.times.authtime, start_time,
+				       sizeof(start_time));
+
+		ka_format_time(creds.times.endtime, end_time,
+			       sizeof(end_time));
+		if (creds.times.endtime > sec)
+			strcpy(end_time_markup, end_time);
+		else
+			g_snprintf(end_time_markup, sizeof(end_time_markup),
+				  "%s <span foreground=\"red\" style=\"italic\">(%s)</span>",
+				  end_time, _("Expired"));
+
+		ret = krb5_unparse_name (kcontext, creds.server, &name);
+		if (!ret) {
+			gtk_list_store_append(tickets, &iter);
+			gtk_list_store_set(tickets, &iter,
+					   PRINCIPAL_COLUMN, name,
+					   START_TIME_COLUMN, start_time,
+					   END_TIME_COLUMN, end_time_markup,
+					   -1);
+			free(name);
+		} else
+			ka_log_error_message("krb5_unparse_name", kcontext, ret);
+		krb5_free_cred_contents (kcontext, &creds);
+	}
+	if(ret != KRB5_CC_END)
+		ka_log_error_message("krb5_cc_get_next", kcontext, ret);
+
+	ret = krb5_cc_end_seq_get (kcontext, ccache, &cursor);
+	if (ret)
+		ka_log_error_message("krb5_cc_end_seq_get", kcontext, ret);
+
+	retval = TRUE;
+out:
+	ret = krb5_cc_close (kcontext, ccache);
+	g_return_val_if_fail (!ret, FALSE);
+
+	return retval;
 }
 
 
@@ -566,7 +693,7 @@ ccache_changed_cb (GFileMonitor *monitor G_GNUC_UNUSED,
 
 
 static gboolean
-monitor_ccache(KaApplet* applet)
+monitor_ccache(KaApplet *applet)
 {
 	const gchar *ccache_name;
 	GFile *ccache;
@@ -610,6 +737,7 @@ grab_credentials (KaApplet* applet)
 	krb5_ccache ccache;
 	gchar *pk_userid = NULL;
 	gchar *pk_anchors = NULL;
+	gchar *errmsg = NULL;
 	gboolean pw_auth = TRUE;
 
 	memset(&my_creds, 0, sizeof(my_creds));
@@ -652,8 +780,10 @@ grab_credentials (KaApplet* applet)
 				invalid_auth = TRUE;
 				break;
 			default:
+				errmsg = ka_get_error_message(kcontext, retval);
 				KA_DEBUG("Auth failed with %d: %s", retval,
-				         ka_get_error_message(kcontext, retval));
+					 errmsg);
+				g_free(errmsg);
 				break;
 		}
 		goto out;
@@ -702,18 +832,19 @@ ka_renew_credentials (KaApplet* applet)
 	set_options_from_creds (applet, kcontext, &my_creds, &opts);
 
 	if (ka_applet_get_tgt_renewable(applet)) {
+
 		retval = get_renewed_creds (kcontext, &my_creds, kprincipal, ccache, NULL);
 		if (retval)
 			goto out;
 
 		retval = krb5_cc_initialize(kcontext, ccache, kprincipal);
 		if(retval) {
-			g_warning("krb5_cc_initialize: %s", ka_get_error_message(kcontext, retval));
+			ka_log_error_message("krb5_cc_initialize", kcontext, retval);
 			goto out;
 		}
 		retval = krb5_cc_store_cred(kcontext, ccache, &my_creds);
 		if (retval) {
-			g_warning("krb5_cc_store_cred: %s", ka_get_error_message(kcontext, retval));
+			ka_log_error_message("krb5_cc_store_cred", kcontext, retval);
 			goto out;
 		}
 	}
@@ -870,9 +1001,11 @@ ka_grab_credentials (KaApplet* applet)
 		if (canceled)
 			break;
 		if (retval) {
-			ka_pwdialog_error(pwdialog,
-					  ka_get_error_message(kcontext,
-                                                               retval));
+			gchar *errmsg;
+
+			errmsg = ka_get_error_message(kcontext, retval);
+			ka_pwdialog_error(pwdialog, errmsg);
+			g_free (errmsg);
 			break;
 		} else {
 			success = TRUE;
@@ -901,11 +1034,22 @@ ka_secmem_init (void)
 }
 
 
+static void
+ka_nm_shutdown(void)
+{
+#ifdef ENABLE_NETWORK_MANAGER
+	if (nm_context) {
+		libnm_glib_shutdown (nm_context);
+		nm_context = NULL;
+	}
+#endif
+}
+
+
 static gboolean
 ka_nm_init(void)
 {
 #ifdef ENABLE_NETWORK_MANAGER
-	libnm_glib_ctx *nm_context;
 	guint32 nm_callback_id;
 
 	nm_context = libnm_glib_init ();
@@ -914,8 +1058,7 @@ ka_nm_init(void)
 	} else {
 		nm_callback_id = libnm_glib_register_callback (nm_context, network_state_cb, &is_online, NULL);
 		if (nm_callback_id == 0) {
-			libnm_glib_shutdown (nm_context);
-			nm_context = NULL;
+			ka_nm_shutdown ();
 
 			g_warning ("Could not connect to NetworkManager, connection status will not be managed!");
 		}
@@ -948,6 +1091,7 @@ main (int argc, char *argv[])
 	g_option_context_add_main_entries (context, options, NULL);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
 	g_option_context_parse (context, &argc, &argv, &error);
+
 	if (error) {
 		g_print ("%s\n%s\n",
 			 error->message,
@@ -955,6 +1099,8 @@ main (int argc, char *argv[])
 		g_error_free (error);
 		return 1;
 	}
+	g_option_context_free (context);
+
 	textdomain (PACKAGE);
 	bind_textdomain_codeset (PACKAGE, "UTF-8");
 	bindtextdomain (PACKAGE, LOCALE_DIR);
@@ -981,5 +1127,6 @@ main (int argc, char *argv[])
 		ka_dbus_service(applet);
 		gtk_main ();
 	}
+	ka_nm_shutdown();
 	return 0;
 }
