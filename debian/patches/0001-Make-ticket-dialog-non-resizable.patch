@@ -1,0 +1,23 @@
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Tue, 29 Sep 2009 12:34:46 +0200
+Subject: [PATCH] Make ticket dialog non resizable
+
+This makes sure window managers like maximus don't try to automaxmize
+the dialog.
+---
+ src/krb5-auth-dialog.xml |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/src/krb5-auth-dialog.xml b/src/krb5-auth-dialog.xml
+index f1a9d11..d379265 100644
+--- a/src/krb5-auth-dialog.xml
++++ b/src/krb5-auth-dialog.xml
+@@ -155,6 +155,7 @@
+   <object class="GtkDialog" id="krb5_tickets_dialog">
+     <property name="border_width">5</property>
+     <property name="title" translatable="yes">Service Tickets</property>
++    <property name="resizable">False</property>
+     <property name="type_hint">normal</property>
+     <property name="has_separator">False</property>
+     <child internal-child="vbox">
+-- 
