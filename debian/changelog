@@ -1,3 +1,10 @@
+krb5-auth-dialog (0.13-2) unstable; urgency=low
+
+  * [3fc941f] Reenable patchsys
+  * [4465319] Pull several minor ticket dialog enhancements from upstream
+
+ -- Guido Günther <agx@sigxcpu.org>  Tue, 29 Sep 2009 14:38:27 +0200
+
 krb5-auth-dialog (0.13-1) unstable; urgency=low
 
   * [b6cfb6e] Imported Upstream version 0.13
