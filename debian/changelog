@@ -1,3 +1,11 @@
+krb5-auth-dialog (0.13-1) unstable; urgency=low
+
+  * [b6cfb6e] Imported Upstream version 0.13
+  * [045601b] Drop 0001-remove-unused-GtkImage-with-duplicate-id.patch - fixed
+    upstream.
+
+ -- Guido Günther <agx@sigxcpu.org>  Tue, 29 Sep 2009 09:36:13 +0200
+
 krb5-auth-dialog (0.12-2) unstable; urgency=low
 
   * [56734b5] new patch 0001-remove-unused-GtkImage-with-duplicate-id.patch:
