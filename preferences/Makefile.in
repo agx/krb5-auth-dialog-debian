@@ -36,7 +36,8 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = krb5-auth-dialog-preferences$(EXEEXT)
 subdir = preferences
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/krb5-auth-dialog-preferences.1.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/m4/compiler-flags.m4 \
@@ -45,10 +46,10 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = krb5-auth-dialog-preferences.1
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(desktopdir)" \
-	"$(DESTDIR)$(pkgdatadir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
+	"$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
 am_krb5_auth_dialog_preferences_OBJECTS = krb5_auth_dialog_preferences-krb5-auth-dialog-preferences.$(OBJEXT) \
@@ -100,6 +101,9 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+man1dir = $(mandir)/man1
+NROFF = nroff
+MANS = $(man_MANS)
 DATA = $(desktop_DATA) $(pkgdata_DATA)
 ETAGS = etags
 CTAGS = ctags
@@ -279,6 +283,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 NULL = 
+man_MANS = krb5-auth-dialog-preferences.1
 krb5_auth_dialog_preferences_SOURCES = \
 	krb5-auth-dialog-preferences.c \
 	$(top_srcdir)/src/krb5-auth-gconf-tools.c \
@@ -321,6 +326,7 @@ CLEANFILES = \
 EXTRA_DIST = \
 	$(desktop_in_files) \
 	$(pkgdata_DATA) \
+	krb5-auth-dialog-preferences.1.in \
 	$(NULL)
 
 all: all-am
@@ -357,6 +363,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+krb5-auth-dialog-preferences.1: $(top_builddir)/config.status $(srcdir)/krb5-auth-dialog-preferences.1.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
@@ -482,6 +490,44 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+install-man1: $(man_MANS)
+	@$(NORMAL_INSTALL)
+	test -z "$(man1dir)" || $(MKDIR_P) "$(DESTDIR)$(man1dir)"
+	@list=''; test -n "$(man1dir)" || exit 0; \
+	{ for i in $$list; do echo "$$i"; done; \
+	l2='$(man_MANS)'; for i in $$l2; do echo "$$i"; done | \
+	  sed -n '/\.1[a-z]*$$/p'; \
+	} | while read p; do \
+	  if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; echo "$$p"; \
+	done | \
+	sed -e 'n;s,.*/,,;p;h;s,.*\.,,;s,^[^1][0-9a-z]*$$,1,;x' \
+	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,' | \
+	sed 'N;N;s,\n, ,g' | { \
+	list=; while read file base inst; do \
+	  if test "$$base" = "$$inst"; then list="$$list $$file"; else \
+	    echo " $(INSTALL_DATA) '$$file' '$(DESTDIR)$(man1dir)/$$inst'"; \
+	    $(INSTALL_DATA) "$$file" "$(DESTDIR)$(man1dir)/$$inst" || exit $$?; \
+	  fi; \
+	done; \
+	for i in $$list; do echo "$$i"; done | $(am__base_list) | \
+	while read files; do \
+	  test -z "$$files" || { \
+	    echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(man1dir)'"; \
+	    $(INSTALL_DATA) $$files "$(DESTDIR)$(man1dir)" || exit $$?; }; \
+	done; }
+
+uninstall-man1:
+	@$(NORMAL_UNINSTALL)
+	@list=''; test -n "$(man1dir)" || exit 0; \
+	files=`{ for i in $$list; do echo "$$i"; done; \
+	l2='$(man_MANS)'; for i in $$l2; do echo "$$i"; done | \
+	  sed -n '/\.1[a-z]*$$/p'; \
+	} | sed -e 's,.*/,,;h;s,.*\.,,;s,^[^1][0-9a-z]*$$,1,;x' \
+	      -e 's,\.[0-9a-z]*$$,,;$(transform);G;s,\n,.,'`; \
+	test -z "$$files" || { \
+	  echo " ( cd '$(DESTDIR)$(man1dir)' && rm -f" $$files ")"; \
+	  cd "$(DESTDIR)$(man1dir)" && rm -f $$files; }
 install-desktopDATA: $(desktop_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(desktopdir)" || $(MKDIR_P) "$(DESTDIR)$(desktopdir)"
@@ -576,6 +622,19 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
+	@list='$(MANS)'; if test -n "$$list"; then \
+	  list=`for p in $$list; do \
+	    if test -f $$p; then d=; else d="$(srcdir)/"; fi; \
+	    if test -f "$$d$$p"; then echo "$$d$$p"; else :; fi; done`; \
+	  if test -n "$$list" && \
+	    grep 'ab help2man is required to generate this page' $$list >/dev/null; then \
+	    echo "error: found man pages containing the \`missing help2man' replacement text:" >&2; \
+	    grep -l 'ab help2man is required to generate this page' $$list | sed 's/^/         /' >&2; \
+	    echo "       to fix them, install help2man, remove and regenerate the man pages;" >&2; \
+	    echo "       typically \`make maintainer-clean' will remove them" >&2; \
+	    exit 1; \
+	  else :; fi; \
+	else :; fi
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
 	list='$(DISTFILES)'; \
@@ -607,9 +666,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS) $(DATA)
+all-am: Makefile $(PROGRAMS) $(MANS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -660,7 +719,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-desktopDATA install-pkgdataDATA
+install-data-am: install-desktopDATA install-man install-pkgdataDATA
 
 install-dvi: install-dvi-am
 
@@ -676,7 +735,7 @@ install-info: install-info-am
 
 install-info-am:
 
-install-man:
+install-man: install-man1
 
 install-pdf: install-pdf-am
 
@@ -707,7 +766,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-desktopDATA \
-	uninstall-pkgdataDATA
+	uninstall-man uninstall-pkgdataDATA
+
+uninstall-man: uninstall-man1
 
 .MAKE: install-am install-strip
 
@@ -718,13 +779,14 @@ uninstall-am: uninstall-binPROGRAMS uninstall-desktopDATA \
 	install-binPROGRAMS install-data install-data-am \
 	install-desktopDATA install-dvi install-dvi-am install-exec \
 	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-pkgdataDATA install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-desktopDATA uninstall-pkgdataDATA
+	install-info-am install-man install-man1 install-pdf \
+	install-pdf-am install-pkgdataDATA install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-desktopDATA uninstall-man \
+	uninstall-man1 uninstall-pkgdataDATA
 
 	$(AM_CPPFLAGS)
 
