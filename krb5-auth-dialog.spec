@@ -1,6 +1,6 @@
 Summary: Kerberos 5 authentication dialog
 Name: krb5-auth-dialog
-Version: 0.13
+Version: 0.14
 Release: 1
 License: GPL
 Group: User Interface/X
