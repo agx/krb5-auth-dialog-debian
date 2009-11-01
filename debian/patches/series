@@ -1,3 +1,0 @@
-0001-Make-ticket-dialog-non-resizable.patch
-0002-Add-some-ticket-flags-to-the-dialog.patch
-0003-Use-gtk_window_present-instead-of-gtk_show_widget.patch
