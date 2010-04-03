@@ -1,3 +1,11 @@
+krb5-auth-dialog (0.15-1) unstable; urgency=low
+
+  * [eafd110] Imported Upstream version 0.15
+  * [469d5f9] install examples
+  * [f7b2bf0] Bump standards version
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 03 Apr 2010 17:49:03 +0200
+
 krb5-auth-dialog (0.14-2) unstable; urgency=low
 
   * [a3c3412] Rebuild against so name bumped libheimdal-dev. (Closes: #561340)
