@@ -2,7 +2,7 @@
  * Copyright (C) 2004,2005,2006 Red Hat, Inc.
  * Authored by Christopher Aillon <caillon@redhat.com>
  *
- * Copyright (C) 2008,2009 Guido Guenther <agx@sigxcpu.org>
+ * Copyright (C) 2008,2009,2010 Guido Guenther <agx@sigxcpu.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -229,7 +229,6 @@ credentials_expiring_real (KaApplet* applet)
 	}
 
 	krb5_free_cred_contents (kcontext, &my_creds);
-
 out:
 	ka_applet_update_status(applet, creds_expiry);
 	return retval;
@@ -258,10 +257,11 @@ ka_ccache_filename (void)
 	name = krb5_cc_default_name (kcontext);
 	if (g_str_has_prefix (name, "FILE:"))
 		return strchr(name,':')+1;
-	else {
-		g_warning ("Unsupported cache type for %s", name);
-		return NULL;
-	}
+	else if (g_str_has_prefix (name, "SCC:"))
+		g_warning ("Cannot monitor sqlite based cache '%s'", name);
+	else
+		g_warning ("Unsupported cache type for '%s'", name);
+	return NULL;
 }
 
 
@@ -521,7 +521,8 @@ out:
 static void
 ka_set_ticket_options(KaApplet* applet, krb5_context context,
 		      krb5_get_init_creds_opt *out,
-		      const char* pk_userid, const char* pk_anchors)
+		      const char* pk_userid G_GNUC_UNUSED,
+		      const char* pk_anchors G_GNUC_UNUSED)
 {
 	gboolean flag;
 #ifdef HAVE_KRB5_GET_INIT_CREDS_OPT_SET_DEFAULT_FLAGS
@@ -674,6 +675,32 @@ ka_parse_name(KaApplet* applet, krb5_context krbcontext, krb5_principal* kprinc)
 
 	g_free(principal);
 	return ret;
+}
+
+
+/*
+ * return current principal in text form
+ *
+ * caller needs to free the returned result using g_free();
+ */
+char*
+ka_unparse_name ()
+{
+	char *princ, *gprinc = NULL;
+	krb5_error_code err;
+
+	if (!kprincipal)
+		goto out;
+
+	if ((err = krb5_unparse_name (kcontext, kprincipal, &princ))) {
+		ka_log_error_message(__func__, kcontext, err);
+		goto out;
+	}
+
+	gprinc = g_strdup (princ);
+	free (princ);
+out:
+	return gprinc;
 }
 
 
@@ -856,6 +883,8 @@ ka_renew_credentials (KaApplet* applet)
 			ka_log_error_message("krb5_cc_store_cred", kcontext, retval);
 			goto out;
 		}
+		ka_applet_signal_emit (applet, KA_SIGNAL_RENEWED_TGT,
+				       my_creds.times.endtime);
 	}
 out:
 	creds_expiry = my_creds.times.endtime;
@@ -1121,6 +1150,7 @@ main (int argc, char *argv[])
 	if (run_always && !run_auto) {
 		always_run = TRUE;
 	}
+
 	if (using_krb5 () || always_run) {
 		g_set_application_name (KA_NAME);
 
