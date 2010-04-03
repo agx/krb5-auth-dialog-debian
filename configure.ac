@@ -1,10 +1,11 @@
-AC_INIT([krb5-auth-dialog], [0.14])
+AC_INIT([krb5-auth-dialog], [0.15])
 AC_CONFIG_SRCDIR(src/krb5-auth-dialog.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
 AM_CONFIG_HEADER(config.h)
 
 AM_MAINTAINER_MODE
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 IT_PROG_INTLTOOL([0.35.0])
 
@@ -237,6 +238,7 @@ po/Makefile.in
 preferences/Makefile
 preferences/krb5-auth-dialog-preferences.1
 help/Makefile
+examples/Makefile
 ])
 
 AC_MSG_NOTICE([])
