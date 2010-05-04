@@ -1,3 +1,11 @@
+krb5-auth-dialog (0.16~rc1-1) experimental; urgency=low
+
+  * [29320e2] Imported Upstream version 0.16~rc1
+  * [d6b65b8] Enable PAM plugin
+  * [c5a9652] Don't run dh_makeshlibs on plugins and remove .la and .a files.
+
+ -- Guido Günther <agx@sigxcpu.org>  Tue, 04 May 2010 08:56:09 +0200
+
 krb5-auth-dialog (0.15-1) unstable; urgency=low
 
   * [eafd110] Imported Upstream version 0.15
