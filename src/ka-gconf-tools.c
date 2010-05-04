@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include <gconf/gconf-client.h>
-#include <krb5-auth-gconf-tools.h>
+#include <ka-gconf-tools.h>
 
 gboolean
 ka_gconf_get_string (GConfClient* client,
@@ -44,6 +44,30 @@ ka_gconf_get_string (GConfClient* client,
 				g_error_free (error);
 		}
 		gconf_value_free (gc_value);
+	}
+	return success;
+}
+
+
+gboolean
+ka_gconf_get_string_list (GConfClient* client,
+		          const char* key,
+		          GSList** list)
+{
+	GError*		error = NULL;
+	gboolean	success = FALSE;
+
+	g_return_val_if_fail (client != NULL, FALSE);
+	g_return_val_if_fail (key != NULL, FALSE);
+	g_return_val_if_fail (*list == NULL, FALSE);
+
+	if ((*list = gconf_client_get_list (client, key,
+	                                   GCONF_VALUE_STRING, &error))) {
+		if (error) {
+			g_print ("%s", error->message);
+			g_error_free (error);
+		} else
+			success = TRUE;
 	}
 	return success;
 }
@@ -123,4 +147,3 @@ ka_gconf_set_bool (GConfClient* client,
 	}
 	return TRUE;
 }
-

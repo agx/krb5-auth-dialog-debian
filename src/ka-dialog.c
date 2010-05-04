@@ -36,12 +36,12 @@
 #include "secmem-util.h"
 #include "memory.h"
 
-#include "krb5-auth-dialog.h"
-#include "krb5-auth-applet.h"
-#include "krb5-auth-pwdialog.h"
-#include "krb5-auth-dbus.h"
-#include "krb5-auth-tools.h"
-#include "krb5-auth-tickets.h"
+#include "ka-dialog.h"
+#include "ka-applet-priv.h"
+#include "ka-pwdialog.h"
+#include "ka-dbus.h"
+#include "ka-tools.h"
+#include "ka-tickets.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include <libnm_glib.h>
@@ -1119,10 +1119,10 @@ main (int argc, char *argv[])
 	const char *help_msg = "Run '" PACKAGE " --help' to see a full list of available command line options";
 	const GOptionEntry options [] = {
 		{"auto", 'a', 0, G_OPTION_ARG_NONE, &run_auto,
-		 	"Only run if an initialized ccache is found (default)", NULL},
+			"Only run if an initialized ccache is found (default)", NULL},
 		{"always", 'A', 0, G_OPTION_ARG_NONE, &run_always,
-		 	"Always run", NULL},
-  		{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+			"Always run", NULL},
+		{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 	};
 
 	context = g_option_context_new ("- Kerberos 5 credential checking");

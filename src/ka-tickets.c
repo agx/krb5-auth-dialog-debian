@@ -23,8 +23,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "krb5-auth-tickets.h"
-#include "krb5-auth-dialog.h"
+#include "ka-tickets.h"
+#include "ka-dialog.h"
 
 static GtkListStore *tickets;
 static GtkWidget    *tickets_dialog;
@@ -113,4 +113,3 @@ ka_tickets_dialog_run()
 		gtk_widget_show (message_dialog);
 	}
 }
-

@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef KRB5_AUTH_GCONF_TOOLS_H
-#define KRB5_AUTH_GCONF_TOOLS_H
+#ifndef KA_GCONF_TOOLS_H
+#define KA_GCONF_TOOLS_H
 
 #include "config.h"
 
@@ -37,8 +37,10 @@
 #define KA_GCONF_KEY_NOTIFY_VALID	KA_GCONF_PATH "/notify/valid"
 #define KA_GCONF_KEY_NOTIFY_EXPIRED	KA_GCONF_PATH "/notify/expired"
 #define KA_GCONF_KEY_NOTIFY_EXPIRING	KA_GCONF_PATH "/notify/expiring"
+#define KA_GCONF_KEY_PLUGINS_ENABLED	KA_GCONF_PATH "/plugins/enabled"
 
 gboolean ka_gconf_get_string (GConfClient* client, const char* key, char** value);
+gboolean ka_gconf_get_string_list (GConfClient* client, const char* key, GSList** list);
 gboolean ka_gconf_get_int (GConfClient* client, const char* key, int* value);
 gboolean ka_gconf_get_bool (GConfClient* client, const char* key, gboolean* value);
 gboolean ka_gconf_set_bool (GConfClient* client, const char* key, gboolean value);

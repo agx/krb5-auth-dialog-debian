@@ -21,22 +21,29 @@ $(service_DATA): $(service_in_files) Makefile
 	sed -e "s|\@BINDIR\@|$(bindir)|" $< > $@
 
 krb5_auth_dialog_SOURCES =	\
-	krb5-auth-dialog.c      \
-	krb5-auth-dialog.h      \
-	krb5-auth-applet.c	\
-	krb5-auth-applet.h	\
-	krb5-auth-pwdialog.c    \
-	krb5-auth-pwdialog.h    \
-	krb5-auth-gconf.c	\
-	krb5-auth-gconf.h	\
-	krb5-auth-gconf-tools.c	\
-	krb5-auth-gconf-tools.h	\
-	krb5-auth-dbus.c	\
-	krb5-auth-dbus.h	\
-	krb5-auth-tools.c	\
-	krb5-auth-tools.h	\
-	krb5-auth-tickets.c	\
-	krb5-auth-tickets.h	\
+	ka-dialog.c      	\
+	ka-dialog.h      	\
+	ka-applet.c		\
+	ka-applet-priv.h	\
+	ka-applet.h		\
+	ka-pwdialog.c    	\
+	ka-pwdialog.h    	\
+	ka-gconf.c		\
+	ka-gconf.h		\
+	ka-gconf-tools.c	\
+	ka-gconf-tools.h	\
+	ka-dbus.c		\
+	ka-dbus.h		\
+	ka-tools.c		\
+	ka-tools.h		\
+	ka-tickets.c		\
+	ka-tickets.h		\
+	ka-plugin.c		\
+	ka-plugin.h		\
+	ka-plugin-loader.c	\
+	ka-plugin-loader.h	\
+	ka-closures.h		\
+	ka-closures.c		\
 	dummy-strings.c		\
 	$(NULL)
 
@@ -47,10 +54,12 @@ krb5_auth_dialog_CPPFLAGS = \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DLOCALE_DIR=\""$(localedir)/"\" \
 	-DBIN_DIR=\""$(bindir)/"\" \
+	-DKA_PLUGINS_DIR=\""$(KA_PLUGINS_DIR)"\" \
 	$(AM_CPPFLAGS) \
 	$(NULL)
 
 krb5_auth_dialog_CFLAGS = \
+	$(GMODULE_CFLAGS) \
 	$(GTK_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(GCONF_CFLAGS) \
@@ -71,14 +80,15 @@ krb5_auth_dialog_LDADD = \
 	$(DBUS_LIBS) \
 	$(GCONF_LIBS) \
 	$(GIO_LIBS) \
+	$(GMODULE_LIBS) \
 	$(GTK_LIBS) \
 	$(NULL)
 
 BUILT_SOURCES = \
-	krb5-auth-applet-dbus-glue.h \
+	ka-dbus-glue.h \
 	$(NULL)
 
-krb5-auth-applet-dbus-glue.h: $(srcdir)/krb5-auth-applet-dbus.xml
+ka-dbus-glue.h: $(srcdir)/ka-dbus.xml
 	dbus-binding-tool                 \
 		--mode=glib-server        \
 		--prefix=krb5_auth_dialog \
@@ -100,14 +110,14 @@ EXTRA_DIST = \
 	$(schema_in_files) \
 	$(autostart_in_files) \
 	$(service_in_files) \
-	$(srcdir)/krb5-auth-applet-dbus.xml \
+	$(srcdir)/ka-dbus.xml \
 	krb5-auth-dialog.1.in \
 	$(NULL)
 
 CLEANFILES = $(schema_DATA) $(service_DATA)
 DISTCLEANFILES = \
 	krb5-auth-dialog.desktop \
-	krb5-auth-applet-dbus-glue.h \
+	ka-dbus-glue.h \
 	$(NULL)
 
 install-data-local: $(schema_DATA)

@@ -21,7 +21,7 @@
  * based on the vino capplet which is:
  *
  * 	Copyright (C) 2003 Sun Microsystems, Inc.
- * 	Copyright (C) 2006 Jonh Wendell <wendell@bani.com.br> 
+ * 	Copyright (C) 2006 Jonh Wendell <wendell@bani.com.br>
  *
  * 	Authors:
  *      	Mark McLoughlin <mark@skynet.ie>
@@ -33,8 +33,8 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "krb5-auth-gconf-tools.h"
-#include "krb5-auth-tools.h"
+#include "ka-gconf-tools.h"
+#include "ka-tools.h"
 
 #define PKINIT_SMARTCARD "PKCS11:" SC_PKCS11
 #define PKINIT_FILE "FILE:"

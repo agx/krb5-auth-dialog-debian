@@ -22,12 +22,14 @@
 
 #include <glib/gi18n.h>
 
-#include "krb5-auth-applet.h"
-#include "krb5-auth-dialog.h"
-#include "krb5-auth-gconf-tools.h"
-#include "krb5-auth-gconf.h"
-#include "krb5-auth-tools.h"
-#include "krb5-auth-tickets.h"
+#include "ka-applet-priv.h"
+#include "ka-dialog.h"
+#include "ka-gconf-tools.h"
+#include "ka-gconf.h"
+#include "ka-tools.h"
+#include "ka-tickets.h"
+#include "ka-plugin-loader.h"
+#include "ka-closures.h"
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
@@ -77,6 +79,7 @@ struct _KaAppletPrivate
 
 	KaPwDialog *pwdialog;		/* the password dialog */
 	int	   pw_prompt_secs;	/* when to start prompting for a password */
+	KaPluginLoader *loader;		/* Plugin loader */
 
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification* notification;/* notification messages */
@@ -219,6 +222,10 @@ ka_applet_dispose(GObject* object)
 		g_object_unref(applet->priv->uixml);
 		applet->priv->uixml = NULL;
 	}
+	if (applet->priv->loader) {
+		g_object_unref(applet->priv->loader);
+		applet->priv->loader = NULL;
+	}
 
 	if (parent_class->dispose != NULL)
 		parent_class->dispose (object);
@@ -347,7 +354,7 @@ ka_applet_class_init(KaAppletClass *klass)
 			0,
 			NULL,
 			NULL,
-			g_cclosure_marshal_VOID__STRING,
+			ka_closure_VOID__STRING_UINT,
 			G_TYPE_NONE,
 			2, /* number of parameters */
 			G_TYPE_STRING,
@@ -399,8 +406,8 @@ ka_applet_select_icon(KaApplet* applet, int remaining)
 	if (remaining > 0) {
 		if (remaining < applet->priv->pw_prompt_secs &&
 		    !applet->priv->renewable)
-		    	tray_icon = exp_icon;
-		else			
+			tray_icon = exp_icon;
+		else
 			tray_icon = val_icon;
 	}
 
@@ -509,9 +516,11 @@ ka_applet_update_status(KaApplet* applet, krb5_timestamp expiry)
 	int remaining = expiry - now;
 	static int last_warn = 0;
 	static gboolean expiry_notified = FALSE;
+	static krb5_timestamp old_expiry = 0;
 	gboolean notify = TRUE;
 	const char* tray_icon = ka_applet_select_icon (applet, remaining);
 	char* tooltip_text = ka_applet_tooltip_text (remaining);
+
 
 	if (remaining > 0) {
 		if (expiry_notified) {
@@ -528,20 +537,26 @@ ka_applet_update_status(KaApplet* applet, krb5_timestamp expiry)
 			}
 			ka_applet_signal_emit (applet, KA_SIGNAL_ACQUIRED_TGT, expiry);
 			expiry_notified = FALSE;
-		} else if (remaining < applet->priv->pw_prompt_secs && (now - last_warn) > NOTIFY_SECONDS &&
-			   !applet->priv->renewable) {
-			ka_gconf_get_bool(applet->priv->gconf,
+		} else {
+			if (remaining < applet->priv->pw_prompt_secs
+			    && (now - last_warn) > NOTIFY_SECONDS
+			    && !applet->priv->renewable) {
+				ka_gconf_get_bool(applet->priv->gconf,
 					  KA_GCONF_KEY_NOTIFY_EXPIRING,
 					  &notify);
-			if (notify) {
-				applet->priv->notify_gconf_key = KA_GCONF_KEY_NOTIFY_EXPIRING;
-				ka_send_event_notification (applet,
+				if (notify) {
+					applet->priv->notify_gconf_key = KA_GCONF_KEY_NOTIFY_EXPIRING;
+					ka_send_event_notification (applet,
 						_("Network credentials expiring"),
 						tooltip_text,
 						"krb-expiring-ticket",
 						"dont-show-again");
+				}
+				last_warn = now;
 			}
-			last_warn = now;
+			/* ticket lifetime got longer e.g. by kinit -R */
+			if (old_expiry && expiry > old_expiry)
+				ka_applet_signal_emit (applet, KA_SIGNAL_RENEWED_TGT, expiry);
 		}
 	} else {
 		if (!expiry_notified) {
@@ -562,6 +577,7 @@ ka_applet_update_status(KaApplet* applet, krb5_timestamp expiry)
 		}
 	}
 
+	old_expiry = expiry;
 	gtk_status_icon_set_from_icon_name (applet->priv->tray_icon, tray_icon);
 	gtk_status_icon_set_tooltip_text (applet->priv->tray_icon, tooltip_text);
 	g_free(tooltip_text);
@@ -864,6 +880,12 @@ ka_applet_get_pwdialog(const KaApplet* applet)
 	return applet->priv->pwdialog;
 }
 
+GConfClient*
+ka_applet_get_gconf_client(const KaApplet* self)
+{
+	return self->priv->gconf;
+}
+
 void
 ka_applet_signal_emit (KaApplet* this, KaAppletSignalNumber signum,
 		       krb5_timestamp expiry)
@@ -912,8 +934,9 @@ ka_applet_create()
 	applet->priv->gconf = ka_gconf_init (applet);
 	g_return_val_if_fail (applet->priv->gconf != NULL, NULL);
 
-	ka_tickets_dialog_create(applet->priv->uixml);
+	ka_tickets_dialog_create (applet->priv->uixml);
+	applet->priv->loader = ka_plugin_loader_create (applet);
+	g_return_val_if_fail (applet->priv->loader != NULL, NULL);
 
 	return applet;
 }
-

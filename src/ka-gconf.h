@@ -18,16 +18,12 @@
  *
  */
 
-#ifndef KRB5_AUTH_DIALOG
-#define KRB5_AUTH_DIALOG
+#ifndef KA_GCONF_H
+#define KA_GCONF_H
 
-#include "krb5-auth-applet.h"
+#include <gconf/gconf-client.h>
+#include "ka-applet-priv.h"
 
-gboolean ka_destroy_ccache (KaApplet* applet);
-gboolean ka_grab_credentials(KaApplet* applet);
-gboolean ka_check_credentials (KaApplet *applet, const char* principal);
-gboolean ka_get_service_tickets(GtkListStore *tickets);
-char* ka_unparse_name(void);
-int ka_tgt_valid_seconds(void);
+GConfClient* ka_gconf_init (KaApplet* applet);
+
 #endif
-
