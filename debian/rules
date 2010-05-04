@@ -7,8 +7,13 @@ include /usr/share/cdbs/1/class/gnome.mk
 include /usr/share/cdbs/1/class/autotools.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
 
+DEB_DH_MAKESHLIBS_ARGS_ALL = --exclude=plugins
+
 DEB_BUILDDIR := build
 DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr \
 			     --enable-network-manager \
 			     --with-libnotify \
 			     --with-pam
+
+binary-install/krb5-auth-dialog::
+	rm debian//krb5-auth-dialog/usr/lib/krb5-auth-dialog/plugins/libka-plugin-*.*a
