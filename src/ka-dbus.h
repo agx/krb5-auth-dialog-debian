@@ -18,13 +18,13 @@
  *
  */
 
-#ifndef KRB5_AUTH_DBUS_H
-#define KRB5_AUTH_DBUS_H
+#ifndef KA_DBUS_H
+#define KA_DBUS_H
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include "krb5-auth-applet.h"
+#include "ka-applet-priv.h"
 
 gboolean ka_dbus_connect(unsigned int* status);
 gboolean ka_dbus_service(KaApplet* applet);
@@ -34,4 +34,4 @@ gboolean ka_dbus_acquire_tgt (KaApplet *applet,
 gboolean ka_dbus_destroy_ccache(KaApplet* applet,
 			        DBusGMethodInvocation *context);
 
-#endif /* KRB5_AUTH_DBUS_H */
+#endif /* KA_DBUS_H */

@@ -1,5 +1,5 @@
-AC_INIT([krb5-auth-dialog], [0.15])
-AC_CONFIG_SRCDIR(src/krb5-auth-dialog.c)
+AC_INIT([krb5-auth-dialog], [0.16])
+AC_CONFIG_SRCDIR(src/ka-dialog.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
 AM_CONFIG_HEADER(config.h)
@@ -18,8 +18,8 @@ AM_GLIB_GNU_GETTEXT
 AC_PROG_CC
 AC_ISC_POSIX
 AC_HEADER_STDC
-AM_PROG_LIBTOOL
-AM_PROG_LEX
+AC_PROG_LIBTOOL
+AC_PROG_LEX
 AC_PROG_YACC
 
 AM_PROG_CC_C_O
@@ -42,6 +42,7 @@ PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_REQUIRED)
 PKG_CHECK_MODULES(GCONF, gconf-2.0 >= $GCONF_REQUIRED)
 PKG_CHECK_MODULES(GIO_UNIX, gio-unix-2.0 >= $GIO_UNIX_REQUIRED)
 PKG_CHECK_MODULES(GIO, gio-2.0 >= $GIO_REQUIRED)
+PKG_CHECK_MODULES(GMODULE, gmodule-2.0)
 
 AM_GCONF_SOURCE_2
 
@@ -217,11 +218,42 @@ AC_SUBST(check_interval)
 
 minimum_lifetime=30
 AC_DEFINE_UNQUOTED(MINUTES_BEFORE_PROMPTING,[$minimum_lifetime],
-		   [Define the to the minimum amount of time (m) a credential
-		    will have to be valid before we'll ask the user to get
+		   [Define to the minimum amount of time (m) a credential
+		    will have to be valid before we will ask the user to get
 		    fresh credentials.])
 AC_SUBST(minimum_lifetime)
 
+dnl
+dnl Plugins
+dnl
+KA_PLUGINS_DIR="$libdir/krb5-auth-dialog/plugins"
+AC_SUBST(KA_PLUGINS_DIR)
+
+dnl PAM Plugin
+PAM_LIBS=
+AC_ARG_WITH([pam],
+  AC_HELP_STRING([--with-pam], [use PAM @<:@default=check@:>@]),
+  [],
+  [with_pam=check])
+
+if test "$with_pam" != "no"; then
+  if test "$with_pam" = "check"; then
+      AC_CHECK_LIB([pam], [pam_start], [with_pam=yes], [with_pam=no])
+  else
+      fail=0
+      AC_CHECK_LIB([pam], [pam_start], [], [fail=1])
+      test $fail = 1 &&
+        AC_MSG_ERROR([You must install the PAM development package in order to compile krb5-auth-dialog])
+  fi
+fi
+
+if test "$with_pam" = "yes"; then
+  PAM_LIBS="${PAM_LIBS} -lpam"
+fi
+AC_SUBST(PAM_LIBS)
+AM_CONDITIONAL([ENABLE_PAM_PLUGIN],[test "$with_pam" = "yes"])
+
+dnl Final stage
 AC_OUTPUT([
 Makefile
 krb5-auth-dialog.spec
@@ -239,6 +271,7 @@ preferences/Makefile
 preferences/krb5-auth-dialog-preferences.1
 help/Makefile
 examples/Makefile
+plugins/Makefile
 ])
 
 AC_MSG_NOTICE([])
@@ -247,9 +280,9 @@ AC_MSG_NOTICE([=====================])
 AC_MSG_NOTICE([])
 AC_MSG_NOTICE([Libraries])
 AC_MSG_NOTICE([])
-AC_MSG_NOTICE([         kerberos: $KRB5_CFLAGS $KRB5_LIBS])
-AC_MSG_NOTICE([              gtk: $GTK_CFLAGS $GTK_LIBS])
-AC_MSG_NOTICE([             dbus: $DBUS_CFLAGS $DBUS_LIBS])
+AC_MSG_NOTICE([         Kerberos: $KRB5_CFLAGS $KRB5_LIBS])
+AC_MSG_NOTICE([              GTK: $GTK_CFLAGS $GTK_LIBS])
+AC_MSG_NOTICE([             DBus: $DBUS_CFLAGS $DBUS_LIBS])
 AC_MSG_NOTICE([            gconf: $GCONF_CFLAGS $GCONF_LIBS])
 AC_MSG_NOTICE([         gio-unix: $GIO_UNIX_CFLAGS $GIO_UNIX_LIBS $GIO_CFLAGS $GIO_LIBS])
 if test "$with_libnotify" = "yes" ; then
@@ -270,4 +303,11 @@ AC_MSG_NOTICE([            Debug : $enable_debug])
 AC_MSG_NOTICE([  Minimum Lifetime: $minimum_lifetime minutes])
 AC_MSG_NOTICE([    Check Interval: $check_interval seconds])
 AC_MSG_NOTICE([])
-
+AC_MSG_NOTICE([Plugins])
+AC_MSG_NOTICE([])
+if test "$with_pam" = "yes" ; then
+AC_MSG_NOTICE([  PAM plugin: $PAM_LIBS])
+else
+AC_MSG_NOTICE([  PAM plugin: no])
+fi
+AC_MSG_NOTICE([])

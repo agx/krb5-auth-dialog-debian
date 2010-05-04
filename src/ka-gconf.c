@@ -22,9 +22,9 @@
 #include <gconf/gconf-client.h>
 #include <string.h>
 
-#include "krb5-auth-applet.h"
-#include "krb5-auth-gconf-tools.h"
-#include "krb5-auth-gconf.h"
+#include "ka-applet-priv.h"
+#include "ka-gconf-tools.h"
+#include "ka-gconf.h"
 
 static gboolean
 ka_gconf_set_principal (GConfClient* client, KaApplet* applet)
@@ -166,8 +166,9 @@ ka_gconf_key_changed_callback (GConfClient* client,
 	} else if (g_strcmp0 (key, KA_GCONF_KEY_PROXIABLE) == 0) {
 		ka_gconf_set_tgt_proxiable (client, applet);
 	} else if (g_strcmp0 (key, KA_GCONF_KEY_NOTIFY_VALID)
-		    || g_strcmp0 (key,KA_GCONF_KEY_NOTIFY_EXPIRING)
-		    || g_strcmp0 (key,KA_GCONF_KEY_NOTIFY_EXPIRED)) {
+		    || g_strcmp0 (key, KA_GCONF_KEY_NOTIFY_EXPIRING)
+		    || g_strcmp0 (key, KA_GCONF_KEY_NOTIFY_EXPIRED)
+		    || g_strcmp0 (key, KA_GCONF_KEY_PLUGINS_ENABLED)) {
 		/* nothing to do */
 	} else
 		g_warning("Received notification for unknown gconf key %s", key);

@@ -53,15 +53,17 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
 	"$(DESTDIR)$(schemadir)" "$(DESTDIR)$(servicedir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
-am_krb5_auth_dialog_OBJECTS =  \
-	krb5_auth_dialog-krb5-auth-dialog.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-applet.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-pwdialog.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-gconf.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-gconf-tools.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-dbus.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-tools.$(OBJEXT) \
-	krb5_auth_dialog-krb5-auth-tickets.$(OBJEXT) \
+am_krb5_auth_dialog_OBJECTS = krb5_auth_dialog-ka-dialog.$(OBJEXT) \
+	krb5_auth_dialog-ka-applet.$(OBJEXT) \
+	krb5_auth_dialog-ka-pwdialog.$(OBJEXT) \
+	krb5_auth_dialog-ka-gconf.$(OBJEXT) \
+	krb5_auth_dialog-ka-gconf-tools.$(OBJEXT) \
+	krb5_auth_dialog-ka-dbus.$(OBJEXT) \
+	krb5_auth_dialog-ka-tools.$(OBJEXT) \
+	krb5_auth_dialog-ka-tickets.$(OBJEXT) \
+	krb5_auth_dialog-ka-plugin.$(OBJEXT) \
+	krb5_auth_dialog-ka-plugin-loader.$(OBJEXT) \
+	krb5_auth_dialog-ka-closures.$(OBJEXT) \
 	krb5_auth_dialog-dummy-strings.$(OBJEXT) $(am__objects_1)
 krb5_auth_dialog_OBJECTS = $(am_krb5_auth_dialog_OBJECTS)
 am__DEPENDENCIES_1 =
@@ -71,7 +73,8 @@ krb5_auth_dialog_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -180,6 +183,8 @@ GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
 GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
 GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
+GMODULE_CFLAGS = @GMODULE_CFLAGS@
+GMODULE_LIBS = @GMODULE_LIBS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GREP = @GREP@
@@ -197,6 +202,7 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+KA_PLUGINS_DIR = @KA_PLUGINS_DIR@
 KRB5_CFLAGS = @KRB5_CFLAGS@
 KRB5_CONFIG = @KRB5_CONFIG@
 KRB5_LIBS = @KRB5_LIBS@
@@ -237,6 +243,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
+PAM_LIBS = @PAM_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 POFILES = @POFILES@
@@ -323,22 +330,29 @@ servicedir = $(datadir)/dbus-1/services
 service_in_files = org.gnome.KrbAuthDialog.service.in
 service_DATA = $(service_in_files:.service.in=.service)
 krb5_auth_dialog_SOURCES = \
-	krb5-auth-dialog.c      \
-	krb5-auth-dialog.h      \
-	krb5-auth-applet.c	\
-	krb5-auth-applet.h	\
-	krb5-auth-pwdialog.c    \
-	krb5-auth-pwdialog.h    \
-	krb5-auth-gconf.c	\
-	krb5-auth-gconf.h	\
-	krb5-auth-gconf-tools.c	\
-	krb5-auth-gconf-tools.h	\
-	krb5-auth-dbus.c	\
-	krb5-auth-dbus.h	\
-	krb5-auth-tools.c	\
-	krb5-auth-tools.h	\
-	krb5-auth-tickets.c	\
-	krb5-auth-tickets.h	\
+	ka-dialog.c      	\
+	ka-dialog.h      	\
+	ka-applet.c		\
+	ka-applet-priv.h	\
+	ka-applet.h		\
+	ka-pwdialog.c    	\
+	ka-pwdialog.h    	\
+	ka-gconf.c		\
+	ka-gconf.h		\
+	ka-gconf-tools.c	\
+	ka-gconf-tools.h	\
+	ka-dbus.c		\
+	ka-dbus.h		\
+	ka-tools.c		\
+	ka-tools.h		\
+	ka-tickets.c		\
+	ka-tickets.h		\
+	ka-plugin.c		\
+	ka-plugin.h		\
+	ka-plugin-loader.c	\
+	ka-plugin-loader.h	\
+	ka-closures.h		\
+	ka-closures.c		\
 	dummy-strings.c		\
 	$(NULL)
 
@@ -349,10 +363,12 @@ krb5_auth_dialog_CPPFLAGS = \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DLOCALE_DIR=\""$(localedir)/"\" \
 	-DBIN_DIR=\""$(bindir)/"\" \
+	-DKA_PLUGINS_DIR=\""$(KA_PLUGINS_DIR)"\" \
 	$(AM_CPPFLAGS) \
 	$(NULL)
 
 krb5_auth_dialog_CFLAGS = \
+	$(GMODULE_CFLAGS) \
 	$(GTK_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(GCONF_CFLAGS) \
@@ -373,11 +389,12 @@ krb5_auth_dialog_LDADD = \
 	$(DBUS_LIBS) \
 	$(GCONF_LIBS) \
 	$(GIO_LIBS) \
+	$(GMODULE_LIBS) \
 	$(GTK_LIBS) \
 	$(NULL)
 
 BUILT_SOURCES = \
-	krb5-auth-applet-dbus-glue.h \
+	ka-dbus-glue.h \
 	$(NULL)
 
 AM_CPPFLAGS = \
@@ -395,14 +412,14 @@ EXTRA_DIST = \
 	$(schema_in_files) \
 	$(autostart_in_files) \
 	$(service_in_files) \
-	$(srcdir)/krb5-auth-applet-dbus.xml \
+	$(srcdir)/ka-dbus.xml \
 	krb5-auth-dialog.1.in \
 	$(NULL)
 
 CLEANFILES = $(schema_DATA) $(service_DATA)
 DISTCLEANFILES = \
 	krb5-auth-dialog.desktop \
-	krb5-auth-applet-dbus-glue.h \
+	ka-dbus-glue.h \
 	$(NULL)
 
 all: $(BUILT_SOURCES)
@@ -496,14 +513,17 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-dummy-strings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-applet.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-closures.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-dbus.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-dialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-gconf.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-plugin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-tickets.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-tools.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -529,133 +549,181 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-krb5_auth_dialog-krb5-auth-dialog.o: krb5-auth-dialog.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-dialog.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Tpo -c -o krb5_auth_dialog-krb5-auth-dialog.o `test -f 'krb5-auth-dialog.c' || echo '$(srcdir)/'`krb5-auth-dialog.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Po
+krb5_auth_dialog-ka-dialog.o: ka-dialog.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-dialog.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-dialog.Tpo -c -o krb5_auth_dialog-ka-dialog.o `test -f 'ka-dialog.c' || echo '$(srcdir)/'`ka-dialog.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-dialog.Tpo $(DEPDIR)/krb5_auth_dialog-ka-dialog.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-dialog.c' object='krb5_auth_dialog-krb5-auth-dialog.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-dialog.c' object='krb5_auth_dialog-ka-dialog.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-dialog.o `test -f 'krb5-auth-dialog.c' || echo '$(srcdir)/'`krb5-auth-dialog.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-dialog.o `test -f 'ka-dialog.c' || echo '$(srcdir)/'`ka-dialog.c
 
-krb5_auth_dialog-krb5-auth-dialog.obj: krb5-auth-dialog.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-dialog.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Tpo -c -o krb5_auth_dialog-krb5-auth-dialog.obj `if test -f 'krb5-auth-dialog.c'; then $(CYGPATH_W) 'krb5-auth-dialog.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-dialog.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-dialog.Po
+krb5_auth_dialog-ka-dialog.obj: ka-dialog.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-dialog.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-dialog.Tpo -c -o krb5_auth_dialog-ka-dialog.obj `if test -f 'ka-dialog.c'; then $(CYGPATH_W) 'ka-dialog.c'; else $(CYGPATH_W) '$(srcdir)/ka-dialog.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-dialog.Tpo $(DEPDIR)/krb5_auth_dialog-ka-dialog.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-dialog.c' object='krb5_auth_dialog-krb5-auth-dialog.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-dialog.c' object='krb5_auth_dialog-ka-dialog.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-dialog.obj `if test -f 'krb5-auth-dialog.c'; then $(CYGPATH_W) 'krb5-auth-dialog.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-dialog.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-dialog.obj `if test -f 'ka-dialog.c'; then $(CYGPATH_W) 'ka-dialog.c'; else $(CYGPATH_W) '$(srcdir)/ka-dialog.c'; fi`
 
-krb5_auth_dialog-krb5-auth-applet.o: krb5-auth-applet.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-applet.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Tpo -c -o krb5_auth_dialog-krb5-auth-applet.o `test -f 'krb5-auth-applet.c' || echo '$(srcdir)/'`krb5-auth-applet.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Po
+krb5_auth_dialog-ka-applet.o: ka-applet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-applet.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-applet.Tpo -c -o krb5_auth_dialog-ka-applet.o `test -f 'ka-applet.c' || echo '$(srcdir)/'`ka-applet.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-applet.Tpo $(DEPDIR)/krb5_auth_dialog-ka-applet.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-applet.c' object='krb5_auth_dialog-krb5-auth-applet.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-applet.c' object='krb5_auth_dialog-ka-applet.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-applet.o `test -f 'krb5-auth-applet.c' || echo '$(srcdir)/'`krb5-auth-applet.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-applet.o `test -f 'ka-applet.c' || echo '$(srcdir)/'`ka-applet.c
 
-krb5_auth_dialog-krb5-auth-applet.obj: krb5-auth-applet.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-applet.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Tpo -c -o krb5_auth_dialog-krb5-auth-applet.obj `if test -f 'krb5-auth-applet.c'; then $(CYGPATH_W) 'krb5-auth-applet.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-applet.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-applet.Po
+krb5_auth_dialog-ka-applet.obj: ka-applet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-applet.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-applet.Tpo -c -o krb5_auth_dialog-ka-applet.obj `if test -f 'ka-applet.c'; then $(CYGPATH_W) 'ka-applet.c'; else $(CYGPATH_W) '$(srcdir)/ka-applet.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-applet.Tpo $(DEPDIR)/krb5_auth_dialog-ka-applet.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-applet.c' object='krb5_auth_dialog-krb5-auth-applet.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-applet.c' object='krb5_auth_dialog-ka-applet.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-applet.obj `if test -f 'krb5-auth-applet.c'; then $(CYGPATH_W) 'krb5-auth-applet.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-applet.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-applet.obj `if test -f 'ka-applet.c'; then $(CYGPATH_W) 'ka-applet.c'; else $(CYGPATH_W) '$(srcdir)/ka-applet.c'; fi`
 
-krb5_auth_dialog-krb5-auth-pwdialog.o: krb5-auth-pwdialog.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-pwdialog.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Tpo -c -o krb5_auth_dialog-krb5-auth-pwdialog.o `test -f 'krb5-auth-pwdialog.c' || echo '$(srcdir)/'`krb5-auth-pwdialog.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Po
+krb5_auth_dialog-ka-pwdialog.o: ka-pwdialog.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-pwdialog.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Tpo -c -o krb5_auth_dialog-ka-pwdialog.o `test -f 'ka-pwdialog.c' || echo '$(srcdir)/'`ka-pwdialog.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Tpo $(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-pwdialog.c' object='krb5_auth_dialog-krb5-auth-pwdialog.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-pwdialog.c' object='krb5_auth_dialog-ka-pwdialog.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-pwdialog.o `test -f 'krb5-auth-pwdialog.c' || echo '$(srcdir)/'`krb5-auth-pwdialog.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-pwdialog.o `test -f 'ka-pwdialog.c' || echo '$(srcdir)/'`ka-pwdialog.c
 
-krb5_auth_dialog-krb5-auth-pwdialog.obj: krb5-auth-pwdialog.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-pwdialog.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Tpo -c -o krb5_auth_dialog-krb5-auth-pwdialog.obj `if test -f 'krb5-auth-pwdialog.c'; then $(CYGPATH_W) 'krb5-auth-pwdialog.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-pwdialog.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-pwdialog.Po
+krb5_auth_dialog-ka-pwdialog.obj: ka-pwdialog.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-pwdialog.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Tpo -c -o krb5_auth_dialog-ka-pwdialog.obj `if test -f 'ka-pwdialog.c'; then $(CYGPATH_W) 'ka-pwdialog.c'; else $(CYGPATH_W) '$(srcdir)/ka-pwdialog.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Tpo $(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-pwdialog.c' object='krb5_auth_dialog-krb5-auth-pwdialog.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-pwdialog.c' object='krb5_auth_dialog-ka-pwdialog.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-pwdialog.obj `if test -f 'krb5-auth-pwdialog.c'; then $(CYGPATH_W) 'krb5-auth-pwdialog.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-pwdialog.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-pwdialog.obj `if test -f 'ka-pwdialog.c'; then $(CYGPATH_W) 'ka-pwdialog.c'; else $(CYGPATH_W) '$(srcdir)/ka-pwdialog.c'; fi`
 
-krb5_auth_dialog-krb5-auth-gconf.o: krb5-auth-gconf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-gconf.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Tpo -c -o krb5_auth_dialog-krb5-auth-gconf.o `test -f 'krb5-auth-gconf.c' || echo '$(srcdir)/'`krb5-auth-gconf.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Po
+krb5_auth_dialog-ka-gconf.o: ka-gconf.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-gconf.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-gconf.Tpo -c -o krb5_auth_dialog-ka-gconf.o `test -f 'ka-gconf.c' || echo '$(srcdir)/'`ka-gconf.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-gconf.Tpo $(DEPDIR)/krb5_auth_dialog-ka-gconf.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-gconf.c' object='krb5_auth_dialog-krb5-auth-gconf.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-gconf.c' object='krb5_auth_dialog-ka-gconf.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-gconf.o `test -f 'krb5-auth-gconf.c' || echo '$(srcdir)/'`krb5-auth-gconf.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-gconf.o `test -f 'ka-gconf.c' || echo '$(srcdir)/'`ka-gconf.c
 
-krb5_auth_dialog-krb5-auth-gconf.obj: krb5-auth-gconf.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-gconf.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Tpo -c -o krb5_auth_dialog-krb5-auth-gconf.obj `if test -f 'krb5-auth-gconf.c'; then $(CYGPATH_W) 'krb5-auth-gconf.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-gconf.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf.Po
+krb5_auth_dialog-ka-gconf.obj: ka-gconf.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-gconf.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-gconf.Tpo -c -o krb5_auth_dialog-ka-gconf.obj `if test -f 'ka-gconf.c'; then $(CYGPATH_W) 'ka-gconf.c'; else $(CYGPATH_W) '$(srcdir)/ka-gconf.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-gconf.Tpo $(DEPDIR)/krb5_auth_dialog-ka-gconf.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-gconf.c' object='krb5_auth_dialog-krb5-auth-gconf.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-gconf.c' object='krb5_auth_dialog-ka-gconf.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-gconf.obj `if test -f 'krb5-auth-gconf.c'; then $(CYGPATH_W) 'krb5-auth-gconf.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-gconf.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-gconf.obj `if test -f 'ka-gconf.c'; then $(CYGPATH_W) 'ka-gconf.c'; else $(CYGPATH_W) '$(srcdir)/ka-gconf.c'; fi`
 
-krb5_auth_dialog-krb5-auth-gconf-tools.o: krb5-auth-gconf-tools.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-gconf-tools.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Tpo -c -o krb5_auth_dialog-krb5-auth-gconf-tools.o `test -f 'krb5-auth-gconf-tools.c' || echo '$(srcdir)/'`krb5-auth-gconf-tools.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Po
+krb5_auth_dialog-ka-gconf-tools.o: ka-gconf-tools.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-gconf-tools.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Tpo -c -o krb5_auth_dialog-ka-gconf-tools.o `test -f 'ka-gconf-tools.c' || echo '$(srcdir)/'`ka-gconf-tools.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Tpo $(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-gconf-tools.c' object='krb5_auth_dialog-krb5-auth-gconf-tools.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-gconf-tools.c' object='krb5_auth_dialog-ka-gconf-tools.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-gconf-tools.o `test -f 'krb5-auth-gconf-tools.c' || echo '$(srcdir)/'`krb5-auth-gconf-tools.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-gconf-tools.o `test -f 'ka-gconf-tools.c' || echo '$(srcdir)/'`ka-gconf-tools.c
 
-krb5_auth_dialog-krb5-auth-gconf-tools.obj: krb5-auth-gconf-tools.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-gconf-tools.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Tpo -c -o krb5_auth_dialog-krb5-auth-gconf-tools.obj `if test -f 'krb5-auth-gconf-tools.c'; then $(CYGPATH_W) 'krb5-auth-gconf-tools.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-gconf-tools.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-gconf-tools.Po
+krb5_auth_dialog-ka-gconf-tools.obj: ka-gconf-tools.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-gconf-tools.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Tpo -c -o krb5_auth_dialog-ka-gconf-tools.obj `if test -f 'ka-gconf-tools.c'; then $(CYGPATH_W) 'ka-gconf-tools.c'; else $(CYGPATH_W) '$(srcdir)/ka-gconf-tools.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Tpo $(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-gconf-tools.c' object='krb5_auth_dialog-krb5-auth-gconf-tools.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-gconf-tools.c' object='krb5_auth_dialog-ka-gconf-tools.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-gconf-tools.obj `if test -f 'krb5-auth-gconf-tools.c'; then $(CYGPATH_W) 'krb5-auth-gconf-tools.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-gconf-tools.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-gconf-tools.obj `if test -f 'ka-gconf-tools.c'; then $(CYGPATH_W) 'ka-gconf-tools.c'; else $(CYGPATH_W) '$(srcdir)/ka-gconf-tools.c'; fi`
 
-krb5_auth_dialog-krb5-auth-dbus.o: krb5-auth-dbus.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-dbus.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Tpo -c -o krb5_auth_dialog-krb5-auth-dbus.o `test -f 'krb5-auth-dbus.c' || echo '$(srcdir)/'`krb5-auth-dbus.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Po
+krb5_auth_dialog-ka-dbus.o: ka-dbus.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-dbus.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-dbus.Tpo -c -o krb5_auth_dialog-ka-dbus.o `test -f 'ka-dbus.c' || echo '$(srcdir)/'`ka-dbus.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-dbus.Tpo $(DEPDIR)/krb5_auth_dialog-ka-dbus.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-dbus.c' object='krb5_auth_dialog-krb5-auth-dbus.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-dbus.c' object='krb5_auth_dialog-ka-dbus.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-dbus.o `test -f 'krb5-auth-dbus.c' || echo '$(srcdir)/'`krb5-auth-dbus.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-dbus.o `test -f 'ka-dbus.c' || echo '$(srcdir)/'`ka-dbus.c
 
-krb5_auth_dialog-krb5-auth-dbus.obj: krb5-auth-dbus.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-dbus.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Tpo -c -o krb5_auth_dialog-krb5-auth-dbus.obj `if test -f 'krb5-auth-dbus.c'; then $(CYGPATH_W) 'krb5-auth-dbus.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-dbus.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-dbus.Po
+krb5_auth_dialog-ka-dbus.obj: ka-dbus.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-dbus.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-dbus.Tpo -c -o krb5_auth_dialog-ka-dbus.obj `if test -f 'ka-dbus.c'; then $(CYGPATH_W) 'ka-dbus.c'; else $(CYGPATH_W) '$(srcdir)/ka-dbus.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-dbus.Tpo $(DEPDIR)/krb5_auth_dialog-ka-dbus.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-dbus.c' object='krb5_auth_dialog-krb5-auth-dbus.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-dbus.c' object='krb5_auth_dialog-ka-dbus.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-dbus.obj `if test -f 'krb5-auth-dbus.c'; then $(CYGPATH_W) 'krb5-auth-dbus.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-dbus.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-dbus.obj `if test -f 'ka-dbus.c'; then $(CYGPATH_W) 'ka-dbus.c'; else $(CYGPATH_W) '$(srcdir)/ka-dbus.c'; fi`
 
-krb5_auth_dialog-krb5-auth-tools.o: krb5-auth-tools.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-tools.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Tpo -c -o krb5_auth_dialog-krb5-auth-tools.o `test -f 'krb5-auth-tools.c' || echo '$(srcdir)/'`krb5-auth-tools.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Po
+krb5_auth_dialog-ka-tools.o: ka-tools.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-tools.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-tools.Tpo -c -o krb5_auth_dialog-ka-tools.o `test -f 'ka-tools.c' || echo '$(srcdir)/'`ka-tools.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-tools.Tpo $(DEPDIR)/krb5_auth_dialog-ka-tools.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-tools.c' object='krb5_auth_dialog-krb5-auth-tools.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-tools.c' object='krb5_auth_dialog-ka-tools.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-tools.o `test -f 'krb5-auth-tools.c' || echo '$(srcdir)/'`krb5-auth-tools.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-tools.o `test -f 'ka-tools.c' || echo '$(srcdir)/'`ka-tools.c
 
-krb5_auth_dialog-krb5-auth-tools.obj: krb5-auth-tools.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-tools.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Tpo -c -o krb5_auth_dialog-krb5-auth-tools.obj `if test -f 'krb5-auth-tools.c'; then $(CYGPATH_W) 'krb5-auth-tools.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-tools.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-tools.Po
+krb5_auth_dialog-ka-tools.obj: ka-tools.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-tools.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-tools.Tpo -c -o krb5_auth_dialog-ka-tools.obj `if test -f 'ka-tools.c'; then $(CYGPATH_W) 'ka-tools.c'; else $(CYGPATH_W) '$(srcdir)/ka-tools.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-tools.Tpo $(DEPDIR)/krb5_auth_dialog-ka-tools.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-tools.c' object='krb5_auth_dialog-krb5-auth-tools.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-tools.c' object='krb5_auth_dialog-ka-tools.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-tools.obj `if test -f 'krb5-auth-tools.c'; then $(CYGPATH_W) 'krb5-auth-tools.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-tools.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-tools.obj `if test -f 'ka-tools.c'; then $(CYGPATH_W) 'ka-tools.c'; else $(CYGPATH_W) '$(srcdir)/ka-tools.c'; fi`
 
-krb5_auth_dialog-krb5-auth-tickets.o: krb5-auth-tickets.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-tickets.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Tpo -c -o krb5_auth_dialog-krb5-auth-tickets.o `test -f 'krb5-auth-tickets.c' || echo '$(srcdir)/'`krb5-auth-tickets.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Po
+krb5_auth_dialog-ka-tickets.o: ka-tickets.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-tickets.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-tickets.Tpo -c -o krb5_auth_dialog-ka-tickets.o `test -f 'ka-tickets.c' || echo '$(srcdir)/'`ka-tickets.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-tickets.Tpo $(DEPDIR)/krb5_auth_dialog-ka-tickets.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-tickets.c' object='krb5_auth_dialog-krb5-auth-tickets.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-tickets.c' object='krb5_auth_dialog-ka-tickets.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-tickets.o `test -f 'krb5-auth-tickets.c' || echo '$(srcdir)/'`krb5-auth-tickets.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-tickets.o `test -f 'ka-tickets.c' || echo '$(srcdir)/'`ka-tickets.c
 
-krb5_auth_dialog-krb5-auth-tickets.obj: krb5-auth-tickets.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-krb5-auth-tickets.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Tpo -c -o krb5_auth_dialog-krb5-auth-tickets.obj `if test -f 'krb5-auth-tickets.c'; then $(CYGPATH_W) 'krb5-auth-tickets.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-tickets.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Tpo $(DEPDIR)/krb5_auth_dialog-krb5-auth-tickets.Po
+krb5_auth_dialog-ka-tickets.obj: ka-tickets.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-tickets.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-tickets.Tpo -c -o krb5_auth_dialog-ka-tickets.obj `if test -f 'ka-tickets.c'; then $(CYGPATH_W) 'ka-tickets.c'; else $(CYGPATH_W) '$(srcdir)/ka-tickets.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-tickets.Tpo $(DEPDIR)/krb5_auth_dialog-ka-tickets.Po
 @am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='krb5-auth-tickets.c' object='krb5_auth_dialog-krb5-auth-tickets.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-tickets.c' object='krb5_auth_dialog-ka-tickets.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-krb5-auth-tickets.obj `if test -f 'krb5-auth-tickets.c'; then $(CYGPATH_W) 'krb5-auth-tickets.c'; else $(CYGPATH_W) '$(srcdir)/krb5-auth-tickets.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-tickets.obj `if test -f 'ka-tickets.c'; then $(CYGPATH_W) 'ka-tickets.c'; else $(CYGPATH_W) '$(srcdir)/ka-tickets.c'; fi`
+
+krb5_auth_dialog-ka-plugin.o: ka-plugin.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-plugin.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-plugin.Tpo -c -o krb5_auth_dialog-ka-plugin.o `test -f 'ka-plugin.c' || echo '$(srcdir)/'`ka-plugin.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-plugin.Tpo $(DEPDIR)/krb5_auth_dialog-ka-plugin.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-plugin.c' object='krb5_auth_dialog-ka-plugin.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-plugin.o `test -f 'ka-plugin.c' || echo '$(srcdir)/'`ka-plugin.c
+
+krb5_auth_dialog-ka-plugin.obj: ka-plugin.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-plugin.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-plugin.Tpo -c -o krb5_auth_dialog-ka-plugin.obj `if test -f 'ka-plugin.c'; then $(CYGPATH_W) 'ka-plugin.c'; else $(CYGPATH_W) '$(srcdir)/ka-plugin.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-plugin.Tpo $(DEPDIR)/krb5_auth_dialog-ka-plugin.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-plugin.c' object='krb5_auth_dialog-ka-plugin.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-plugin.obj `if test -f 'ka-plugin.c'; then $(CYGPATH_W) 'ka-plugin.c'; else $(CYGPATH_W) '$(srcdir)/ka-plugin.c'; fi`
+
+krb5_auth_dialog-ka-plugin-loader.o: ka-plugin-loader.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-plugin-loader.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Tpo -c -o krb5_auth_dialog-ka-plugin-loader.o `test -f 'ka-plugin-loader.c' || echo '$(srcdir)/'`ka-plugin-loader.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Tpo $(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-plugin-loader.c' object='krb5_auth_dialog-ka-plugin-loader.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-plugin-loader.o `test -f 'ka-plugin-loader.c' || echo '$(srcdir)/'`ka-plugin-loader.c
+
+krb5_auth_dialog-ka-plugin-loader.obj: ka-plugin-loader.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-plugin-loader.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Tpo -c -o krb5_auth_dialog-ka-plugin-loader.obj `if test -f 'ka-plugin-loader.c'; then $(CYGPATH_W) 'ka-plugin-loader.c'; else $(CYGPATH_W) '$(srcdir)/ka-plugin-loader.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Tpo $(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-plugin-loader.c' object='krb5_auth_dialog-ka-plugin-loader.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-plugin-loader.obj `if test -f 'ka-plugin-loader.c'; then $(CYGPATH_W) 'ka-plugin-loader.c'; else $(CYGPATH_W) '$(srcdir)/ka-plugin-loader.c'; fi`
+
+krb5_auth_dialog-ka-closures.o: ka-closures.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-closures.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-closures.Tpo -c -o krb5_auth_dialog-ka-closures.o `test -f 'ka-closures.c' || echo '$(srcdir)/'`ka-closures.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-closures.Tpo $(DEPDIR)/krb5_auth_dialog-ka-closures.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-closures.c' object='krb5_auth_dialog-ka-closures.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-closures.o `test -f 'ka-closures.c' || echo '$(srcdir)/'`ka-closures.c
+
+krb5_auth_dialog-ka-closures.obj: ka-closures.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-closures.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-closures.Tpo -c -o krb5_auth_dialog-ka-closures.obj `if test -f 'ka-closures.c'; then $(CYGPATH_W) 'ka-closures.c'; else $(CYGPATH_W) '$(srcdir)/ka-closures.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-closures.Tpo $(DEPDIR)/krb5_auth_dialog-ka-closures.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-closures.c' object='krb5_auth_dialog-ka-closures.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-closures.obj `if test -f 'ka-closures.c'; then $(CYGPATH_W) 'ka-closures.c'; else $(CYGPATH_W) '$(srcdir)/ka-closures.c'; fi`
 
 krb5_auth_dialog-dummy-strings.o: dummy-strings.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-dummy-strings.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-dummy-strings.Tpo -c -o krb5_auth_dialog-dummy-strings.o `test -f 'dummy-strings.c' || echo '$(srcdir)/'`dummy-strings.c
@@ -1030,7 +1098,7 @@ uninstall-man: uninstall-man1
 $(service_DATA): $(service_in_files) Makefile
 	sed -e "s|\@BINDIR\@|$(bindir)|" $< > $@
 
-krb5-auth-applet-dbus-glue.h: $(srcdir)/krb5-auth-applet-dbus.xml
+ka-dbus-glue.h: $(srcdir)/ka-dbus.xml
 	dbus-binding-tool                 \
 		--mode=glib-server        \
 		--prefix=krb5_auth_dialog \

@@ -22,9 +22,9 @@
 
 #include <glib/gi18n.h>
 
-#include "krb5-auth-applet.h"
-#include "krb5-auth-dialog.h"
-#include "krb5-auth-pwdialog.h"
+#include "ka-applet-priv.h"
+#include "ka-dialog.h"
+#include "ka-pwdialog.h"
 
 struct _KaPwDialog {
   GObject parent;
@@ -307,4 +307,3 @@ ka_pwdialog_create(GtkBuilder* xml)
 
 	return pwdialog;
 }
-
