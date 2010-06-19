@@ -463,7 +463,8 @@ ka_send_event_notification (KaApplet *applet,
 			    const char *icon,
 			    const char *action)
 {
-        const char *notify_icon;
+	const char *notify_icon;
+	GError *error = NULL;
 
 	g_return_if_fail (applet != NULL);
 	g_return_if_fail (summary != NULL);
@@ -473,8 +474,16 @@ ka_send_event_notification (KaApplet *applet,
 		notify_init (PACKAGE);
 
 	if (applet->priv->notification != NULL) {
-		notify_notification_close (applet->priv->notification, NULL);
+		if (!notify_notification_close (applet->priv->notification,
+		                                &error)) {
+			if (error)
+				g_warning ("Cannot close notification %s",
+					   error->message);
+			else
+				g_warning ("Cannot close notification");
+		}
 		g_object_unref (applet->priv->notification);
+		g_clear_error (&error);
 	}
 
 	notify_icon = icon ? icon : "krb-valid-ticket";
@@ -620,7 +629,7 @@ ka_applet_cb_preferences (GtkWidget* menuitem G_GNUC_UNUSED,
 				  G_CALLBACK (gtk_widget_destroy),
 				  NULL);
 		gtk_widget_show (message_dialog);
-		g_error_free (error);
+		g_clear_error (&error);
 	  }
 }
 
@@ -661,7 +670,7 @@ ka_about_dialog_url_hook (GtkAboutDialog *about,
 				  G_CALLBACK (gtk_widget_destroy),
 				  NULL);
 		gtk_widget_show (message_dialog);
-		g_error_free (error);
+		g_clear_error (&error);
 	  }
 }
 

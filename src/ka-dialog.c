@@ -206,6 +206,7 @@ credentials_expiring_real (KaApplet* applet)
 	krb5_timestamp now;
 	gboolean retval = FALSE;
 
+	memset(&my_creds, 0, sizeof(my_creds));
 	ka_applet_set_tgt_renewable(applet, FALSE);
 	if (!ka_get_tgt_from_ccache (kcontext, &my_creds)) {
 		creds_expiry = 0;
@@ -223,13 +224,17 @@ credentials_expiring_real (KaApplet* applet)
 	    (now + ka_applet_get_pw_prompt_secs(applet) > my_creds.times.endtime))
 		retval = TRUE;
 
-	/* If our creds are expiring, determine whether they are renewable */
-	if (retval && get_cred_renewable(&my_creds) && my_creds.times.renew_till > now) {
+	/* If our creds are expiring, determine whether they are renewable.
+	 * If the expiry is already at the renew_till time, don't consider
+	 * credentials renewable */
+	if (retval && get_cred_renewable(&my_creds)
+	    && my_creds.times.renew_till > now
+	    && my_creds.times.renew_till > creds_expiry) {
 		ka_applet_set_tgt_renewable(applet, TRUE);
 	}
 
-	krb5_free_cred_contents (kcontext, &my_creds);
 out:
+	krb5_free_cred_contents (kcontext, &my_creds);
 	ka_applet_update_status(applet, creds_expiry);
 	return retval;
 }
@@ -557,46 +562,6 @@ ka_set_ticket_options(KaApplet* applet, krb5_context context,
 }
 
 
-/*
- * set ticket options
- * by looking at krb5.conf, the passed in creds and gconf
- */
-static void
-set_options_from_creds(const KaApplet* applet,
-		       krb5_context context,
-		       krb5_creds *in,
-		       krb5_get_init_creds_opt *out)
-{
-	krb5_deltat renew_lifetime;
-	int flag;
-
-#ifdef HAVE_KRB5_GET_INIT_CREDS_OPT_SET_DEFAULT_FLAGS
-	krb5_get_init_creds_opt_set_default_flags(context, PACKAGE,
-		krb5_principal_get_realm(context, kprincipal), out);
-#endif
-
-	flag = get_cred_forwardable(in) != 0;
-	krb5_get_init_creds_opt_set_forwardable(out, flag);
-	flag = get_cred_proxiable(in) != 0;
-	krb5_get_init_creds_opt_set_proxiable(out, flag);
-	flag = get_cred_renewable(in) != 0;
-	if (flag && (in->times.renew_till > in->times.starttime)) {
-		renew_lifetime = in->times.renew_till -
-				 in->times.starttime;
-		krb5_get_init_creds_opt_set_renew_life(out,
-						       renew_lifetime);
-	}
-	if (in->times.endtime >
-	    in->times.starttime + ka_applet_get_pw_prompt_secs(applet)) {
-		krb5_get_init_creds_opt_set_tkt_life(out,
-						     in->times.endtime -
-						     in->times.starttime);
-	}
-	/* This doesn't do a deep copy -- fix it later. */
-	/* krb5_get_init_creds_opt_set_address_list(out, creds->addresses); */
-}
-
-
 #if ENABLE_PKINIT && HAVE_KRB5_GET_INIT_CREDS_OPT_SET_PKINIT
 static krb5_error_code
 ka_auth_heimdal_pkinit(KaApplet* applet, krb5_creds* creds,
@@ -728,14 +693,13 @@ ccache_changed_cb (GFileMonitor *monitor G_GNUC_UNUSED,
 }
 
 
-static gboolean
+static GFileMonitor*
 monitor_ccache(KaApplet *applet)
 {
 	const gchar *ccache_name;
 	GFile *ccache;
-	GFileMonitor *monitor;
+	GFileMonitor *monitor = NULL;
 	GError *err = NULL;
-	gboolean ret = FALSE;
 
 	ccache_name = ka_ccache_filename ();
 	g_return_val_if_fail (ccache_name != NULL, FALSE);
@@ -749,18 +713,14 @@ monitor_ccache(KaApplet *applet)
 			credentials_expiring ((gpointer)applet);
 		else
 			g_warning ("Failed to monitor %s: %s", ccache_name, err->message);
-		goto out;
 	} else {
 		/* g_file_monitor_set_rate_limit(monitor, 10*1000); */
 		g_signal_connect (monitor, "changed", G_CALLBACK (ccache_changed_cb), applet);
 		KA_DEBUG ("Monitoring %s", ccache_name);
-		ret = TRUE;
 	}
-out:
 	g_object_unref (ccache);
-	if (err)
-		g_error_free (err);
-	return ret;
+	g_clear_error (&err);
+	return monitor;
 }
 
 
@@ -846,8 +806,8 @@ ka_renew_credentials (KaApplet* applet)
 	krb5_error_code retval;
 	krb5_creds my_creds;
 	krb5_ccache ccache;
-	krb5_get_init_creds_opt opts;
 
+	memset(&my_creds, 0, sizeof(my_creds));
 	if (kprincipal == NULL) {
 		retval = ka_parse_name(applet, kcontext, &kprincipal);
 		if (retval)
@@ -860,15 +820,13 @@ ka_renew_credentials (KaApplet* applet)
 
 	retval = ka_get_tgt_from_ccache (kcontext, &my_creds);
 	if (!retval) {
+		krb5_free_cred_contents (kcontext, &my_creds);
 		krb5_cc_close (kcontext, ccache);
 		return -1;
 	}
 
-	krb5_get_init_creds_opt_init (&opts);
-	set_options_from_creds (applet, kcontext, &my_creds, &opts);
-
 	if (ka_applet_get_tgt_renewable(applet)) {
-
+		krb5_free_cred_contents (kcontext, &my_creds);
 		retval = get_renewed_creds (kcontext, &my_creds, kprincipal, ccache, NULL);
 		if (retval)
 			goto out;
@@ -921,12 +879,11 @@ ka_get_tgt_from_ccache (krb5_context context, krb5_creds *creds)
 				     get_principal_realm_data(principal), 0)) {
 		goto out_free_princ;
 	}
-
 	pattern.client = principal;
 	if (!krb5_cc_retrieve_cred(context, ccache, 0, &pattern, creds))
 		ret = TRUE;
-	krb5_free_principal(context, pattern.server);
 
+	krb5_free_principal(context, pattern.server);
 out_free_princ:
 	krb5_free_principal(context, principal);
 out:
@@ -1124,6 +1081,7 @@ main (int argc, char *argv[])
 			"Always run", NULL},
 		{ NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
 	};
+	GFileMonitor *monitor = NULL;
 
 	context = g_option_context_new ("- Kerberos 5 credential checking");
 	g_option_context_add_main_entries (context, options, NULL);
@@ -1134,7 +1092,7 @@ main (int argc, char *argv[])
 		g_print ("%s\n%s\n",
 			 error->message,
 			 help_msg);
-		g_error_free (error);
+		g_clear_error (&error);
 		return 1;
 	}
 	g_option_context_free (context);
@@ -1161,11 +1119,13 @@ main (int argc, char *argv[])
 
 		if (credentials_expiring ((gpointer)applet)) {
 			g_timeout_add_seconds (CREDENTIAL_CHECK_INTERVAL, (GSourceFunc)credentials_expiring, applet);
-			monitor_ccache (applet);
+			monitor = monitor_ccache (applet);
 		}
 		ka_dbus_service(applet);
 		gtk_main ();
 	}
 	ka_nm_shutdown();
+	if (monitor)
+		g_object_unref (monitor);
 	return 0;
 }

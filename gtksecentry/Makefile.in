@@ -195,6 +195,8 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PAM_LIBS = @PAM_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -267,11 +269,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+NULL = 
 AM_CPPFLAGS = $(GTK_CFLAGS) \
 	-I$(top_srcdir)/secmem -I$(top_srcdir)/gtksecentry
 
 noinst_LIBRARIES = libgtksecentry.a
-libgtksecentry_a_SOURCES = gtksecentry.c gtksecentry.h
+libgtksecentry_a_SOURCES = \
+	gtksecentry.c \
+	gtksecentry.h \
+	gseal-gtk-compat.h
+
 all: all-am
 
 .SUFFIXES:

@@ -202,10 +202,10 @@ ka_gconf_init (KaApplet* applet)
 	ka_gconf_set_tgt_renewable(client, applet);
 	ka_gconf_set_tgt_proxiable(client, applet);
 out:
-	if(error) {
+	if (error) {
 		client = NULL;
-		g_print ("%s", error->message);
-		g_error_free (error);
+		g_warning ("%s", error->message);
+		g_clear_error (&error);
 	}
 	return client;
 }

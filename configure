@@ -791,6 +791,8 @@ ENABLE_SK_TRUE
 DOC_USER_FORMATS
 OMF_DIR
 HELP_DIR
+PKG_CONFIG_LIBDIR
+PKG_CONFIG_PATH
 PKG_CONFIG
 WARN_PYTHON_CFLAGS
 WARN_CFLAGS
@@ -994,6 +996,8 @@ CPP
 YACC
 YFLAGS
 PKG_CONFIG
+PKG_CONFIG_PATH
+PKG_CONFIG_LIBDIR
 GTK_CFLAGS
 GTK_LIBS
 DBUS_CFLAGS
@@ -1689,6 +1693,10 @@ Some influential environment variables:
               This script will default YFLAGS to the empty string to avoid a
               default value of `-d' given by some make applications.
   PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
   GTK_CFLAGS  C compiler flags for GTK, overriding pkg-config
   GTK_LIBS    linker flags for GTK, overriding pkg-config
   DBUS_CFLAGS C compiler flags for DBUS, overriding pkg-config
@@ -7127,13 +7135,13 @@ if test "${lt_cv_nm_interface+set}" = set; then :
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:7130: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:7138: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:7133: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:7141: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:7136: output\"" >&5)
+  (eval echo "\"\$as_me:7144: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -8338,7 +8346,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 8341 "configure"' > conftest.$ac_ext
+  echo '#line 8349 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9596,11 +9604,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9599: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9607: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9603: \$? = $ac_status" >&5
+   echo "$as_me:9611: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9935,11 +9943,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9938: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9946: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9942: \$? = $ac_status" >&5
+   echo "$as_me:9950: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10040,11 +10048,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10043: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10051: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10047: \$? = $ac_status" >&5
+   echo "$as_me:10055: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10095,11 +10103,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10098: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10106: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10102: \$? = $ac_status" >&5
+   echo "$as_me:10110: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12479,7 +12487,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 12482 "configure"
+#line 12490 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12575,7 +12583,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 12578 "configure"
+#line 12586 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13157,7 +13165,7 @@ fi
     maximum|error)
 	try_compiler_flags="-Wall -Wformat -Wformat-security -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
 	try_compiler_flags="$try_compiler_flags -Wextra -Wshadow -Wcast-align -Wwrite-strings -Waggregate-return"
-	try_compiler_flags="$try_compiler_flags -Wstrict-prototypes -Winline -Wredundant-decls -Wno-sign-compare"
+	try_compiler_flags="$try_compiler_flags -Winline -Wredundant-decls -Wno-sign-compare"
 	try_compiler_flags="$try_compiler_flags $common_flags"
 	if test "$enable_compile_warnings" = "error" ; then
 	    try_compiler_flags="$try_compiler_flags -Werror"
@@ -13283,6 +13291,10 @@ $as_echo "yes" >&6; }
 
 
 
+
+
+
+
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
 	if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
@@ -13395,7 +13407,6 @@ $as_echo "yes" >&6; }
 $as_echo "no" >&6; }
 		PKG_CONFIG=""
 	fi
-
 fi
 
 gdu_cv_version_required=0.3.2
@@ -13494,11 +13505,10 @@ pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK" >&5
 $as_echo_n "checking for GTK... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_CFLAGS"; then
-        pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_CFLAGS"; then
+    pkg_cv_GTK_CFLAGS="$GTK_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-2.0 >= \$GTK_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk+-2.0 >= $GTK_REQUIRED") 2>&5
   ac_status=$?
@@ -13508,15 +13518,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GTK_LIBS"; then
-        pkg_cv_GTK_LIBS="$GTK_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GTK_LIBS"; then
+    pkg_cv_GTK_LIBS="$GTK_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-2.0 >= \$GTK_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gtk+-2.0 >= $GTK_REQUIRED") 2>&5
   ac_status=$?
@@ -13526,14 +13534,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -13541,9 +13550,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gtk+-2.0 >= $GTK_REQUIRED"`
+	        GTK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "gtk+-2.0 >= $GTK_REQUIRED" 2>&1`
         else
-	        GTK_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-2.0 >= $GTK_REQUIRED"`
+	        GTK_PKG_ERRORS=`$PKG_CONFIG --print-errors "gtk+-2.0 >= $GTK_REQUIRED" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GTK_PKG_ERRORS" >&5
@@ -13557,9 +13566,10 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GTK_CFLAGS
 and GTK_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error "The pkg-config script could not be found or is too old.  Make sure it
@@ -13577,18 +13587,17 @@ else
 	GTK_LIBS=$pkg_cv_GTK_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for DBUS" >&5
 $as_echo_n "checking for DBUS... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$DBUS_CFLAGS"; then
-        pkg_cv_DBUS_CFLAGS="$DBUS_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$DBUS_CFLAGS"; then
+    pkg_cv_DBUS_CFLAGS="$DBUS_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"dbus-glib-1 >= \$DBUS_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "dbus-glib-1 >= $DBUS_REQUIRED") 2>&5
   ac_status=$?
@@ -13598,15 +13607,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$DBUS_LIBS"; then
-        pkg_cv_DBUS_LIBS="$DBUS_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$DBUS_LIBS"; then
+    pkg_cv_DBUS_LIBS="$DBUS_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"dbus-glib-1 >= \$DBUS_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "dbus-glib-1 >= $DBUS_REQUIRED") 2>&5
   ac_status=$?
@@ -13616,14 +13623,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -13631,9 +13639,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        DBUS_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "dbus-glib-1 >= $DBUS_REQUIRED"`
+	        DBUS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "dbus-glib-1 >= $DBUS_REQUIRED" 2>&1`
         else
-	        DBUS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "dbus-glib-1 >= $DBUS_REQUIRED"`
+	        DBUS_PKG_ERRORS=`$PKG_CONFIG --print-errors "dbus-glib-1 >= $DBUS_REQUIRED" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$DBUS_PKG_ERRORS" >&5
@@ -13647,9 +13655,10 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables DBUS_CFLAGS
 and DBUS_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error "The pkg-config script could not be found or is too old.  Make sure it
@@ -13667,18 +13676,17 @@ else
 	DBUS_LIBS=$pkg_cv_DBUS_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GCONF" >&5
 $as_echo_n "checking for GCONF... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GCONF_CFLAGS"; then
-        pkg_cv_GCONF_CFLAGS="$GCONF_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GCONF_CFLAGS"; then
+    pkg_cv_GCONF_CFLAGS="$GCONF_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gconf-2.0 >= \$GCONF_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gconf-2.0 >= $GCONF_REQUIRED") 2>&5
   ac_status=$?
@@ -13688,15 +13696,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GCONF_LIBS"; then
-        pkg_cv_GCONF_LIBS="$GCONF_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GCONF_LIBS"; then
+    pkg_cv_GCONF_LIBS="$GCONF_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gconf-2.0 >= \$GCONF_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gconf-2.0 >= $GCONF_REQUIRED") 2>&5
   ac_status=$?
@@ -13706,14 +13712,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -13721,9 +13728,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GCONF_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gconf-2.0 >= $GCONF_REQUIRED"`
+	        GCONF_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "gconf-2.0 >= $GCONF_REQUIRED" 2>&1`
         else
-	        GCONF_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gconf-2.0 >= $GCONF_REQUIRED"`
+	        GCONF_PKG_ERRORS=`$PKG_CONFIG --print-errors "gconf-2.0 >= $GCONF_REQUIRED" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GCONF_PKG_ERRORS" >&5
@@ -13737,9 +13744,10 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GCONF_CFLAGS
 and GCONF_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error "The pkg-config script could not be found or is too old.  Make sure it
@@ -13757,18 +13765,17 @@ else
 	GCONF_LIBS=$pkg_cv_GCONF_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GIO_UNIX" >&5
 $as_echo_n "checking for GIO_UNIX... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GIO_UNIX_CFLAGS"; then
-        pkg_cv_GIO_UNIX_CFLAGS="$GIO_UNIX_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GIO_UNIX_CFLAGS"; then
+    pkg_cv_GIO_UNIX_CFLAGS="$GIO_UNIX_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-unix-2.0 >= \$GIO_UNIX_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gio-unix-2.0 >= $GIO_UNIX_REQUIRED") 2>&5
   ac_status=$?
@@ -13778,15 +13785,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GIO_UNIX_LIBS"; then
-        pkg_cv_GIO_UNIX_LIBS="$GIO_UNIX_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GIO_UNIX_LIBS"; then
+    pkg_cv_GIO_UNIX_LIBS="$GIO_UNIX_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-unix-2.0 >= \$GIO_UNIX_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gio-unix-2.0 >= $GIO_UNIX_REQUIRED") 2>&5
   ac_status=$?
@@ -13796,14 +13801,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -13811,9 +13817,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GIO_UNIX_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gio-unix-2.0 >= $GIO_UNIX_REQUIRED"`
+	        GIO_UNIX_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "gio-unix-2.0 >= $GIO_UNIX_REQUIRED" 2>&1`
         else
-	        GIO_UNIX_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gio-unix-2.0 >= $GIO_UNIX_REQUIRED"`
+	        GIO_UNIX_PKG_ERRORS=`$PKG_CONFIG --print-errors "gio-unix-2.0 >= $GIO_UNIX_REQUIRED" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GIO_UNIX_PKG_ERRORS" >&5
@@ -13827,9 +13833,10 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GIO_UNIX_CFLAGS
 and GIO_UNIX_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error "The pkg-config script could not be found or is too old.  Make sure it
@@ -13847,18 +13854,17 @@ else
 	GIO_UNIX_LIBS=$pkg_cv_GIO_UNIX_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GIO" >&5
 $as_echo_n "checking for GIO... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GIO_CFLAGS"; then
-        pkg_cv_GIO_CFLAGS="$GIO_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GIO_CFLAGS"; then
+    pkg_cv_GIO_CFLAGS="$GIO_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-2.0 >= \$GIO_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gio-2.0 >= $GIO_REQUIRED") 2>&5
   ac_status=$?
@@ -13868,15 +13874,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GIO_LIBS"; then
-        pkg_cv_GIO_LIBS="$GIO_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GIO_LIBS"; then
+    pkg_cv_GIO_LIBS="$GIO_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-2.0 >= \$GIO_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gio-2.0 >= $GIO_REQUIRED") 2>&5
   ac_status=$?
@@ -13886,14 +13890,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -13901,9 +13906,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GIO_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gio-2.0 >= $GIO_REQUIRED"`
+	        GIO_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "gio-2.0 >= $GIO_REQUIRED" 2>&1`
         else
-	        GIO_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gio-2.0 >= $GIO_REQUIRED"`
+	        GIO_PKG_ERRORS=`$PKG_CONFIG --print-errors "gio-2.0 >= $GIO_REQUIRED" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GIO_PKG_ERRORS" >&5
@@ -13917,9 +13922,10 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GIO_CFLAGS
 and GIO_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error "The pkg-config script could not be found or is too old.  Make sure it
@@ -13937,18 +13943,17 @@ else
 	GIO_LIBS=$pkg_cv_GIO_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GMODULE" >&5
 $as_echo_n "checking for GMODULE... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GMODULE_CFLAGS"; then
-        pkg_cv_GMODULE_CFLAGS="$GMODULE_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GMODULE_CFLAGS"; then
+    pkg_cv_GMODULE_CFLAGS="$GMODULE_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gmodule-2.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gmodule-2.0") 2>&5
   ac_status=$?
@@ -13958,15 +13963,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GMODULE_LIBS"; then
-        pkg_cv_GMODULE_LIBS="$GMODULE_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$GMODULE_LIBS"; then
+    pkg_cv_GMODULE_LIBS="$GMODULE_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gmodule-2.0\""; } >&5
   ($PKG_CONFIG --exists --print-errors "gmodule-2.0") 2>&5
   ac_status=$?
@@ -13976,14 +13979,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -13991,9 +13995,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GMODULE_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "gmodule-2.0"`
+	        GMODULE_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "gmodule-2.0" 2>&1`
         else
-	        GMODULE_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gmodule-2.0"`
+	        GMODULE_PKG_ERRORS=`$PKG_CONFIG --print-errors "gmodule-2.0" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GMODULE_PKG_ERRORS" >&5
@@ -14007,9 +14011,10 @@ installed software in a non-standard prefix.
 
 Alternatively, you may set the environment variables GMODULE_CFLAGS
 and GMODULE_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-" "$LINENO" 5
+See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error "The pkg-config script could not be found or is too old.  Make sure it
@@ -14027,7 +14032,7 @@ else
 	GMODULE_LIBS=$pkg_cv_GMODULE_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	:
+
 fi
 
 
@@ -14424,46 +14429,44 @@ pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for NETWORK_MANAGER" >&5
 $as_echo_n "checking for NETWORK_MANAGER... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$NETWORK_MANAGER_CFLAGS"; then
-        pkg_cv_NETWORK_MANAGER_CFLAGS="$NETWORK_MANAGER_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnm_glib >= 0.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libnm_glib >= 0.5") 2>&5
+if test -n "$NETWORK_MANAGER_CFLAGS"; then
+    pkg_cv_NETWORK_MANAGER_CFLAGS="$NETWORK_MANAGER_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnm-glib >= 0.7.999\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnm-glib >= 0.7.999") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_NETWORK_MANAGER_CFLAGS=`$PKG_CONFIG --cflags "libnm_glib >= 0.5" 2>/dev/null`
+  pkg_cv_NETWORK_MANAGER_CFLAGS=`$PKG_CONFIG --cflags "libnm-glib >= 0.7.999" 2>/dev/null`
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$NETWORK_MANAGER_LIBS"; then
-        pkg_cv_NETWORK_MANAGER_LIBS="$NETWORK_MANAGER_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnm_glib >= 0.5\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libnm_glib >= 0.5") 2>&5
+if test -n "$NETWORK_MANAGER_LIBS"; then
+    pkg_cv_NETWORK_MANAGER_LIBS="$NETWORK_MANAGER_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnm-glib >= 0.7.999\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libnm-glib >= 0.7.999") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_NETWORK_MANAGER_LIBS=`$PKG_CONFIG --libs "libnm_glib >= 0.5" 2>/dev/null`
+  pkg_cv_NETWORK_MANAGER_LIBS=`$PKG_CONFIG --libs "libnm-glib >= 0.7.999" 2>/dev/null`
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -14471,17 +14474,17 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        NETWORK_MANAGER_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnm_glib >= 0.5"`
+	        NETWORK_MANAGER_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libnm-glib >= 0.7.999" 2>&1`
         else
-	        NETWORK_MANAGER_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnm_glib >= 0.5"`
+	        NETWORK_MANAGER_PKG_ERRORS=`$PKG_CONFIG --print-errors "libnm-glib >= 0.7.999" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$NETWORK_MANAGER_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                enable_network_manager=no
+	enable_network_manager=no
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 	enable_network_manager=no
 else
 	NETWORK_MANAGER_CFLAGS=$pkg_cv_NETWORK_MANAGER_CFLAGS
@@ -14525,11 +14528,10 @@ pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY" >&5
 $as_echo_n "checking for LIBNOTIFY... " >&6; }
 
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_CFLAGS"; then
-        pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_CFLAGS"; then
+    pkg_cv_LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= \$LIBNOTIFY_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= $LIBNOTIFY_REQUIRED") 2>&5
   ac_status=$?
@@ -14539,15 +14541,13 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBNOTIFY_LIBS"; then
-        pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
+if test -n "$LIBNOTIFY_LIBS"; then
+    pkg_cv_LIBNOTIFY_LIBS="$LIBNOTIFY_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= \$LIBNOTIFY_REQUIRED\""; } >&5
   ($PKG_CONFIG --exists --print-errors "libnotify >= $LIBNOTIFY_REQUIRED") 2>&5
   ac_status=$?
@@ -14557,14 +14557,15 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
-    fi
-else
-	pkg_failed=untried
+ else
+    pkg_failed=untried
 fi
 
 
 
 if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
@@ -14572,15 +14573,13 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libnotify >= $LIBNOTIFY_REQUIRED"`
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libnotify >= $LIBNOTIFY_REQUIRED" 2>&1`
         else
-	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libnotify >= $LIBNOTIFY_REQUIRED"`
+	        LIBNOTIFY_PKG_ERRORS=`$PKG_CONFIG --print-errors "libnotify >= $LIBNOTIFY_REQUIRED" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$LIBNOTIFY_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
 
     if test "x$with_libnotify" = "xcheck" ; then
        with_libnotify=no
@@ -14589,6 +14588,8 @@ $as_echo "no" >&6; }
     fi
 
 elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 
     if test "x$with_libnotify" = "xcheck" ; then
        with_libnotify=no
