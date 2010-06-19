@@ -1,3 +1,12 @@
+krb5-auth-dialog (0.16~rc2-1) experimental; urgency=low
+
+  * [daedd98] Imported Upstream version 0.16~rc2
+       * plugs leaks (Closes: #538225)
+       * updates glib check (Closes: #569319)
+  * [60e919c] debian/watch: Don't only match even release numbers
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 19 Jun 2010 15:29:09 +0200
+
 krb5-auth-dialog (0.16~rc1-1) experimental; urgency=low
 
   * [29320e2] Imported Upstream version 0.16~rc1
