@@ -1,3 +1,11 @@
+krb5-auth-dialog (0.16-2) unstable; urgency=low
+
+  * [5626953] Switch to 3.0 (quilt) source format
+  * [7154aeb] Add simple AFS plugin
+  * [f3efa5f] Bump standards version to 3.9.0
+
+ -- Guido Günther <agx@sigxcpu.org>  Wed, 07 Jul 2010 20:41:47 +0200
+
 krb5-auth-dialog (0.16-1) unstable; urgency=low
 
   * [6f45d53] Imported Upstream version 0.16
