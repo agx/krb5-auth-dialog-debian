@@ -1,3 +1,15 @@
+krb5-auth-dialog (0.16-3) unstable; urgency=low
+
+  * [578488d] New patch:
+       0003-Always-startup-not-only-with-a-valid-ticket-cache.patch
+     Always startup, not only with a valid ticket cache (Closes: #582497)
+  * [f391a2b] New patch:
+        0004-Change-the-Name-from-Network-Authentication-to-Kerbe.patch
+    Change the Name from "Network Authentication" to "Kerberos Authentication"
+    (Closes: #593543)
+
+ -- Guido Günther <agx@sigxcpu.org>  Thu, 19 Aug 2010 14:31:45 +0200
+
 krb5-auth-dialog (0.16-2) unstable; urgency=low
 
   * [5626953] Switch to 3.0 (quilt) source format
