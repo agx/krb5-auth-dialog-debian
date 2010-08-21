@@ -1,3 +1,10 @@
+krb5-auth-dialog (0.16-4) unstable; urgency=low
+
+  * [ec8ae28] Drop 0004-Change-the-Name-from-Network-Authentication-to-
+    Kerbe.patch. This breaks too many strings before the release.
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 21 Aug 2010 13:39:25 +0200
+
 krb5-auth-dialog (0.16-3) unstable; urgency=low
 
   * [578488d] New patch:
