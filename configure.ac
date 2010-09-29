@@ -1,4 +1,4 @@
-AC_INIT([krb5-auth-dialog], [0.16])
+AC_INIT([krb5-auth-dialog], [0.17])
 AC_CONFIG_SRCDIR(src/ka-dialog.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
@@ -27,22 +27,41 @@ AM_PROG_CC_C_O
 KA_COMPILE_WARNINGS([maximum])
 GNOME_DOC_INIT
 
-GTK_REQUIRED="2.16.0"
-DBUS_REQUIRED="0.60"
-GCONF_REQUIRED="2.8"
-LIBNOTIFY_REQUIRED="0.4"
-GIO_UNIX_REQUIRED="0.0"
-GIO_REQUIRED="0.0"
+AC_MSG_CHECKING([which gtk+ version to compile against])
+AC_ARG_WITH([gtk],
+  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 2.0)])],
+  [case "$with_gtk" in
+     2.0|3.0) ;;
+     *) AC_MSG_ERROR([invalid gtk version specified]) ;;
+   esac],
+  [with_gtk=2.0])
+AC_MSG_RESULT([$with_gtk])
+
+case "$with_gtk" in
+  2.0) GTK_API_VERSION=2.0
+       GTK_REQUIRED=2.16.0
+       GLIB_REQUIRED=2.16.0
+       DBUS_REQUIRED=0.60
+       GCONF_REQUIRED=2.8
+       LIBNOTIFY_REQUIRED=0.4
+       ;;
+  3.0) GTK_API_VERSION=3.0
+       GTK_REQUIRED=2.90.4
+       GLIB_REQUIRED="2.25.10"
+       DBUS_REQUIRED="0.82"
+       GCONF_REQUIRED="2.31"
+       LIBNOTIFY_REQUIRED="0.5.1"
+       ;;
+esac
+
+PKG_CHECK_MODULES(GTK, [gtk+-$GTK_API_VERSION >= $GTK_REQUIRED, glib-2.0 >= $GLIB_REQUIRED])
+PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_REQUIRED)
+PKG_CHECK_MODULES(GCONF, gconf-2.0 >= $GCONF_REQUIRED)
+PKG_CHECK_MODULES(GIO, [gio-2.0, gio-unix-2.0])
+PKG_CHECK_MODULES(GMODULE, gmodule-2.0)
 
 dnl check for deprecated symbols:
 dnl GNOME_MAINTAINER_MODE_DEFINES
-
-PKG_CHECK_MODULES(GTK, gtk+-2.0 >= $GTK_REQUIRED)
-PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_REQUIRED)
-PKG_CHECK_MODULES(GCONF, gconf-2.0 >= $GCONF_REQUIRED)
-PKG_CHECK_MODULES(GIO_UNIX, gio-unix-2.0 >= $GIO_UNIX_REQUIRED)
-PKG_CHECK_MODULES(GIO, gio-2.0 >= $GIO_REQUIRED)
-PKG_CHECK_MODULES(GMODULE, gmodule-2.0)
 
 AM_GCONF_SOURCE_2
 
@@ -76,6 +95,8 @@ if test "x$KRB5_CONFIG" != "xnone"; then
    KRB5_CFLAGS="`${KRB5_CONFIG} --cflags krb5`"
    AC_SUBST(KRB5_CFLAGS)
    AC_SUBST(KRB5_LIBS)
+else
+   AC_MSG_ERROR([krb5-config not found. You need to install a Kerberos development package])
 fi
 
 dnl Check for API differences between Heimdal and MIT Kerberos
