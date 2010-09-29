@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-requires gtk+ 2.12 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkDialog" id="krb5_auth_dialog_prefs">
     <property name="border_width">5</property>
@@ -31,9 +31,6 @@
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Kerberos User</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -270,9 +267,6 @@
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Ticket Options</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -454,9 +448,6 @@
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Notifications</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -559,9 +550,6 @@
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Appearance</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="expand">False</property>
