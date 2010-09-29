@@ -1,3 +1,12 @@
+krb5-auth-dialog (0.17-1) experimental; urgency=low
+
+  * [2745b08] New upstream version 0.17
+  * [b61caca] Drop AFS plugin patches - fixed upstream
+  * [c52328c] Build for GTK+ 2.0
+  * [0febefd] Bump standards version
+
+ -- Guido Günther <agx@sigxcpu.org>  Wed, 29 Sep 2010 17:54:19 +0200
+
 krb5-auth-dialog (0.16-4) unstable; urgency=low
 
   * [ec8ae28] Drop 0004-Change-the-Name-from-Network-Authentication-to-
