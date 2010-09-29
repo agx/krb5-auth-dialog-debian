@@ -68,14 +68,22 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(pkglibdir)"
 LTLIBRARIES = $(pkglib_LTLIBRARIES)
-libka_plugin_dummy_la_LIBADD =
+libka_plugin_afs_la_LIBADD =
 am__objects_1 =
-am_libka_plugin_dummy_la_OBJECTS =  \
-	libka_plugin_dummy_la-ka-plugin-dummy.lo $(am__objects_1)
-libka_plugin_dummy_la_OBJECTS = $(am_libka_plugin_dummy_la_OBJECTS)
+am_libka_plugin_afs_la_OBJECTS = libka_plugin_afs_la-ka-plugin-afs.lo \
+	$(am__objects_1)
+libka_plugin_afs_la_OBJECTS = $(am_libka_plugin_afs_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
+libka_plugin_afs_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(AM_CFLAGS) $(CFLAGS) $(libka_plugin_afs_la_LDFLAGS) \
+	$(LDFLAGS) -o $@
+libka_plugin_dummy_la_LIBADD =
+am_libka_plugin_dummy_la_OBJECTS =  \
+	libka_plugin_dummy_la-ka-plugin-dummy.lo $(am__objects_1)
+libka_plugin_dummy_la_OBJECTS = $(am_libka_plugin_dummy_la_OBJECTS)
 libka_plugin_dummy_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
 	$(AM_CFLAGS) $(CFLAGS) $(libka_plugin_dummy_la_LDFLAGS) \
@@ -118,9 +126,11 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(libka_plugin_dummy_la_SOURCES) \
+SOURCES = $(libka_plugin_afs_la_SOURCES) \
+	$(libka_plugin_dummy_la_SOURCES) \
 	$(libka_plugin_pam_la_SOURCES)
-DIST_SOURCES = $(libka_plugin_dummy_la_SOURCES) \
+DIST_SOURCES = $(libka_plugin_afs_la_SOURCES) \
+	$(libka_plugin_dummy_la_SOURCES) \
 	$(am__libka_plugin_pam_la_SOURCES_DIST)
 ETAGS = etags
 CTAGS = ctags
@@ -167,8 +177,6 @@ GCONF_SCHEMA_FILE_DIR = @GCONF_SCHEMA_FILE_DIR@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
-GIO_UNIX_CFLAGS = @GIO_UNIX_CFLAGS@
-GIO_UNIX_LIBS = @GIO_UNIX_LIBS@
 GMODULE_CFLAGS = @GMODULE_CFLAGS@
 GMODULE_LIBS = @GMODULE_LIBS@
 GMOFILES = @GMOFILES@
@@ -312,6 +320,7 @@ NULL =
 pkglib_LTLIBRARIES = \
 	libka-plugin-dummy.la \
 	$(PAM_PLUGIN) \
+	libka-plugin-afs.la \
 	$(NULL)
 
 
@@ -348,6 +357,23 @@ libka_plugin_dummy_la_LDFLAGS = \
 @ENABLE_PAM_PLUGIN_TRUE@	-avoid-version \
 @ENABLE_PAM_PLUGIN_TRUE@	$(PAM_LIBS) \
 @ENABLE_PAM_PLUGIN_TRUE@	$(NULL)
+
+
+# AFS plugin
+libka_plugin_afs_la_SOURCES = \
+	ka-plugin-afs.c \
+	ka-plugin-afs.h \
+	$(NULL)
+
+libka_plugin_afs_la_CPPFLAGS = \
+	$(GTK_CFLAGS)       \
+	-I$(top_srcdir)/src \
+	$(NULL)
+
+libka_plugin_afs_la_LDFLAGS = \
+	-module \
+	-avoid-version \
+	$(NULL)
 
 all: all-am
 
@@ -414,6 +440,8 @@ clean-pkglibLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
+libka-plugin-afs.la: $(libka_plugin_afs_la_OBJECTS) $(libka_plugin_afs_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libka_plugin_afs_la_LINK) -rpath $(pkglibdir) $(libka_plugin_afs_la_OBJECTS) $(libka_plugin_afs_la_LIBADD) $(LIBS)
 libka-plugin-dummy.la: $(libka_plugin_dummy_la_OBJECTS) $(libka_plugin_dummy_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libka_plugin_dummy_la_LINK) -rpath $(pkglibdir) $(libka_plugin_dummy_la_OBJECTS) $(libka_plugin_dummy_la_LIBADD) $(LIBS)
 libka-plugin-pam.la: $(libka_plugin_pam_la_OBJECTS) $(libka_plugin_pam_la_DEPENDENCIES) 
@@ -425,6 +453,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libka_plugin_afs_la-ka-plugin-afs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libka_plugin_dummy_la-ka-plugin-dummy.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libka_plugin_pam_la-ka-plugin-pam.Plo@am__quote@
 
@@ -451,6 +480,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+libka_plugin_afs_la-ka-plugin-afs.lo: ka-plugin-afs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libka_plugin_afs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libka_plugin_afs_la-ka-plugin-afs.lo -MD -MP -MF $(DEPDIR)/libka_plugin_afs_la-ka-plugin-afs.Tpo -c -o libka_plugin_afs_la-ka-plugin-afs.lo `test -f 'ka-plugin-afs.c' || echo '$(srcdir)/'`ka-plugin-afs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libka_plugin_afs_la-ka-plugin-afs.Tpo $(DEPDIR)/libka_plugin_afs_la-ka-plugin-afs.Plo
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-plugin-afs.c' object='libka_plugin_afs_la-ka-plugin-afs.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libka_plugin_afs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libka_plugin_afs_la-ka-plugin-afs.lo `test -f 'ka-plugin-afs.c' || echo '$(srcdir)/'`ka-plugin-afs.c
 
 libka_plugin_dummy_la-ka-plugin-dummy.lo: ka-plugin-dummy.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libka_plugin_dummy_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libka_plugin_dummy_la-ka-plugin-dummy.lo -MD -MP -MF $(DEPDIR)/libka_plugin_dummy_la-ka-plugin-dummy.Tpo -c -o libka_plugin_dummy_la-ka-plugin-dummy.lo `test -f 'ka-plugin-dummy.c' || echo '$(srcdir)/'`ka-plugin-dummy.c
