@@ -133,13 +133,12 @@
     <tertiary>krb5-auth-dialog</tertiary>
   </indexterm>
 
-   <para>Der Kerberos Netzwerkanmeldungsdialog ist ein Applet für den <systemitem>GNOME-Desktop</systemitem>, welches Ihre Kerberos-Tickets überwacht und auffrischt. Erinnerungen werden angezeigt, sobald ein Ticket abzulaufen droht.</para>
-   <para>
-    Once you have acquired a Kerberos ticket - be it via GDM or via the applet itself - the applet will handle the ticket's renewal until it expires. It can also be used to destroy (remove) the credential cache, to acquire a ticket with different options or to switch to another principal.</para>
+   <para>Der Kerberos Netzwerkanmeldungsdialog ist ein Applet für die <systemitem>GNOME-Arbeitsumgebung</systemitem>, welches Ihre Kerberos-Tickets überwacht und auffrischt. Erinnerungen werden angezeigt, sobald ein Ticket abzulaufen droht.</para>
+   <para>Sobald Sie ein neues Kerberos-Ticket erhalten haben - sei es über Anmeldung via GDM oder durch das Applet selbst - wird das Applet die Erneuerung des Ticket bis zu dessen Ablaufen übernehmen. Das Applet kann außerdem zur Löschung des Ticket-Caches, zur Anforderung eines neuen Tickets mit anderen Einstellungen und zum Ändern des eingestellten Principals verwendet werden.</para>
  </section>
 
 <section id="using">
-  <title>Benutzung</title>
+  <title>Aufruf</title>
   <para>Der <application>Kerberos Netzwerkanmeldungsdialog</application> wird üblicherweise bereits beim Start von GNOME gestartet, aber Sie können den <application>Kerberos Netzwerkanmeldungsdialog</application> auch manuell folgendermaßen starten:</para>
   <variablelist>
     <varlistentry>
@@ -152,10 +151,10 @@
   <para>Das Symbol im Benachrichtigungsfeld zeigt einen der folgenden drei Zustände an:</para>
 
   <section id="trayicon-valid">
-    <title>Valid Kerberos ticket</title>
-    <para>You have a valid Kerberos ticket that can be used to authenticate to network services.</para>
+    <title>Gültiges Kerberos-Ticket</title>
+    <para>Sie besitzen ein gültiges Kerberos-Ticket, welches für die Anmeldung an Netzwerkdiensten benutzt werden kann.</para>
     <figure>
-      <title>Valid Kerberos ticket</title>
+      <title>Gültiges Kerberos-Ticket</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -167,10 +166,10 @@
  </section>
 
   <section id="trayicon-expiring">
-    <title>Kerberos ticket expiring</title>
-    <para>Das Kerberos-Ticket droht abzulaufen, aber ist noch immer dazu verwendbar, sich an Netzwerkdiensten zu legitimieren.</para>
+    <title>Kerberos-Ticket droht abzulaufen</title>
+    <para>Das Kerberos-Ticket droht abzulaufen, ist aber noch immer dazu verwendbar, sich an Netzwerkdiensten anzumelden.</para>
     <figure>
-      <title>Kerberos ticket expiring</title>
+      <title>Kerberos-Ticket droht abzulaufen</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -181,11 +180,10 @@
     </figure>
  </section>
   <section id="trayicon-expired">
-    <title>Kerberos ticket expired</title>
-    <para>Your Kerberos became invalid (e.g. expired). It can no longer be used to authenticate to network services. This is not a problem if the application that requires Kerberos knows how to request a new ticket via <application>Kerberos Network Authentication Dialog</application>. In case it doesn't you can just left click on the applet an reenter your password.
-</para>
+    <title>Kerberos-Ticket ist abgelaufen</title>
+    <para>Ihr Kerberos Ticket ist ungültig (abgelaufen). Es kann nicht länger für die Anmeldung an Netzwerkdiensten benutzt werden. Dies ist kein Problem, falls die Anwendung, welche Kerberos benötigt, in der Lage ist ein neues Ticket via <application>Kerberos Netzwerkanmeldungsdialog</application> anzufordern. Andernfalls können Sie mit der linken Maustaste auf das Applet klicken und das Passwort neu eingeben.</para>
     <figure>
-      <title>Kerberos ticket expired</title>
+      <title>Kerberos-Ticket ist abgelaufen</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -202,10 +200,10 @@
   <para>Wenn der <application>Kerberos Netzwerkanmeldungsdialog</application> gestartet wurde, können die folgenden Benachrichtigungen angezeigt werden.</para>
 
  <section id="notify-valid">
-    <title>Kerberos credentials valid</title>
-    <para>You just acquired a valid Kerberos ticket that can be used to authenticate to network services.</para>
+    <title>Kerberos-Anmeldedaten sind gültig</title>
+    <para>Sie haben soeben ein gültiges Kerberos Ticket erhalten, welches für die Anmeldung an Netzwerkdiensten benutzt werden kann.</para>
     <figure>
-      <title>Notification when Kerberos credentials become valid</title>
+      <title>Benachrichtigung, falls Kerberos Anmeldedaten gültig sind</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -217,10 +215,10 @@
  </section>
 
  <section id="notify-expiring">
-    <title>Kerberos credentials expiring</title>
-    <para>Your Kerberos credentials are about to expire. You can left click on the tray applet to refresh them.</para>
+    <title>Kerberos-Anmeldedaten drohen abzulaufen</title>
+    <para>Ihre Kerberos Anmeldedaten drohen abzulaufen. Sie können die Anmeldedaten durch einen Klick mit der linken Maustaste auf das Applet erneuern.</para>
     <figure>
-      <title>Notification when Kerberos credentials expiring</title>
+      <title>Benachrichtigung, falls Kerberos Anmeldedaten abzulaufen drohen</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -232,10 +230,10 @@
  </section>
 
  <section id="notify-expired">
-    <title>Kerberos credentials expired</title>
-    <para>Your Kerberos credentials just expired. They can no longer be used to authenticate to network services.</para>
+    <title>Kerberos-Anmeldedaten sind abgelaufen</title>
+    <para>Ihre Kerberos-Anmeldedaten sind soeben abgelaufen. Sie können nicht mehr für eine Anmeldung an Netzwerkdiensten benutzt werden.</para>
     <figure>
-      <title>Notification when Kerberos credentials expired</title>
+      <title>Benachrichtigung, falls Kerberos-Anmeldedaten abgelaufen sind</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -249,12 +247,7 @@
 
 <section id="preferences">
   <title>Einstellungen</title>
-  <para>
-    You can set preferences by selecting "Preferences" from the applets context menu or by selecting "Network Authentication" in the <application>Control Center</application>.
-    <table frame="topbot" id="tbl-principal-prefs">
-      <title>Kerberos Principal Preferences</title>
-      <tgroup cols="2" colsep="1" rowsep="1"> <colspec colwidth="19.21*"/> <colspec colwidth="46.79*"/>
-        <thead>
+  <para>Sie können Einstellungen ändern, indem Sie  »Einstellungen« im Kontextmenü des Applets auswählen oder indem Sie  »Netzwerkanmeldung« in der  <application>Systemverwaltung</application> auswählen. <table frame="topbot" id="tbl-principal-prefs"><title>Einstellungen für Kerberos-Principal</title><tgroup cols="2" colsep="1" rowsep="1"><colspec colwidth="19.21*"/><colspec colwidth="46.79*"/><thead>
           <row>
             <entry colsep="0" rowsep="1">
               <para>Dialogelement</para>
@@ -263,93 +256,89 @@
               <para>Beschreibung</para>
             </entry>
           </row>
-        </thead>
-        <tbody>
+        </thead><tbody>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>Kerberos Principal</guilabel>
+                <guilabel>Kerberos-Principal</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>The Kerberos principal to use. Leave blank to use you current username. If you change this setting you have to destroy the credential cache before these setting takes effect.</para>
+              <para>Der Kerberos-Principal, welcher benutzt werden soll. Um Ihren aktuellen Benutzernamen zu verwenden, Feld bitte leer lassen. Falls Sie diese Einstellung ändern, müssen Sie den Ticket-Cache löschen bevor die Änderung wirksam wird.</para>
             </entry>
           </row>
 
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>PKINIT Userid</guilabel>
+                <guilabel>PKINIT-Benutzerkennung</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>The principals public/private/certificate identifier. Leave empty if not using PKINIT. To enable using a security token add the path to the pkcs11 Library here, e.g. "PKCS11:/usr/lib/opensc/opensc-pkcs11.so"</para>
+              <para>Die öffentliche/private/zertifizierte Kennung des Principals. Feld bitte leer lassen, falls PKINIT nicht benutzt wird. Um die Verwendung eines Sicherheits-Token zu aktivieren, fügen Sie den Pfad zur pkcs11-Bibliothek hier ein, zum Beispiel  »PKCS11:/usr/lib/opensc/opensc-pkcs11.so«</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>PKINIT anchors</guilabel>
+                <guilabel>PKINIT-Anker</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Path to CA certificates used as trust anchors for pkinit. You only need to set this if it hasn't been set up globally in <filename>/etc/krb5.conf</filename></para>
+              <para>Pfad zu CA Zertifikaten, welche als »trust anchors« für pkinit verwendet werden. Sie müssen diese Einstellung nur vornehmen, falls sie nicht in <filename>/etc/krb5.conf</filename> definiert wurde.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>forwardable</guilabel>
+                <guilabel>weiterleitbar</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether the requested Kerberos ticket should be forwardable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
+              <para>Gibt an, ob das angeforderte Kerberos Ticket als »weiterleitbar« definiert wird. Die Änderung dieser Einstellung erfordert eine erneute Anmeldung, indem Sie mit der linken Maustaste auf das Applet klicken und Ihr Passwort eingeben.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>renewable</guilabel>
+                <guilabel>erneuerbar</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether the requested Kerberos ticket should be renewable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
+              <para>Gibt an, ob das angeforderte Kerberos-Ticket als »erneuerbar« definiert wird. Die Änderung dieser Einstellung erfordert eine erneute Anmeldung, indem Sie mit der linken Maustaste auf das Applet klicken und Ihr Passwort eingeben.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>proxiable</guilabel>
+                <guilabel>proxy-fähig</guilabel>
 	      </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether the requested Kerberos ticket should be proxiable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
+              <para>Gibt an, ob das angeforderte Kerberos Ticket als »proxy-fähig« definiert wird. Die Änderung dieser Einstellung erfordert eine erneute Anmeldung, indem Sie mit der linken Maustaste auf das Applet klicken und Ihr Passwort eingeben.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>Warn .. minutes before expiry</guilabel>
+                <guilabel>Warnung … Minuten vor Ablaufen des Tickets</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Notifications that your credentials are about to expire will be sent that many minutes before expiry.</para>
+              <para>Benachrichtigungen, dass Ihre Anmeldedaten abzulaufen drohen, werden in den hier eingegebenen Minuten vor Ablaufen des Tickets verschickt.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
               <para>
-                <guilabel>Show tray icon</guilabel>
+                <guilabel>Benachrichtigungssymbol anzeigen</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Legt fest, ob das Benachrichtigungssymbol angezeigt werden soll oder nicht. Deaktivieren des Symbols deaktiviert auch die Benachrichtigungen, anstelle dessen wird ein Passwortdialog geöffnet.</para>
             </entry>
           </row>
-	</tbody>
-      </tgroup>
-    </table>
-  </para>
+	</tbody></tgroup></table></para>
 </section>
 
 </article>

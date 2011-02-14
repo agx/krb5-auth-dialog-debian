@@ -49,8 +49,9 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = krb5-auth-dialog.1
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
-	"$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(pkgdatadir)" \
-	"$(DESTDIR)$(schemadir)" "$(DESTDIR)$(servicedir)"
+	"$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(desktopdir)" \
+	"$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(schemadir)" \
+	"$(DESTDIR)$(servicedir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
 am_krb5_auth_dialog_OBJECTS = krb5_auth_dialog-ka-dialog.$(OBJEXT) \
@@ -64,17 +65,16 @@ am_krb5_auth_dialog_OBJECTS = krb5_auth_dialog-ka-dialog.$(OBJEXT) \
 	krb5_auth_dialog-ka-plugin.$(OBJEXT) \
 	krb5_auth_dialog-ka-plugin-loader.$(OBJEXT) \
 	krb5_auth_dialog-ka-closures.$(OBJEXT) \
+	krb5_auth_dialog-ka-entry-buffer.$(OBJEXT) \
 	krb5_auth_dialog-dummy-strings.$(OBJEXT) $(am__objects_1)
 krb5_auth_dialog_OBJECTS = $(am_krb5_auth_dialog_OBJECTS)
 am__DEPENDENCIES_1 =
-krb5_auth_dialog_DEPENDENCIES =  \
-	$(top_builddir)/gtksecentry/libgtksecentry.a \
-	$(top_builddir)/secmem/libsecmem.a $(am__DEPENDENCIES_1) \
+krb5_auth_dialog_DEPENDENCIES = $(top_builddir)/secmem/libsecmem.a \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -134,8 +134,8 @@ am__base_list = \
 man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(man_MANS)
-DATA = $(autostart_DATA) $(pkgdata_DATA) $(schema_DATA) \
-	$(service_DATA)
+DATA = $(autostart_DATA) $(desktop_DATA) $(pkgdata_DATA) \
+	$(schema_DATA) $(service_DATA)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -155,6 +155,8 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 COMPILER_FLAGS = @COMPILER_FLAGS@
+CONTROL_CENTER_CFLAGS = @CONTROL_CENTER_CFLAGS@
+CONTROL_CENTER_LIBS = @CONTROL_CENTER_LIBS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -242,6 +244,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PAM_LIBS = @PAM_LIBS@
+PANELS_DIR = @PANELS_DIR@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
@@ -323,6 +326,9 @@ man_MANS = krb5-auth-dialog.1
 autostartdir = $(sysconfdir)/xdg/autostart
 autostart_in_files = krb5-auth-dialog.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
+desktopdir = $(datadir)/applications
+desktop_in_files = krb5-auth-dialog.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = krb5-auth-dialog.schemas.in
 schema_DATA = $(schema_in_files:.schemas.in=.schemas)
@@ -353,11 +359,12 @@ krb5_auth_dialog_SOURCES = \
 	ka-plugin-loader.h	\
 	ka-closures.h		\
 	ka-closures.c		\
+	ka-entry-buffer.h	\
+	ka-entry-buffer.c	\
 	dummy-strings.c		\
 	$(NULL)
 
 krb5_auth_dialog_CPPFLAGS = \
-	-I$(top_srcdir)/gtksecentry \
 	-I$(top_srcdir)/secmem \
 	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
 	-DDATA_DIR=\""$(datadir)"\" \
@@ -380,7 +387,6 @@ krb5_auth_dialog_CFLAGS = \
 	$(NULL)
 
 krb5_auth_dialog_LDADD = \
-	$(top_builddir)/gtksecentry/libgtksecentry.a \
 	$(top_builddir)/secmem/libsecmem.a \
 	$(NETWORK_MANAGER_LIBS) \
 	$(LIBCAP) \
@@ -398,7 +404,6 @@ BUILT_SOURCES = \
 	$(NULL)
 
 AM_CPPFLAGS = \
-	-I $(top_srcdir)/gtksecentry/ \
 	-I $(top_srcdir)/secmem/ \
 	$(DISABLE_DEPRECATED) \
 	$(NULL)
@@ -517,6 +522,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-closures.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-dbus.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-dialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-gconf-tools.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-gconf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-plugin-loader.Po@am__quote@
@@ -725,6 +731,22 @@ krb5_auth_dialog-ka-closures.obj: ka-closures.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-closures.obj `if test -f 'ka-closures.c'; then $(CYGPATH_W) 'ka-closures.c'; else $(CYGPATH_W) '$(srcdir)/ka-closures.c'; fi`
 
+krb5_auth_dialog-ka-entry-buffer.o: ka-entry-buffer.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-entry-buffer.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Tpo -c -o krb5_auth_dialog-ka-entry-buffer.o `test -f 'ka-entry-buffer.c' || echo '$(srcdir)/'`ka-entry-buffer.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Tpo $(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-entry-buffer.c' object='krb5_auth_dialog-ka-entry-buffer.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-entry-buffer.o `test -f 'ka-entry-buffer.c' || echo '$(srcdir)/'`ka-entry-buffer.c
+
+krb5_auth_dialog-ka-entry-buffer.obj: ka-entry-buffer.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-ka-entry-buffer.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Tpo -c -o krb5_auth_dialog-ka-entry-buffer.obj `if test -f 'ka-entry-buffer.c'; then $(CYGPATH_W) 'ka-entry-buffer.c'; else $(CYGPATH_W) '$(srcdir)/ka-entry-buffer.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Tpo $(DEPDIR)/krb5_auth_dialog-ka-entry-buffer.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ka-entry-buffer.c' object='krb5_auth_dialog-ka-entry-buffer.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-ka-entry-buffer.obj `if test -f 'ka-entry-buffer.c'; then $(CYGPATH_W) 'ka-entry-buffer.c'; else $(CYGPATH_W) '$(srcdir)/ka-entry-buffer.c'; fi`
+
 krb5_auth_dialog-dummy-strings.o: dummy-strings.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-dummy-strings.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-dummy-strings.Tpo -c -o krb5_auth_dialog-dummy-strings.o `test -f 'dummy-strings.c' || echo '$(srcdir)/'`dummy-strings.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-dummy-strings.Tpo $(DEPDIR)/krb5_auth_dialog-dummy-strings.Po
@@ -804,6 +826,26 @@ uninstall-autostartDATA:
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(autostartdir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(autostartdir)" && rm -f $$files
+install-desktopDATA: $(desktop_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(desktopdir)" || $(MKDIR_P) "$(DESTDIR)$(desktopdir)"
+	@list='$(desktop_DATA)'; test -n "$(desktopdir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(desktopdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(desktopdir)" || exit $$?; \
+	done
+
+uninstall-desktopDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(desktop_DATA)'; test -n "$(desktopdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(desktopdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(desktopdir)" && rm -f $$files
 install-pkgdataDATA: $(pkgdata_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(pkgdatadir)" || $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)"
@@ -965,7 +1007,7 @@ check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS) $(MANS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(schemadir)" "$(DESTDIR)$(servicedir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(schemadir)" "$(DESTDIR)$(servicedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -1019,8 +1061,9 @@ info: info-am
 
 info-am:
 
-install-data-am: install-autostartDATA install-data-local install-man \
-	install-pkgdataDATA install-schemaDATA install-serviceDATA
+install-data-am: install-autostartDATA install-data-local \
+	install-desktopDATA install-man install-pkgdataDATA \
+	install-schemaDATA install-serviceDATA
 
 install-dvi: install-dvi-am
 
@@ -1067,8 +1110,8 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-autostartDATA uninstall-binPROGRAMS \
-	uninstall-man uninstall-pkgdataDATA uninstall-schemaDATA \
-	uninstall-serviceDATA
+	uninstall-desktopDATA uninstall-man uninstall-pkgdataDATA \
+	uninstall-schemaDATA uninstall-serviceDATA
 
 uninstall-man: uninstall-man1
 
@@ -1079,16 +1122,17 @@ uninstall-man: uninstall-man1
 	distclean-generic distclean-libtool distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-autostartDATA install-binPROGRAMS install-data \
-	install-data-am install-data-local install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-man1 \
-	install-pdf install-pdf-am install-pkgdataDATA install-ps \
-	install-ps-am install-schemaDATA install-serviceDATA \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-autostartDATA uninstall-binPROGRAMS uninstall-man \
+	install-data-am install-data-local install-desktopDATA \
+	install-dvi install-dvi-am install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-man1 install-pdf install-pdf-am \
+	install-pkgdataDATA install-ps install-ps-am \
+	install-schemaDATA install-serviceDATA install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-autostartDATA \
+	uninstall-binPROGRAMS uninstall-desktopDATA uninstall-man \
 	uninstall-man1 uninstall-pkgdataDATA uninstall-schemaDATA \
 	uninstall-serviceDATA
 

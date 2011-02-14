@@ -8,6 +8,10 @@ autostart_in_files = krb5-auth-dialog.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
+desktopdir = $(datadir)/applications
+desktop_in_files = krb5-auth-dialog.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = krb5-auth-dialog.schemas.in
 schema_DATA = $(schema_in_files:.schemas.in=.schemas)
@@ -44,11 +48,12 @@ krb5_auth_dialog_SOURCES =	\
 	ka-plugin-loader.h	\
 	ka-closures.h		\
 	ka-closures.c		\
+	ka-entry-buffer.h	\
+	ka-entry-buffer.c	\
 	dummy-strings.c		\
 	$(NULL)
 
 krb5_auth_dialog_CPPFLAGS = \
-	-I$(top_srcdir)/gtksecentry \
 	-I$(top_srcdir)/secmem \
 	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
 	-DDATA_DIR=\""$(datadir)"\" \
@@ -71,7 +76,6 @@ krb5_auth_dialog_CFLAGS = \
 	$(NULL)
 
 krb5_auth_dialog_LDADD = \
-	$(top_builddir)/gtksecentry/libgtksecentry.a \
 	$(top_builddir)/secmem/libsecmem.a \
 	$(NETWORK_MANAGER_LIBS) \
 	$(LIBCAP) \
@@ -95,7 +99,6 @@ ka-dbus-glue.h: $(srcdir)/ka-dbus.xml
 		$< > $@
 
 AM_CPPFLAGS = \
-	-I $(top_srcdir)/gtksecentry/ \
 	-I $(top_srcdir)/secmem/ \
 	$(DISABLE_DEPRECATED) \
 	$(NULL)
