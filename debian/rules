@@ -11,9 +11,8 @@ DEB_DH_MAKESHLIBS_ARGS_ALL = --exclude=plugins
 DEB_BUILDDIR := build
 DEB_CONFIGURE_EXTRA_FLAGS := --prefix=/usr \
 			     --enable-network-manager \
-			     --with-libnotify \
 			     --with-pam \
-			     --with-gtk=2.0
+			     --with-gtk=3.0
 
 binary-install/krb5-auth-dialog::
 	rm debian//krb5-auth-dialog/usr/lib/krb5-auth-dialog/plugins/libka-plugin-*.*a
