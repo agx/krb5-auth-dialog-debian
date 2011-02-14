@@ -1,10 +1,11 @@
 NULL = 
 
-SUBDIRS = secmem gtksecentry src po etpo icons preferences help examples plugins
+SUBDIRS = secmem src po etpo icons help examples plugins cc-panel
 
 EXTRA_DIST = \
 	krb5-auth-dialog.spec \
 	MAINTAINERS           \
+	CodingStyle           \
 	gnome-doc-utils.make  \
 	$(NULL)
 

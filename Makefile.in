@@ -126,6 +126,8 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 COMPILER_FLAGS = @COMPILER_FLAGS@
+CONTROL_CENTER_CFLAGS = @CONTROL_CENTER_CFLAGS@
+CONTROL_CENTER_LIBS = @CONTROL_CENTER_LIBS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -213,6 +215,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PAM_LIBS = @PAM_LIBS@
+PANELS_DIR = @PANELS_DIR@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
@@ -290,10 +293,11 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 NULL = 
-SUBDIRS = secmem gtksecentry src po etpo icons preferences help examples plugins
+SUBDIRS = secmem src po etpo icons help examples plugins cc-panel
 EXTRA_DIST = \
 	krb5-auth-dialog.spec \
 	MAINTAINERS           \
+	CodingStyle           \
 	gnome-doc-utils.make  \
 	$(NULL)
 

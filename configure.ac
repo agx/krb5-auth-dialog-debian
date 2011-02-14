@@ -1,4 +1,4 @@
-AC_INIT([krb5-auth-dialog], [0.17])
+AC_INIT([krb5-auth-dialog], [2.91.6])
 AC_CONFIG_SRCDIR(src/ka-dialog.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
@@ -29,17 +29,17 @@ GNOME_DOC_INIT
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
 AC_ARG_WITH([gtk],
-  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 2.0)])],
+  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 3.0)])],
   [case "$with_gtk" in
      2.0|3.0) ;;
      *) AC_MSG_ERROR([invalid gtk version specified]) ;;
    esac],
-  [with_gtk=2.0])
+  [with_gtk=3.0])
 AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
   2.0) GTK_API_VERSION=2.0
-       GTK_REQUIRED=2.16.0
+       GTK_REQUIRED=2.18.0
        GLIB_REQUIRED=2.16.0
        DBUS_REQUIRED=0.60
        GCONF_REQUIRED=2.8
@@ -59,6 +59,7 @@ PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= $DBUS_REQUIRED)
 PKG_CHECK_MODULES(GCONF, gconf-2.0 >= $GCONF_REQUIRED)
 PKG_CHECK_MODULES(GIO, [gio-2.0, gio-unix-2.0])
 PKG_CHECK_MODULES(GMODULE, gmodule-2.0)
+PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
 
 dnl check for deprecated symbols:
 dnl GNOME_MAINTAINER_MODE_DEFINES
@@ -184,33 +185,24 @@ if test "x$enable_network_manager" = "xyes"; then
 fi
 AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "x$enable_network_manager" = "xyes"])
 
+
 dnl libnotify
-LIBNOTIFY_CFLAGS=
-LIBNOTIFY_LIBS=
-AC_ARG_WITH(libnotify,
-  [  --with-libnotify	use libnotify for status messages],
-  [],
-  [with_libnotify=check])
+savedCFLAGS="$CFLAGS"
+savedLIBS="$LIBS"
+CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
+LIBS="$LIBNOTIFY_LIBS $LIBS"
+AC_CHECK_FUNCS([notify_notification_new_with_status_icon \
+                notify_notification_set_hint])
+CFLAGS="$savedCFLAGS"
+LIBS="$savedLIBS"
 
-if test "x$with_libnotify" = "xyes" -o "x$with_libnotify" = "xcheck"; then
-  PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED,
-    [with_libnotify=yes], [
-    if test "x$with_libnotify" = "xcheck" ; then
-       with_libnotify=no
-    else
-       AC_MSG_ERROR(
-         [You must install libnotify >= $LIBNOTIFY_REQUIRED to compile krb5-auth-dialog])
-    fi
-  ])
-  if test "x$with_libnotify" = "xyes" ; then
-    AC_DEFINE_UNQUOTED(HAVE_LIBNOTIFY, 1,
-      [use libnotify for status messages])
-  fi
-fi
-AM_CONDITIONAL(HAVE_LIBNOTIFY, [test "x$with_libnotify" = "xyes"])
-AC_SUBST(LIBNOTIFY_CFLAGS)
-AC_SUBST(LIBNOTIFY_LIBS)
 
+dnl libgnome-control-center
+dnl for the new panel
+PKG_CHECK_MODULES(CONTROL_CENTER, [
+ libgnome-control-center >= 2.31.4])
+PANELS_DIR="${libdir}/control-center-1/panels"
+AC_SUBST(PANELS_DIR)
 
 dnl secmem
 dnl Checks for library functions.
@@ -281,18 +273,16 @@ krb5-auth-dialog.spec
 src/Makefile
 src/krb5-auth-dialog.1
 secmem/Makefile
-gtksecentry/Makefile
 icons/Makefile
 icons/22x22/Makefile
 icons/48x48/Makefile
 icons/scalable/Makefile
 etpo/Makefile
 po/Makefile.in
-preferences/Makefile
-preferences/krb5-auth-dialog-preferences.1
 help/Makefile
 examples/Makefile
 plugins/Makefile
+cc-panel/Makefile
 ])
 
 AC_MSG_NOTICE([])
@@ -316,6 +306,7 @@ AC_MSG_NOTICE([  Network Manager: $NETWORK_MANAGER_CFLAGS $NETWORK_MANAGER_LIBS]
 else
 AC_MSG_NOTICE([  Network Manager: no])
 fi
+AC_MSG_NOTICE([         gnome-cc: $CONTROL_CENTER_CFLAGS $CONTROL_CENTER_LIBS])
 AC_MSG_NOTICE([])
 AC_MSG_NOTICE([Miscellaneous])
 AC_MSG_NOTICE([])
