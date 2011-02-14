@@ -1,3 +1,12 @@
+krb5-auth-dialog (2.91.6-1) experimental; urgency=low
+
+  * [c646d52] New upstream version 2.91.6
+    (Closes: #583739, #593543)
+  * [296a143] Update for GTK+/GNOME 3.0
+  * [726c62c] Drop patches, fixed upstream
+
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 14 Feb 2011 23:58:08 +0100
+
 krb5-auth-dialog (0.17-1) experimental; urgency=low
 
   * [2745b08] New upstream version 0.17
