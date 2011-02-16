@@ -1,0 +1,23 @@
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Thu, 19 Aug 2010 14:26:30 +0200
+Subject: Always startup, not only with a valid ticket cache
+
+Closes: #582497
+---
+ src/krb5-auth-dialog.desktop.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/krb5-auth-dialog.desktop.in b/src/krb5-auth-dialog.desktop.in
+index 5569646..f9f260c 100644
+--- a/src/krb5-auth-dialog.desktop.in
++++ b/src/krb5-auth-dialog.desktop.in
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ _Name=Kerberos Authentication
+ _Comment=Kerberos Network Authentication Dialog
+-Exec=krb5-auth-dialog
++Exec=krb5-auth-dialog -A
+ Terminal=false
+ Type=Application
+ NoDisplay=true
+-- 
