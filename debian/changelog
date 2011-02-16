@@ -1,3 +1,11 @@
+krb5-auth-dialog (2.91.6-2) experimental; urgency=low
+
+  * [c92676b] Readd
+    0001-Always-startup-not-only-with-a-valid-ticket-cache.patch
+    since this isn't applied upstream yet.
+
+ -- Guido Günther <agx@sigxcpu.org>  Wed, 16 Feb 2011 20:32:35 +0100
+
 krb5-auth-dialog (2.91.6-1) experimental; urgency=low
 
   * [c646d52] New upstream version 2.91.6
