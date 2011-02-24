@@ -1,3 +1,11 @@
+krb5-auth-dialog (2.91.90-1) experimental; urgency=low
+
+  * [2a51379] New upstream version 2.91.90
+  * [0ae9824] Adapt to new GTK+ 3 naming scheme
+  * [dc46361] Drop patches, fixed upstream.
+
+ -- Guido Günther <agx@sigxcpu.org>  Thu, 24 Feb 2011 20:01:12 +0100
+
 krb5-auth-dialog (2.91.6-2) experimental; urgency=low
 
   * [c92676b] Readd
