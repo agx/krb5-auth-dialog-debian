@@ -950,21 +950,31 @@ ka_ns_check_persistence (KaApplet *self)
 {
     GList   *caps;
     GList   *l;
+    gboolean is_autostart = g_getenv("DESKTOP_AUTOSTART_ID") ? TRUE : FALSE;
+    gint    seconds = 5;
 
     self->priv->ns_persistence = FALSE;
-    caps = notify_get_server_caps ();
-    if (caps == NULL) {
+    do {
+        caps = notify_get_server_caps ();
+        if (caps == NULL)
             g_warning ("Failed to read server caps");
-            return;
-    }
-
-    l = g_list_find_custom (caps, "persistence", (GCompareFunc)strcmp);
-    if (l != NULL) {
-        self->priv->ns_persistence = TRUE;
-        KA_DEBUG ("Notification server supports persistence.");
-    }
-    g_list_foreach (caps, (GFunc) g_free, NULL);
-    g_list_free (caps);
+        else {
+            l = g_list_find_custom (caps, "persistence", (GCompareFunc)strcmp);
+            if (l != NULL) {
+                self->priv->ns_persistence = TRUE;
+                KA_DEBUG ("Notification server supports persistence.");
+            }
+            g_list_foreach (caps, (GFunc) g_free, NULL);
+            g_list_free (caps);
+        }
+        /* During session start we have to wait until the shell is fully up
+         * to reliably detect the persistence property (#642666) */
+        if (is_autostart && !self->priv->ns_persistence) {
+            sleep(1);
+            seconds--;
+        } else
+            break;
+    } while (seconds);
 }
 
 
@@ -989,7 +999,7 @@ ka_applet_create ()
     applet->priv->uixml = gtk_builder_new ();
     ret = gtk_builder_add_from_file (applet->priv->uixml,
                                      KA_DATA_DIR G_DIR_SEPARATOR_S
-                                     PACKAGE ".xml", &error);
+                                     PACKAGE ".ui", &error);
     if (!ret) {
         g_assert (error);
         g_assert (error->message);
