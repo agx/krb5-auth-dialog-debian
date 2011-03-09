@@ -74,7 +74,7 @@ krb5_auth_dialog_DEPENDENCIES = $(top_builddir)/secmem/libsecmem.a \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -161,8 +161,6 @@ CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DATADIRNAME = @DATADIRNAME@
-DBUS_CFLAGS = @DBUS_CFLAGS@
-DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DISTCHECK_CONFIGURE_FLAGS = @DISTCHECK_CONFIGURE_FLAGS@
@@ -377,7 +375,6 @@ krb5_auth_dialog_CPPFLAGS = \
 krb5_auth_dialog_CFLAGS = \
 	$(GMODULE_CFLAGS) \
 	$(GTK_CFLAGS) \
-	$(DBUS_CFLAGS) \
 	$(GCONF_CFLAGS) \
 	$(KRB5_CFLAGS) \
 	$(NETWORK_MANAGER_CFLAGS) \
@@ -392,15 +389,10 @@ krb5_auth_dialog_LDADD = \
 	$(LIBCAP) \
 	$(KRB5_LIBS) \
 	$(LIBNOTIFY_LIBS) \
-	$(DBUS_LIBS) \
 	$(GCONF_LIBS) \
 	$(GIO_LIBS) \
 	$(GMODULE_LIBS) \
 	$(GTK_LIBS) \
-	$(NULL)
-
-BUILT_SOURCES = \
-	ka-dbus-glue.h \
 	$(NULL)
 
 AM_CPPFLAGS = \
@@ -417,18 +409,15 @@ EXTRA_DIST = \
 	$(schema_in_files) \
 	$(autostart_in_files) \
 	$(service_in_files) \
-	$(srcdir)/ka-dbus.xml \
 	krb5-auth-dialog.1.in \
 	$(NULL)
 
 CLEANFILES = $(schema_DATA) $(service_DATA)
 DISTCLEANFILES = \
 	krb5-auth-dialog.desktop \
-	ka-dbus-glue.h \
 	$(NULL)
 
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -1003,15 +992,13 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
+check: check-am
 all-am: Makefile $(PROGRAMS) $(MANS) $(DATA)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(schemadir)" "$(DESTDIR)$(servicedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -1038,7 +1025,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
@@ -1115,7 +1101,7 @@ uninstall-am: uninstall-autostartDATA uninstall-binPROGRAMS \
 
 uninstall-man: uninstall-man1
 
-.MAKE: all check install install-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic clean-libtool ctags distclean distclean-compile \
@@ -1141,12 +1127,6 @@ uninstall-man: uninstall-man1
 
 $(service_DATA): $(service_in_files) Makefile
 	sed -e "s|\@BINDIR\@|$(bindir)|" $< > $@
-
-ka-dbus-glue.h: $(srcdir)/ka-dbus.xml
-	dbus-binding-tool                 \
-		--mode=glib-server        \
-		--prefix=krb5_auth_dialog \
-		$< > $@
 
 install-data-local: $(schema_DATA)
 @GCONF_SCHEMAS_INSTALL_TRUE@	if test -z "$(DESTDIR)" ; then \
