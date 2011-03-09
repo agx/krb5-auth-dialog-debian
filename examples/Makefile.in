@@ -75,8 +75,6 @@ CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DATADIRNAME = @DATADIRNAME@
-DBUS_CFLAGS = @DBUS_CFLAGS@
-DBUS_LIBS = @DBUS_LIBS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DISTCHECK_CONFIGURE_FLAGS = @DISTCHECK_CONFIGURE_FLAGS@
@@ -238,6 +236,8 @@ top_srcdir = @top_srcdir@
 NULL = 
 EXTRA_DIST = \
 	tgt-signals.py \
+	tgt-acquire.py \
+	destroy-ccache.py \
 	$(NULL)
 
 all: all-am
