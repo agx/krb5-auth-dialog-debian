@@ -1,3 +1,11 @@
+krb5-auth-dialog (2.91.91-1) experimental; urgency=low
+
+  * [ca71a0f] New upstream version 2.91.91
+  * [4b5ff36] Depend on recent glib since we use GDBus instead of libdbus-glib
+    now
+
+ -- Guido Günther <agx@sigxcpu.org>  Wed, 09 Mar 2011 10:56:53 +0100
+
 krb5-auth-dialog (2.91.90-1) experimental; urgency=low
 
   * [2a51379] New upstream version 2.91.90
