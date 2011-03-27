@@ -44,6 +44,10 @@
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include <nm-client.h>
+
+#if !defined(NM_CHECK_VERSION)
+#define NM_CHECK_VERSION(x,y,z) 0
+#endif
 #endif
 
 #ifdef HAVE_HX509_ERR_H
@@ -308,6 +312,14 @@ ka_get_service_tickets (GtkListStore * tickets)
         /* if the file doesn't exist, it's not an error if we can't
          * parse it */
         if (!g_file_test (ka_ccache_filename (), G_FILE_TEST_EXISTS))
+            gtk_list_store_append (tickets, &iter);
+            gtk_list_store_set (tickets, &iter,
+                                PRINCIPAL_COLUMN, _("Your ticket cache is currently empty"),
+                                START_TIME_COLUMN, 0,
+                                END_TIME_COLUMN, 0,
+                                FORWARDABLE_COLUMN, FALSE,
+                                RENEWABLE_COLUMN, FALSE,
+                                PROXIABLE_COLUMN, FALSE, -1);
             retval = TRUE;
         goto out;
     }
@@ -471,11 +483,20 @@ ka_nm_client_state_changed_cb (NMClient * client,
         KA_DEBUG ("Network state: %d", state);
         /* do nothing */
         break;
+#if NM_CHECK_VERSION(0,8,992)
+    case NM_STATE_DISCONNECTING:
+#endif
     case NM_STATE_DISCONNECTED:
         KA_DEBUG ("Network disconnected");
         *online = FALSE;
         break;
+#if NM_CHECK_VERSION(0,8,992)
+    case NM_STATE_CONNECTED_LOCAL:
+    case NM_STATE_CONNECTED_SITE:
+    case NM_STATE_CONNECTED_GLOBAL:
+#else
     case NM_STATE_CONNECTED:
+#endif
         KA_DEBUG ("Network connected");
         *online = TRUE;
         break;
