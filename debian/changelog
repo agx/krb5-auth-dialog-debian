@@ -1,3 +1,9 @@
+krb5-auth-dialog (3.0.0-1) experimental; urgency=low
+
+  * [cc2cada] New upstream version 3.0.0
+
+ -- Guido Günther <agx@sigxcpu.org>  Wed, 06 Apr 2011 16:25:16 +0200
+
 krb5-auth-dialog (2.91.93-1) experimental; urgency=low
 
   * [dfccd34] New upstream version 2.91.93
