@@ -81,7 +81,7 @@ struct _KaAppletPrivate {
     gboolean ns_persistence;    /* does the notification server support persistence */
 
     KaPwDialog *pwdialog;       /* the password dialog */
-    int pw_prompt_secs;         /* when to start prompting for a password */
+    int pw_prompt_secs;         /* when to start sending notifications */
     KaPluginLoader *loader;     /* Plugin loader */
 
     NotifyNotification *notification;   /* notification messages */
@@ -530,7 +530,7 @@ ka_send_event_notification (KaApplet *self,
     }
 
     notify_notification_clear_actions(notification);
-    /* Add List Tickets button until we moved this into cc-panl */
+
     if (self->priv->ns_persistence) {
         notify_notification_add_action (notification,
                                         "ka-list-tickets",
@@ -591,14 +591,14 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
     int remaining = expiry - now;
     static int last_warn = 0;
     static gboolean expiry_notified = FALSE;
+    static gboolean initial_notification = TRUE;
     static krb5_timestamp old_expiry = 0;
     gboolean notify = TRUE;
     const char *status_icon = ka_applet_select_icon (applet, remaining);
     char *tooltip_text = ka_applet_tooltip_text (remaining);
 
-
     if (remaining > 0) {
-        if (expiry_notified) {
+        if (expiry_notified || initial_notification) {
             const char* msg;
             ka_gconf_get_bool (applet->priv->gconf,
                                KA_GCONF_KEY_NOTIFY_VALID, &notify);
@@ -607,8 +607,12 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
 
                 if (applet->priv->krb_msg)
                     msg = applet->priv->krb_msg;
-                else
-                    msg = _("You've refreshed your Kerberos credentials.");
+                else {
+                    if (initial_notification)
+                        msg = _("You have valid Kerberos credentials.");
+                    else
+                        msg = _("You've refreshed your Kerberos credentials.");
+                }
                 ka_send_event_notification (applet,
                                             _("Network credentials valid"),
                                             msg,
@@ -661,6 +665,7 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
     old_expiry = expiry;
     ka_update_tray_icon(applet, status_icon, tooltip_text);
     g_free (tooltip_text);
+    initial_notification = FALSE;
     return 0;
 }
 
@@ -731,7 +736,7 @@ ka_applet_cb_about_dialog (GtkMenuItem *menuitem G_GNUC_UNUSED,
                            "logo-icon-name", "krb-valid-ticket",
                            "copyright",
                            "Copyright (C) 2004,2005,2006 Red Hat, Inc.,\n"
-                           "2008,2009 Guido Günther",
+                           "2008-2011 Guido Günther",
                            "website-label", PACKAGE " website",
                            "website",
                            "https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog/",
