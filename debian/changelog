@@ -1,3 +1,10 @@
+krb5-auth-dialog (3.0.1-1) experimental; urgency=low
+
+  * [cb23040] New upstream version 3.0.1
+  * [4c2c01e] watch: look for bz2 files
+
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 07 May 2011 14:52:12 +0200
+
 krb5-auth-dialog (3.0.0-1) experimental; urgency=low
 
   * [cc2cada] New upstream version 3.0.0
