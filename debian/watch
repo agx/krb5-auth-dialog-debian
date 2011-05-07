@@ -1,4 +1,4 @@
 # format version number, currently 3; this line is compulsory!
 version=3
 http://ftp.gnome.org/pub/GNOME/sources/krb5-auth-dialog/([\d\.]+)/ \
-        krb5-auth-dialog-([\d\.]*)\.tar\.gz
+        krb5-auth-dialog-([\d\.]*)\.tar\.bz2
