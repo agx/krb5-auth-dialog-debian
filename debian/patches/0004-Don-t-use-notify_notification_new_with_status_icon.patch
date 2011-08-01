@@ -1,0 +1,25 @@
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Sun, 7 Aug 2011 17:59:00 +0200
+Subject: Don't use notify_notification_new_with_status_icon
+
+---
+ src/ka-applet.c |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
+
+diff --git a/src/ka-applet.c b/src/ka-applet.c
+index bce4288..0c9d981 100644
+--- a/src/ka-applet.c
++++ b/src/ka-applet.c
+@@ -489,10 +489,7 @@ ka_send_event_notification (KaApplet *applet,
+ 	notify_icon = icon ? icon : "krb-valid-ticket";
+ 
+ 	applet->priv->notification = \
+-		notify_notification_new_with_status_icon(summary,
+-							 message,
+-							 notify_icon,
+-							 applet->priv->tray_icon);
++		notify_notification_new (summary, message, notify_icon);
+ 
+ 	notify_notification_set_urgency (applet->priv->notification, NOTIFY_URGENCY_NORMAL);
+ 	notify_notification_add_action (applet->priv->notification,
+-- 

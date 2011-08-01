@@ -1,3 +1,4 @@
 0001-Add-simple-AFS-plugin.patch
 0002-Rerun-autoreconf.patch
 0003-Always-startup-not-only-with-a-valid-ticket-cache.patch
+0004-Don-t-use-notify_notification_new_with_status_icon.patch
