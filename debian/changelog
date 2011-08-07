@@ -1,3 +1,10 @@
+krb5-auth-dialog (0.16-5) unstable; urgency=low
+
+  * [15ef46b] Don't use notify_notification_new_with_status_icon
+    not available in libnotify 0.7 (Closes: #630286)
+
+ -- Guido Günther <agx@sigxcpu.org>  Sun, 07 Aug 2011 18:08:30 +0200
+
 krb5-auth-dialog (0.16-4) unstable; urgency=low
 
   * [ec8ae28] Drop 0004-Change-the-Name-from-Network-Authentication-to-
