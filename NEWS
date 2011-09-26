@@ -1,3 +1,28 @@
+==============
+Version 3.2.0
+==============
+* Use GtkApplication
+* Turn ticket dialog into the main window that gets shown when
+  krb5-auth-dialog is invoked multiple times. This makes the 
+  prefs easily accessible.
+* Fix crash when displaying empty ticket dialog
+* UI translations:
+	Andrej Žnidaršič (sl)
+	Mario Blättermann (de)
+	Zdeněk Hataš (cs)
+
+==============
+Version 3.1.91
+==============
+* Move preferences from cc into the app (BZ#657292)
+* Update ticket list on ccache changes
+* Add menu bar to ticket dialog making help accessible again
+* UI translations:
+	Aron Xu (zh_CN)
+	dmustieles (es)
+	Fran Dieguez (gl)
+	Petr Kovar (cs)
+
 =============
 Version 3.0.1
 =============

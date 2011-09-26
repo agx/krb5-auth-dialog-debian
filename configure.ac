@@ -1,5 +1,5 @@
-AC_INIT([krb5-auth-dialog],[3.0.1])
-AC_CONFIG_SRCDIR(src/ka-dialog.c)
+AC_INIT([krb5-auth-dialog],[3.2.0])
+AC_CONFIG_SRCDIR(src/ka-kerberos.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([1.11.1 dist-bzip2 -Wno-portability])
 AC_CONFIG_HEADERS([config.h])
@@ -27,32 +27,12 @@ AM_PROG_CC_C_O
 KA_COMPILE_WARNINGS([maximum])
 GNOME_DOC_INIT
 
-AC_MSG_CHECKING([which gtk+ version to compile against])
-AC_ARG_WITH([gtk],
-  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 3.0)])],
-  [case "$with_gtk" in
-     2.0|3.0) ;;
-     *) AC_MSG_ERROR([invalid gtk version specified]) ;;
-   esac],
-  [with_gtk=3.0])
-AC_MSG_RESULT([$with_gtk])
+GTK_REQUIRED=3.0
+GLIB_REQUIRED=2.28
+GCONF_REQUIRED=2.31
+LIBNOTIFY_REQUIRED=0.7.0
 
-case "$with_gtk" in
-  2.0) GTK_API_VERSION=2.0
-       GTK_REQUIRED=2.18.0
-       GLIB_REQUIRED=2.26.0
-       GCONF_REQUIRED=2.8
-       LIBNOTIFY_REQUIRED=0.4
-       ;;
-  3.0) GTK_API_VERSION=3.0
-       GTK_REQUIRED=2.90.4
-       GLIB_REQUIRED=2.26.0
-       GCONF_REQUIRED=2.31
-       LIBNOTIFY_REQUIRED=0.5.1
-       ;;
-esac
-
-PKG_CHECK_MODULES(GTK, [gtk+-$GTK_API_VERSION >= $GTK_REQUIRED, glib-2.0 >= $GLIB_REQUIRED])
+PKG_CHECK_MODULES(GTK, [gtk+-3.0 >= $GTK_REQUIRED, glib-2.0 >= $GLIB_REQUIRED])
 PKG_CHECK_MODULES(GCONF, gconf-2.0 >= $GCONF_REQUIRED)
 PKG_CHECK_MODULES(GIO, [gio-2.0, gio-unix-2.0])
 PKG_CHECK_MODULES(GMODULE, gmodule-2.0)
@@ -193,13 +173,6 @@ CFLAGS="$savedCFLAGS"
 LIBS="$savedLIBS"
 
 
-dnl libgnome-control-center
-dnl for the new panel
-PKG_CHECK_MODULES(CONTROL_CENTER, [
- libgnome-control-center >= 2.31.4])
-PANELS_DIR="${libdir}/control-center-1/panels"
-AC_SUBST(PANELS_DIR)
-
 dnl secmem
 dnl Checks for library functions.
 AC_CHECK_FUNCS(seteuid stpcpy mmap)
@@ -277,7 +250,6 @@ po/Makefile.in
 help/Makefile
 examples/Makefile
 plugins/Makefile
-cc-panel/Makefile
 ])
 AC_OUTPUT
 
@@ -301,7 +273,6 @@ AC_MSG_NOTICE([  Network Manager: $NETWORK_MANAGER_CFLAGS $NETWORK_MANAGER_LIBS]
 else
 AC_MSG_NOTICE([  Network Manager: no])
 fi
-AC_MSG_NOTICE([         gnome-cc: $CONTROL_CENTER_CFLAGS $CONTROL_CENTER_LIBS])
 AC_MSG_NOTICE([])
 AC_MSG_NOTICE([Miscellaneous])
 AC_MSG_NOTICE([])
