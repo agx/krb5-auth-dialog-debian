@@ -2,7 +2,7 @@
  * Copyright (C) 2004,2005,2006 Red Hat, Inc.
  * Authored by Christopher Aillon <caillon@redhat.com>
  *
- * Copyright (C) 2008,2009,2010 Guido Guenther <agx@sigxcpu.org>
+ * Copyright (C) 2008,2009,2010,2011 Guido Guenther <agx@sigxcpu.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,12 +35,11 @@
 #include "secmem-util.h"
 #include "memory.h"
 
-#include "ka-dialog.h"
+#include "ka-kerberos.h"
 #include "ka-applet-priv.h"
 #include "ka-pwdialog.h"
-#include "ka-dbus.h"
 #include "ka-tools.h"
-#include "ka-tickets.h"
+#include "ka-main-window.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
 #include <nm-client.h>
@@ -60,8 +59,9 @@ static krb5_timestamp creds_expiry;
 static krb5_timestamp canceled_creds_expiry;
 static gboolean canceled;
 static gboolean invalid_auth;
-static gboolean always_run;
 static gboolean is_online = TRUE;
+static gboolean kcontext_valid;
+GFileMonitor *ccache_monitor;
 
 static int grab_credentials (KaApplet *applet);
 static int ka_renew_credentials (KaApplet *applet);
@@ -315,8 +315,6 @@ ka_get_service_tickets (GtkListStore * tickets)
             gtk_list_store_append (tickets, &iter);
             gtk_list_store_set (tickets, &iter,
                                 PRINCIPAL_COLUMN, _("Your ticket cache is currently empty"),
-                                START_TIME_COLUMN, 0,
-                                END_TIME_COLUMN, 0,
                                 FORWARDABLE_COLUMN, FALSE,
                                 RENEWABLE_COLUMN, FALSE,
                                 PROXIABLE_COLUMN, FALSE, -1);
@@ -677,9 +675,9 @@ ka_unparse_name ()
 
 
 static void
-ccache_changed_cb (GFileMonitor * monitor G_GNUC_UNUSED,
-                   GFile * file,
-                   GFile * other_file G_GNUC_UNUSED,
+ccache_changed_cb (GFileMonitor *monitor G_GNUC_UNUSED,
+                   GFile *file,
+                   GFile *other_file G_GNUC_UNUSED,
                    GFileMonitorEvent event_type, gpointer data)
 {
     KaApplet *applet = KA_APPLET (data);
@@ -691,6 +689,7 @@ ccache_changed_cb (GFileMonitor * monitor G_GNUC_UNUSED,
     case G_FILE_MONITOR_EVENT_CHANGED:
         KA_DEBUG ("%s changed", ccache_name);
         credentials_expiring ((gpointer) applet);
+        g_signal_emit_by_name(applet, "krb-ccache-changed");
         break;
     default:
         KA_DEBUG ("%s unhandled event: %d", ccache_name, event_type);
@@ -898,7 +897,7 @@ ka_get_tgt_from_ccache (krb5_context context, krb5_creds *creds)
 }
 
 static gboolean
-using_krb5 (void)
+ka_krb5_context_init ()
 {
     krb5_error_code err;
     gboolean have_tgt = FALSE;
@@ -907,6 +906,8 @@ using_krb5 (void)
     err = krb5_init_context (&kcontext);
     if (err)
         return FALSE;
+    else
+        kcontext_valid = TRUE;
 
     have_tgt = ka_get_tgt_from_ccache (kcontext, &creds);
     if (have_tgt) {
@@ -914,6 +915,17 @@ using_krb5 (void)
         krb5_free_cred_contents (kcontext, &creds);
     }
     return have_tgt;
+}
+
+
+static gboolean
+ka_krb5_context_free ()
+{
+    if (kcontext_valid) {
+        krb5_free_context (kcontext);
+        kcontext_valid = FALSE;
+    }
+    return TRUE;
 }
 
 
@@ -1069,68 +1081,32 @@ ka_nm_init (void)
 }
 
 
-int
-main (int argc, char *argv[])
+gboolean
+ka_kerberos_init (KaApplet *applet)
 {
-    KaApplet *applet;
-    GOptionContext *context;
-    GError *error = NULL;
+    gboolean ret;
 
-    gboolean run_auto = FALSE;
-
-    const char *help_msg =
-        "Run '" PACKAGE
-        " --help' to see a full list of available command line options";
-    const GOptionEntry options[] = {
-        {"auto", 'a', 0, G_OPTION_ARG_NONE, &run_auto,
-         "Only run if an initialized ccache is found", NULL},
-        {NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL}
-    };
-    GFileMonitor *monitor = NULL;
-
-    context = g_option_context_new ("- Kerberos 5 credential checking");
-    g_option_context_add_main_entries (context, options, NULL);
-    g_option_context_add_group (context, gtk_get_option_group (TRUE));
-    g_option_context_parse (context, &argc, &argv, &error);
-
-    if (error) {
-        g_print ("%s\n%s\n", error->message, help_msg);
-        g_clear_error (&error);
-        return 1;
-    }
-    g_option_context_free (context);
-
-    textdomain (PACKAGE);
-    bind_textdomain_codeset (PACKAGE, "UTF-8");
-    bindtextdomain (PACKAGE, LOCALE_DIR);
     ka_secmem_init ();
+    ret = ka_krb5_context_init (applet);
+    ka_nm_init ();
+    g_timeout_add_seconds (CREDENTIAL_CHECK_INTERVAL,
+                           (GSourceFunc) credentials_expiring, applet);
+    g_idle_add ((GSourceFunc) credentials_expiring_once, applet);
+    ccache_monitor = monitor_ccache (applet);
+    return ret;
+}
 
-    always_run = !run_auto;
-    if (using_krb5 () || always_run) {
-        g_set_application_name (KA_NAME);
 
-        applet = ka_applet_create ();
-        if (!applet)
-            return 1;
-
-        if (!ka_dbus_connect (applet)) {
-            ka_applet_destroy (applet);
-            return 1;
-        }
-        ka_nm_init ();
-
-        g_timeout_add_seconds (CREDENTIAL_CHECK_INTERVAL,
-                               (GSourceFunc) credentials_expiring, applet);
-        g_idle_add ((GSourceFunc) credentials_expiring_once, applet);
-        monitor = monitor_ccache (applet);
-
-        gtk_main ();
-    }
-    ka_dbus_disconnect ();
+gboolean
+ka_kerberos_destroy ()
+{
     ka_nm_shutdown ();
-    if (monitor)
-        g_object_unref (monitor);
-    return 0;
+
+    if (ccache_monitor)
+        g_object_unref (ccache_monitor);
+
+    ka_krb5_context_free ();
+    return TRUE;
 }
 
 /*

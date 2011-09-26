@@ -23,12 +23,14 @@
 #include <glib/gi18n.h>
 
 #include "ka-applet-priv.h"
-#include "ka-dialog.h"
+#include "ka-dbus.h"
+#include "ka-kerberos.h"
 #include "ka-gconf-tools.h"
 #include "ka-gconf.h"
 #include "ka-tools.h"
-#include "ka-tickets.h"
+#include "ka-main-window.h"
 #include "ka-plugin-loader.h"
+#include "ka-preferences.h"
 #include "ka-closures.h"
 #include <libnotify/notify.h>
 
@@ -56,22 +58,23 @@ const gchar *ka_signal_names[KA_SIGNAL_COUNT] = {
     "krb-tgt-acquired",
     "krb-tgt-renewed",
     "krb-tgt-expired",
+    "krb-ccache-changed",
 };
 
 
 struct _KaApplet {
-    GObject parent;
+    GtkApplication parent;
 
     KaAppletPrivate *priv;
 };
 
 struct _KaAppletClass {
-    GObjectClass parent;
+    GtkApplicationClass parent;
 
     guint signals[KA_SIGNAL_COUNT];
 };
 
-G_DEFINE_TYPE (KaApplet, ka_applet, G_TYPE_OBJECT);
+G_DEFINE_TYPE (KaApplet, ka_applet, GTK_TYPE_APPLICATION);
 
 struct _KaAppletPrivate {
     GtkBuilder *uixml;
@@ -84,6 +87,11 @@ struct _KaAppletPrivate {
     int pw_prompt_secs;         /* when to start sending notifications */
     KaPluginLoader *loader;     /* Plugin loader */
 
+    /* command line handling */
+    gboolean startup_ccache;    /* ccache found on startup */
+    gboolean auto_run;          /* only start with valid ccache */
+
+    /* GConf optins */
     NotifyNotification *notification;   /* notification messages */
     char *krb_msg;              /* Additional banner delivered by Kerberos */
     const char *notify_gconf_key;       /* disable notification gconf key */
@@ -98,7 +106,96 @@ struct _KaAppletPrivate {
     GConfClient *gconf;         /* gconf client */
 };
 
+
 static void ka_close_notification (KaApplet *self);
+static gboolean is_initialized;
+
+static void 
+ka_applet_activate (GApplication *application G_GNUC_UNUSED)
+{
+    if (is_initialized) {
+        KA_DEBUG ("Main window activated");
+        ka_main_window_show ();
+    } else
+        is_initialized = TRUE;
+}
+
+
+static int
+ka_applet_command_line (GApplication            *application,
+                        GApplicationCommandLine *cmdline G_GNUC_UNUSED)
+{
+    KaApplet *self = KA_APPLET(application);
+    KA_DEBUG ("Evaluating command line");
+    
+    if (!self->priv->startup_ccache &&
+        self->priv->auto_run)
+        ka_applet_destroy (self);
+    else
+        ka_applet_activate (application);
+    return 0;
+}
+
+
+
+static gint
+ka_applet_local_command_line (GApplication *application,
+                              gchar ***argv,
+                              gint *exit_status)
+{
+    KaApplet *self = KA_APPLET(application);
+    GOptionContext *context;
+    GError *error = NULL;
+
+    gint argc = g_strv_length (*argv);
+    gboolean auto_run = FALSE;
+
+    const char *help_msg =
+        "Run '" PACKAGE
+        " --help' to see a full list of available command line options";
+    const GOptionEntry options[] = {
+        {"auto", 'a', 0, G_OPTION_ARG_NONE, &auto_run,
+         "Only run if an initialized ccache is found", NULL},
+        {NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL}
+    };
+
+    KA_DEBUG ("Parsing local command line");
+    
+    context = g_option_context_new ("- Kerberos 5 credential checking");
+    g_option_context_add_main_entries (context, options, NULL);
+    g_option_context_add_group (context, gtk_get_option_group (TRUE));
+    g_option_context_parse (context, &argc, argv, &error);
+
+    if (error) {
+        g_print ("%s\n%s\n", error->message, help_msg);
+        g_clear_error (&error);
+        *exit_status = 1;
+    } else {
+        self->priv->auto_run = auto_run;
+        *exit_status = 0;
+    }
+
+    g_option_context_free (context);
+    return FALSE;
+}
+
+static void
+ka_applet_startup (GApplication *application)
+{
+    KaApplet *self = KA_APPLET (application);
+    GtkWindow *main_window;
+
+    KA_DEBUG ("Primary application");
+
+    self->priv->startup_ccache = ka_kerberos_init (self);
+    if (!ka_dbus_connect (self)) {
+        ka_applet_destroy (self);
+    }
+
+    main_window = ka_main_window_create (self, self->priv->uixml);
+    gtk_application_add_window (GTK_APPLICATION(self), main_window);
+    ka_preferences_window_create (self, self->priv->uixml);
+}
 
 static void
 ka_applet_set_property (GObject *object,
@@ -266,6 +363,11 @@ ka_applet_class_init (KaAppletClass *klass)
     object_class->finalize = ka_applet_finalize;
     g_type_class_add_private (klass, sizeof (KaAppletPrivate));
 
+    G_APPLICATION_CLASS (klass)->local_command_line =   \
+        ka_applet_local_command_line;
+    G_APPLICATION_CLASS (klass)->command_line = ka_applet_command_line;
+    G_APPLICATION_CLASS (klass)->startup = ka_applet_startup;
+
     object_class->set_property = ka_applet_set_property;
     object_class->get_property = ka_applet_get_property;
 
@@ -318,8 +420,7 @@ ka_applet_class_init (KaAppletClass *klass)
                                   G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
     g_object_class_install_property (object_class,
                                      KA_PROP_TGT_RENEWABLE, pspec);
-
-    for (i = 0; i < KA_SIGNAL_COUNT; i++) {
+    for (i=0; i < KA_SIGNAL_COUNT-1; i++) {
         guint signalId;
 
         signalId = g_signal_new (ka_signal_names[i], G_OBJECT_CLASS_TYPE (klass),
@@ -329,13 +430,21 @@ ka_applet_class_init (KaAppletClass *klass)
                                  G_TYPE_STRING, G_TYPE_UINT);
         klass->signals[i] = signalId;
     }
+    klass->signals[KA_CCACHE_CHANGED] = g_signal_new (
+        ka_signal_names[KA_CCACHE_CHANGED], 
+        G_OBJECT_CLASS_TYPE (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        g_cclosure_marshal_VOID__VOID,
+        G_TYPE_NONE, 0);
 }
 
 
 static KaApplet *
 ka_applet_new (void)
 {
-    return g_object_new (KA_TYPE_APPLET, NULL);
+    return g_object_new (KA_TYPE_APPLET, 
+                         "application-id", "org.gnome.KrbAuthDialog",
+                         NULL);
 }
 
 
@@ -456,8 +565,8 @@ ka_notify_ticket_action_cb (NotifyNotification *notification G_GNUC_UNUSED,
         KA_DEBUG ("Removing ccache");
         ka_destroy_ccache (self);
     } else if (strcmp (action, "ka-list-tickets") == 0) {
-        KA_DEBUG ("Listing tickets");
-        ka_tickets_dialog_run ();
+        KA_DEBUG ("Showing main window");
+        ka_main_window_show ();
     } else {
         g_warning ("unkonwn action for callback");
     }
@@ -680,37 +789,10 @@ ka_applet_menu_add_separator_item (GtkWidget *menu)
     gtk_widget_show (menu_item);
 }
 
-static void
-ka_applet_cb_preferences (GtkWidget *menuitem G_GNUC_UNUSED,
-                          gpointer user_data G_GNUC_UNUSED)
-{
-    GError *error = NULL;
-
-    g_spawn_command_line_async (BIN_DIR
-                                G_DIR_SEPARATOR_S
-                                "gnome-control-center ka-panel", &error);
-    if (error) {
-        GtkWidget *message_dialog;
-
-        message_dialog = gtk_message_dialog_new (NULL,
-                                                 GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                 GTK_MESSAGE_ERROR,
-                                                 GTK_BUTTONS_CLOSE,
-                                                 _("There was an error launching the preferences dialog: %s"),
-                                                 error->message);
-        gtk_window_set_resizable (GTK_WINDOW (message_dialog), FALSE);
-
-        g_signal_connect (message_dialog, "response",
-                          G_CALLBACK (gtk_widget_destroy), NULL);
-        gtk_widget_show (message_dialog);
-        g_clear_error (&error);
-    }
-}
-
 
 /* Free all resources and quit */
 static void
-ka_applet_cb_quit (GtkMenuItem *menuitem G_GNUC_UNUSED, gpointer user_data)
+ka_applet_quit_cb (GtkMenuItem *menuitem G_GNUC_UNUSED, gpointer user_data)
 {
     KaApplet *applet = KA_APPLET (user_data);
 
@@ -719,36 +801,7 @@ ka_applet_cb_quit (GtkMenuItem *menuitem G_GNUC_UNUSED, gpointer user_data)
 
 
 static void
-ka_applet_cb_about_dialog (GtkMenuItem *menuitem G_GNUC_UNUSED,
-                           gpointer user_data G_GNUC_UNUSED)
-{
-    const gchar *authors[] = {
-        "Christopher Aillon <caillon@redhat.com>",
-        "Jonathan Blandford <jrb@redhat.com>",
-        "Colin Walters <walters@verbum.org>",
-        "Guido Günther <agx@sigxcpu.org>",
-        NULL
-    };
-
-    gtk_show_about_dialog (NULL,
-                           "authors", authors,
-                           "version", VERSION,
-                           "logo-icon-name", "krb-valid-ticket",
-                           "copyright",
-                           "Copyright (C) 2004,2005,2006 Red Hat, Inc.,\n"
-                           "2008-2011 Guido Günther",
-                           "website-label", PACKAGE " website",
-                           "website",
-                           "https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog/",
-                           "license", "GNU General Public License Version 2",
-                           /* Translators: add the translators of your language here */
-                           "translator-credits", _("translator-credits"),
-                           NULL);
-}
-
-
-static void
-ka_applet_cb_show_help (GtkMenuItem *menuitem G_GNUC_UNUSED,
+ka_applet_show_help_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
                         gpointer user_data)
 {
     KaApplet *applet = KA_APPLET (user_data);
@@ -759,7 +812,7 @@ ka_applet_cb_show_help (GtkMenuItem *menuitem G_GNUC_UNUSED,
 
 
 static void
-ka_applet_cb_destroy_ccache (GtkMenuItem *menuitem G_GNUC_UNUSED,
+ka_applet_destroy_ccache_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
                              gpointer user_data)
 {
     KaApplet *applet = KA_APPLET (user_data);
@@ -768,10 +821,10 @@ ka_applet_cb_destroy_ccache (GtkMenuItem *menuitem G_GNUC_UNUSED,
 }
 
 static void
-ka_applet_cb_show_tickets (GtkMenuItem *menuitem G_GNUC_UNUSED,
+ka_applet_show_tickets_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
                            gpointer user_data G_GNUC_UNUSED)
 {
-    ka_tickets_dialog_run ();
+    ka_main_window_show ();
 }
 
 
@@ -789,7 +842,7 @@ ka_applet_create_context_menu (KaApplet *applet)
     menu_item =
         gtk_image_menu_item_new_with_mnemonic (_("Remove Credentials _Cache"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_cb_destroy_ccache), applet);
+                      G_CALLBACK (ka_applet_destroy_ccache_cb), applet);
     image = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
@@ -799,26 +852,13 @@ ka_applet_create_context_menu (KaApplet *applet)
     /* Ticket dialog */
     menu_item = gtk_image_menu_item_new_with_mnemonic (_("_List Tickets"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_cb_show_tickets), applet);
+                      G_CALLBACK (ka_applet_show_tickets_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
-    /* Preferences */
-    menu_item =
-        gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
-    g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_cb_preferences), applet);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-    /* About item */
+    /* Help item */
     menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_HELP, NULL);
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_cb_show_help), applet);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-    /* About item */
-    menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
-    g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_cb_about_dialog), applet);
+                      G_CALLBACK (ka_applet_show_help_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     ka_applet_menu_add_separator_item (menu);
@@ -826,7 +866,7 @@ ka_applet_create_context_menu (KaApplet *applet)
     /* Quit */
     menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_cb_quit), applet);
+                      G_CALLBACK (ka_applet_quit_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     gtk_widget_show_all (menu);
@@ -984,12 +1024,21 @@ ka_ns_check_persistence (KaApplet *self)
 }
 
 
-/* destroy the applet and quit */
+/* undo what was done on startup() */
 void
-ka_applet_destroy (KaApplet* applet)
+ka_applet_destroy (KaApplet* self)
 {
-    g_object_unref (applet);
-    gtk_main_quit ();
+    GList *windows, *first;
+
+    ka_dbus_disconnect ();
+    windows = gtk_application_get_windows (GTK_APPLICATION(self));
+    if (windows) {
+        first = g_list_first (windows);
+        gtk_application_remove_window(GTK_APPLICATION (self), 
+                                      GTK_WINDOW (first->data));
+    }
+
+    ka_kerberos_destroy ();
 }
 
 
@@ -1020,17 +1069,40 @@ ka_applet_create ()
         g_assert (error->message);
         g_error ("Failed to load UI XML: %s", error->message);
     }
+    gtk_builder_connect_signals (applet->priv->uixml, NULL);
+
     applet->priv->pwdialog = ka_pwdialog_create (applet->priv->uixml);
     g_return_val_if_fail (applet->priv->pwdialog != NULL, NULL);
 
     applet->priv->gconf = ka_gconf_init (applet);
     g_return_val_if_fail (applet->priv->gconf != NULL, NULL);
 
-    ka_tickets_dialog_create (applet->priv->uixml);
     applet->priv->loader = ka_plugin_loader_create (applet);
     g_return_val_if_fail (applet->priv->loader != NULL, NULL);
 
     return applet;
+}
+
+int
+main (int argc, char *argv[])
+{
+    KaApplet *applet;
+    int ret = 0;
+
+    textdomain (PACKAGE);
+    bind_textdomain_codeset (PACKAGE, "UTF-8");
+    bindtextdomain (PACKAGE, LOCALE_DIR);
+
+    g_set_application_name (KA_NAME);
+
+    gtk_init (&argc, &argv);
+    applet = ka_applet_create ();
+    if (!applet)
+        return 1;
+
+    ret = g_application_run (G_APPLICATION(applet), argc, argv);
+    g_object_unref (applet);
+    return ret;
 }
 
 /*
