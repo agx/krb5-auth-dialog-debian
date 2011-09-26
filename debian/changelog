@@ -1,3 +1,11 @@
+krb5-auth-dialog (3.2.0-1) unstable; urgency=low
+
+  * [85df09c] New upstream version 3.2.0
+  * [bf94419] Drop build-dep on now unused libgnome-control-center-dev
+  * [e21e032] Bump standards version
+
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 26 Sep 2011 22:41:10 +0200
+
 krb5-auth-dialog (3.0.1-1) experimental; urgency=low
 
   * [cb23040] New upstream version 3.0.1
