@@ -22,7 +22,6 @@ Build-Depends: debhelper (>= 6),
  gnome-doc-utils,
  rarian-compat,
  libpam0g-dev,
- libgnome-control-center-dev
 Standards-Version: 3.9.1
 Vcs-Git: git://git.debian.org/git/users/agx/krb5-auth-dialog.git
 Vcs-Browser: http://git.debian.org/git/users/agx/krb5-auth-dialog.git
