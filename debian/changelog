@@ -1,3 +1,13 @@
+krb5-auth-dialog (3.2.0-2) unstable; urgency=low
+
+  * [24d4f35] New patch 0001-Add-categories-to-desktop-file.patch
+    cherry-picked from upstream git: Add categories to desktop file
+  * [61ad408] New patch 0002-Register-org.gnome.KrbAuthDialog-early.patch
+    cherry-picked from upstream git: Register org.gnome.KrbAuthDialog early to
+    fix DBus activation
+
+ -- Guido Günther <agx@sigxcpu.org>  Tue, 27 Sep 2011 23:41:36 +0200
+
 krb5-auth-dialog (3.2.0-1) unstable; urgency=low
 
   * [85df09c] New upstream version 3.2.0
