@@ -144,7 +144,7 @@
     <varlistentry>
       <term>Línea de comandos</term>
       <listitem>
-	<para>Escriba <command>krb5-auth-dialog --always</command> después pulse <keycap>Intro</keycap>:</para>
+	<para>Escriba <command>krb5-auth-dialog</command> y <keycap>Intro</keycap>:</para>
       </listitem>
     </varlistentry>
   </variablelist>

@@ -159,12 +159,15 @@
     <varlistentry>
       <term>Kommandorad</term>
       <listitem>
-	<para>Skriv <command>krb5-auth-dialog --always</command> och tryck sedan på <keycap>Return</keycap>:</para>
+	<para>
+	  Type <command>krb5-auth-dialog</command>,
+          then press <keycap>Return</keycap>:
+        </para>
       </listitem>
     </varlistentry>
   </variablelist>
   <para>
-    The tray icon will indicate one of tree states:
+    The tray icon will indicate one of three states:
   </para>
 
   <section id="trayicon-valid">
