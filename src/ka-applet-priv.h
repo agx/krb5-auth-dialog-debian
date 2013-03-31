@@ -25,7 +25,6 @@
 
 #include <glib-object.h>
 #include <glib/gprintf.h>
-#include <gconf/gconf-client.h>
 #include <krb5.h>
 
 #include "config.h"
@@ -52,11 +51,21 @@ void ka_applet_set_tgt_renewable (KaApplet *self, gboolean renewable);
 gboolean ka_applet_get_tgt_renewable (const KaApplet *self);
 guint ka_applet_get_pw_prompt_secs (const KaApplet *self);
 KaPwDialog *ka_applet_get_pwdialog (const KaApplet *self);
-GConfClient *ka_applet_get_gconf_client (const KaApplet *self);
+GSettings *ka_applet_get_settings (const KaApplet *self);
 void ka_applet_signal_emit (KaApplet *self, KaAppletSignalNumber signum,
                             krb5_timestamp expiry);
 void ka_applet_set_msg (KaApplet *self, const char *msg);
+GtkWindow* ka_applet_last_focused_window(KaApplet *self);
 
+/* properties */
+#define KA_PROP_NAME_PRINCIPAL       "principal"
+#define KA_PROP_NAME_PK_USERID       "pk-userid"
+#define KA_PROP_NAME_PK_ANCHORS      "pk-anchors"
+#define KA_PROP_NAME_PW_PROMPT_MINS  "pw-prompt-mins"
+#define KA_PROP_NAME_TGT_FORWARDABLE "tgt-forwardable"
+#define KA_PROP_NAME_TGT_PROXIABLE   "tgt-proxiable"
+#define KA_PROP_NAME_TGT_RENEWABLE   "tgt-renewable"
+#define KA_PROP_NAME_CONF_TICKETS    "conf-tickets"
 
 /* create the applet */
 KaApplet *ka_applet_create (void);

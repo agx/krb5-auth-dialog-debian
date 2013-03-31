@@ -1,6 +1,6 @@
 /* Krb5 Auth Applet -- Acquire and release kerberos tickets
  *
- * (C) 2008,2009,2010 Guido Guenther <agx@sigxcpu.org>
+ * (C) 2008,2009,2010,2013 Guido Guenther <agx@sigxcpu.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@
 #include "ka-applet-priv.h"
 #include "ka-dbus.h"
 #include "ka-kerberos.h"
-#include "ka-gconf-tools.h"
-#include "ka-gconf.h"
+#include "ka-settings.h"
 #include "ka-tools.h"
 #include "ka-main-window.h"
 #include "ka-plugin-loader.h"
@@ -51,6 +50,7 @@ enum {
     KA_PROP_TGT_FORWARDABLE,
     KA_PROP_TGT_PROXIABLE,
     KA_PROP_TGT_RENEWABLE,
+    KA_PROP_CONF_TICKETS,
 };
 
 
@@ -91,10 +91,10 @@ struct _KaAppletPrivate {
     gboolean startup_ccache;    /* ccache found on startup */
     gboolean auto_run;          /* only start with valid ccache */
 
-    /* GConf optins */
+    /* GSettings options */
     NotifyNotification *notification;   /* notification messages */
     char *krb_msg;              /* Additional banner delivered by Kerberos */
-    const char *notify_gconf_key;       /* disable notification gconf key */
+    const char *notify_key;     /* name of disable notification setting key */
     char *principal;            /* the principal to request */
     gboolean renewable;         /* credentials renewable? */
     char *pk_userid;            /* "userid" for pkint */
@@ -102,20 +102,23 @@ struct _KaAppletPrivate {
     gboolean tgt_forwardable;   /* request a forwardable ticket */
     gboolean tgt_renewable;     /* request a renewable ticket */
     gboolean tgt_proxiable;     /* request a proxiable ticket */
+    gboolean conf_tickets;      /* whether to display configuration tickets */
 
-    GConfClient *gconf;         /* gconf client */
+    GSettings *settings;         /* GSettings client */
 };
 
 
 static void ka_close_notification (KaApplet *self);
 static gboolean is_initialized;
 
-static void 
+static void
 ka_applet_activate (GApplication *application G_GNUC_UNUSED)
 {
+    KaApplet *self = KA_APPLET(application);
+
     if (is_initialized) {
         KA_DEBUG ("Main window activated");
-        ka_main_window_show ();
+        ka_main_window_show (self);
     } else
         is_initialized = TRUE;
 }
@@ -127,7 +130,7 @@ ka_applet_command_line (GApplication            *application,
 {
     KaApplet *self = KA_APPLET(application);
     KA_DEBUG ("Evaluating command line");
-    
+
     if (!self->priv->startup_ccache &&
         self->priv->auto_run)
         ka_applet_destroy (self);
@@ -160,7 +163,7 @@ ka_applet_local_command_line (GApplication *application,
     };
 
     KA_DEBUG ("Parsing local command line");
-    
+
     context = g_option_context_new ("- Kerberos 5 credential checking");
     g_option_context_add_main_entries (context, options, NULL);
     g_option_context_add_group (context, gtk_get_option_group (TRUE));
@@ -179,18 +182,102 @@ ka_applet_local_command_line (GApplication *application,
     return FALSE;
 }
 
+GtkWindow *ka_applet_last_focused_window (KaApplet *self)
+{
+    GList *l = gtk_application_get_windows (GTK_APPLICATION(self));
+
+    if (l != NULL )
+        return g_list_first (l)->data;
+
+    return NULL;
+}
+
+static void
+action_preferences (GSimpleAction *action G_GNUC_UNUSED,
+		    GVariant *parameter G_GNUC_UNUSED,
+		    gpointer userdata)
+{
+    KaApplet *self = userdata;
+
+    ka_preferences_window_show (self);
+}
+
+static void
+action_about (GSimpleAction *action G_GNUC_UNUSED,
+              GVariant *parameter G_GNUC_UNUSED,
+              gpointer userdata)
+{
+    KaApplet *self = KA_APPLET(userdata);
+
+    ka_show_about (self);
+}
+
+static void
+action_help (GSimpleAction *action G_GNUC_UNUSED,
+              GVariant *parameter G_GNUC_UNUSED,
+              gpointer userdata)
+{
+    KaApplet *self = KA_APPLET(userdata);
+    GtkWindow *window = ka_applet_last_focused_window (self);
+
+    ka_show_help (gtk_window_get_screen (window), NULL, NULL);
+}
+
+static void
+action_quit (GSimpleAction *action G_GNUC_UNUSED,
+             GVariant *parameter G_GNUC_UNUSED,
+             gpointer userdata)
+{
+    KaApplet *self = KA_APPLET (userdata);
+
+    ka_applet_destroy (self);
+}
+
+static GActionEntry app_entries[] = {
+    { "preferences", action_preferences, NULL, NULL, NULL, {0} },
+    { "about", action_about, NULL, NULL, NULL, {0} },
+    { "help", action_help, NULL, NULL, NULL, {0} },
+    { "quit", action_quit, NULL, NULL, NULL, {0} },
+};
+
+static void
+ka_applet_app_menu_create(KaApplet *self,
+                          GtkBuilder *uixml)
+{
+    const gchar *debug_no_app_menu;
+    GMenuModel *model = G_MENU_MODEL(gtk_builder_get_object (uixml,
+                                                             "app-menu"));
+    g_action_map_add_action_entries (G_ACTION_MAP (self),
+                                     app_entries, G_N_ELEMENTS (app_entries),
+                                     self);
+
+    g_assert (model != NULL);
+    gtk_application_set_app_menu (GTK_APPLICATION(self),
+                                  model);
+
+    debug_no_app_menu = g_getenv ("KRB5_AUTH_DIALOG_DEBUG_NO_APP_MENU");
+    if (debug_no_app_menu) {
+        KA_DEBUG ("Disabling app menu GtkSetting as requested...");
+        g_object_set (gtk_settings_get_default (),
+                      "gtk-shell-shows-app-menu", FALSE,
+                      NULL);
+    }
+}
+
 static void
 ka_applet_startup (GApplication *application)
 {
     KaApplet *self = KA_APPLET (application);
-    GtkWindow *main_window;
 
     KA_DEBUG ("Primary application");
 
+    G_APPLICATION_CLASS (ka_applet_parent_class)->startup (application);
+
     self->priv->startup_ccache = ka_kerberos_init (self);
-    main_window = ka_main_window_create (self, self->priv->uixml);
-    gtk_application_add_window (GTK_APPLICATION(self), main_window);
+    ka_main_window_create (self, self->priv->uixml);
     ka_preferences_window_create (self, self->priv->uixml);
+
+    ka_applet_app_menu_create(self, self->priv->uixml);
 }
 
 static void
@@ -243,6 +330,12 @@ ka_applet_set_property (GObject *object,
                   self->priv->tgt_renewable ? "True" : "False");
         break;
 
+    case KA_PROP_CONF_TICKETS:
+        self->priv->conf_tickets = g_value_get_boolean (value);
+        KA_DEBUG ("%s: %s", pspec->name,
+                  self->priv->tgt_renewable ? "True" : "False");
+        break;
+
     default:
         /* We don't have any other property... */
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -285,6 +378,10 @@ ka_applet_get_property (GObject *object,
 
     case KA_PROP_TGT_RENEWABLE:
         g_value_set_boolean (value, self->priv->tgt_renewable);
+        break;
+
+    case KA_PROP_CONF_TICKETS:
+        g_value_set_boolean (value, self->priv->conf_tickets);
         break;
 
     default:
@@ -367,25 +464,25 @@ ka_applet_class_init (KaAppletClass *klass)
     object_class->set_property = ka_applet_set_property;
     object_class->get_property = ka_applet_get_property;
 
-    pspec = g_param_spec_string ("principal",
+    pspec = g_param_spec_string (KA_PROP_NAME_PRINCIPAL,
                                  "Principal",
                                  "Get/Set Kerberos principal",
                                  "", G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
     g_object_class_install_property (object_class, KA_PROP_PRINCIPAL, pspec);
 
-    pspec = g_param_spec_string ("pk-userid",
+    pspec = g_param_spec_string (KA_PROP_NAME_PK_USERID,
                                  "PKinit identifier",
                                  "Get/Set Pkinit identifier",
                                  "", G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
     g_object_class_install_property (object_class, KA_PROP_PK_USERID, pspec);
 
-    pspec = g_param_spec_string ("pk-anchors",
+    pspec = g_param_spec_string (KA_PROP_NAME_PK_ANCHORS,
                                  "PKinit trust anchors",
                                  "Get/Set Pkinit trust anchors",
                                  "", G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
     g_object_class_install_property (object_class, KA_PROP_PK_ANCHORS, pspec);
 
-    pspec = g_param_spec_uint ("pw-prompt-mins",
+    pspec = g_param_spec_uint (KA_PROP_NAME_PW_PROMPT_MINS,
                                "Password prompting interval",
                                "Password prompting interval in minutes",
                                0, G_MAXUINT, MINUTES_BEFORE_PROMPTING,
@@ -393,7 +490,7 @@ ka_applet_class_init (KaAppletClass *klass)
     g_object_class_install_property (object_class,
                                      KA_PROP_PW_PROMPT_MINS, pspec);
 
-    pspec = g_param_spec_boolean ("tgt-forwardable",
+    pspec = g_param_spec_boolean (KA_PROP_NAME_TGT_FORWARDABLE,
                                   "Forwardable ticket",
                                   "wether to request forwardable tickets",
                                   FALSE,
@@ -401,7 +498,7 @@ ka_applet_class_init (KaAppletClass *klass)
     g_object_class_install_property (object_class,
                                      KA_PROP_TGT_FORWARDABLE, pspec);
 
-    pspec = g_param_spec_boolean ("tgt-proxiable",
+    pspec = g_param_spec_boolean (KA_PROP_NAME_TGT_PROXIABLE,
                                   "Proxiable ticket",
                                   "wether to request proxiable tickets",
                                   FALSE,
@@ -409,13 +506,22 @@ ka_applet_class_init (KaAppletClass *klass)
     g_object_class_install_property (object_class,
                                      KA_PROP_TGT_PROXIABLE, pspec);
 
-    pspec = g_param_spec_boolean ("tgt-renewable",
+    pspec = g_param_spec_boolean (KA_PROP_NAME_TGT_RENEWABLE,
                                   "Renewable ticket",
                                   "wether to request renewable tickets",
                                   FALSE,
                                   G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
     g_object_class_install_property (object_class,
                                      KA_PROP_TGT_RENEWABLE, pspec);
+
+    pspec = g_param_spec_boolean (KA_PROP_NAME_CONF_TICKETS,
+                                  "Configuration tickets",
+                                  "wether to show configuration tickets",
+                                  FALSE,
+                                  G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+    g_object_class_install_property (object_class,
+                                     KA_PROP_CONF_TICKETS, pspec);
+
     for (i=0; i < KA_SIGNAL_COUNT-1; i++) {
         guint signalId;
 
@@ -427,7 +533,7 @@ ka_applet_class_init (KaAppletClass *klass)
         klass->signals[i] = signalId;
     }
     klass->signals[KA_CCACHE_CHANGED] = g_signal_new (
-        ka_signal_names[KA_CCACHE_CHANGED], 
+        ka_signal_names[KA_CCACHE_CHANGED],
         G_OBJECT_CLASS_TYPE (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
         g_cclosure_marshal_VOID__VOID,
@@ -438,7 +544,7 @@ ka_applet_class_init (KaAppletClass *klass)
 static KaApplet *
 ka_applet_new (void)
 {
-    return g_object_new (KA_TYPE_APPLET, 
+    return g_object_new (KA_TYPE_APPLET,
                          "application-id", "org.gnome.KrbAuthDialog",
                          NULL);
 }
@@ -532,15 +638,20 @@ ka_notify_disable_action_cb (NotifyNotification *notification G_GNUC_UNUSED,
                               gpointer user_data)
 {
     KaApplet *self = KA_APPLET (user_data);
+    GSettings *ns = g_settings_get_child (self->priv->settings,
+                                              KA_SETTING_CHILD_NOTIFY);
 
     if (strcmp (action, "dont-show-again") == 0) {
-        KA_DEBUG ("turning of notification %s", self->priv->notify_gconf_key);
-        ka_gconf_set_bool (self->priv->gconf,
-                           self->priv->notify_gconf_key, FALSE);
-        self->priv->notify_gconf_key = NULL;
+        KA_DEBUG ("turning of notification %s", self->priv->notify_key);
+        if (!g_settings_set_boolean (ns,
+                                     self->priv->notify_key, FALSE)) {
+            g_warning("Failed to set %s", self->priv->notify_key);
+        }
+        self->priv->notify_key = NULL;
     } else {
         g_warning ("unkonwn action for callback");
     }
+    g_object_unref (ns);
 }
 
 
@@ -562,7 +673,7 @@ ka_notify_ticket_action_cb (NotifyNotification *notification G_GNUC_UNUSED,
         ka_destroy_ccache (self);
     } else if (strcmp (action, "ka-list-tickets") == 0) {
         KA_DEBUG ("Showing main window");
-        ka_main_window_show ();
+        ka_main_window_show (self);
     } else {
         g_warning ("unkonwn action for callback");
     }
@@ -620,6 +731,12 @@ ka_send_event_notification (KaApplet *self,
 #endif
         notify_notification_set_urgency (notification, NOTIFY_URGENCY_NORMAL);
     }
+
+#if HAVE_NOTIFY_NOTIFICATION_SET_HINT
+    notify_notification_set_hint (notification,
+                                  "desktop-entry",
+                                  g_variant_new_string (PACKAGE));
+#endif
 
     if (self->priv->ns_persistence) {
         hint = "resident";
@@ -685,6 +802,18 @@ ka_update_tray_icon (KaApplet *self, const char *icon, const char *tooltip)
     }
 }
 
+/* check whether a given notification is enabled */
+static gboolean
+get_notify_enabled (KaApplet *self, const char *key)
+{
+    gboolean ret;
+    GSettings *ns = g_settings_get_child (self->priv->settings,
+                                          KA_SETTING_CHILD_NOTIFY);
+    ret = g_settings_get_boolean (ns, key);
+    g_object_unref (ns);
+    return ret;
+}
+
 /*
  * update the tray icon's tooltip and icon
  * and notify listeners about acquired/expiring tickets via signals
@@ -705,10 +834,9 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
     if (remaining > 0) {
         if (expiry_notified || initial_notification) {
             const char* msg;
-            ka_gconf_get_bool (applet->priv->gconf,
-                               KA_GCONF_KEY_NOTIFY_VALID, &notify);
+            notify = get_notify_enabled (applet, KA_SETTING_KEY_NOTIFY_VALID);
             if (notify) {
-                applet->priv->notify_gconf_key = KA_GCONF_KEY_NOTIFY_VALID;
+                applet->priv->notify_key = KA_SETTING_KEY_NOTIFY_VALID;
 
                 if (applet->priv->krb_msg)
                     msg = applet->priv->krb_msg;
@@ -732,11 +860,11 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
             if (remaining < applet->priv->pw_prompt_secs
                 && (now - last_warn) > NOTIFY_SECONDS
                 && !applet->priv->renewable) {
-                ka_gconf_get_bool (applet->priv->gconf,
-                                   KA_GCONF_KEY_NOTIFY_EXPIRING, &notify);
+                notify = get_notify_enabled (applet,
+                                             KA_SETTING_KEY_NOTIFY_EXPIRING);
                 if (notify) {
-                    applet->priv->notify_gconf_key =
-                        KA_GCONF_KEY_NOTIFY_EXPIRING;
+                    applet->priv->notify_key =
+                        KA_SETTING_KEY_NOTIFY_EXPIRING;
                     ka_send_event_notification (applet,
                                                 _("Network credentials expiring"),
                                                 tooltip_text,
@@ -751,13 +879,12 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
         }
     } else {
         if (!expiry_notified) {
-            ka_gconf_get_bool (applet->priv->gconf,
-                               KA_GCONF_KEY_NOTIFY_EXPIRED, &notify);
+            notify = get_notify_enabled (applet, KA_SETTING_KEY_NOTIFY_EXPIRED);
             if (notify) {
-                applet->priv->notify_gconf_key = KA_GCONF_KEY_NOTIFY_EXPIRED;
+                applet->priv->notify_key = KA_SETTING_KEY_NOTIFY_EXPIRED;
                 ka_send_event_notification (applet,
                                             _("Network credentials expired"),
-                                            _("Your Kerberos credentails have expired."),
+                                            _("Your Kerberos credentials have expired."),
                                             "krb-no-valid-ticket",
                                             TRUE);
             }
@@ -776,7 +903,7 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
 
 
 static void
-ka_applet_menu_add_separator_item (GtkWidget *menu)
+ka_applet_tray_icon_menu_add_separator_item (GtkWidget *menu)
 {
     GtkWidget *menu_item;
 
@@ -788,7 +915,8 @@ ka_applet_menu_add_separator_item (GtkWidget *menu)
 
 /* Free all resources and quit */
 static void
-ka_applet_quit_cb (GtkMenuItem *menuitem G_GNUC_UNUSED, gpointer user_data)
+ka_applet_tray_icon_quit_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
+                             gpointer user_data)
 {
     KaApplet *applet = KA_APPLET (user_data);
 
@@ -797,8 +925,8 @@ ka_applet_quit_cb (GtkMenuItem *menuitem G_GNUC_UNUSED, gpointer user_data)
 
 
 static void
-ka_applet_show_help_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
-                        gpointer user_data)
+ka_applet_tray_icon_show_help_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
+                                  gpointer user_data)
 {
     KaApplet *applet = KA_APPLET (user_data);
 
@@ -808,8 +936,8 @@ ka_applet_show_help_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
 
 
 static void
-ka_applet_destroy_ccache_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
-                             gpointer user_data)
+ka_applet_tray_icon_destroy_ccache_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
+                                       gpointer user_data)
 {
     KaApplet *applet = KA_APPLET (user_data);
 
@@ -817,10 +945,10 @@ ka_applet_destroy_ccache_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
 }
 
 static void
-ka_applet_show_tickets_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
-                           gpointer user_data G_GNUC_UNUSED)
+ka_applet_tray_icon_show_tickets_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
+                                     gpointer user_data)
 {
-    ka_main_window_show ();
+    ka_main_window_show (KA_APPLET(user_data));
 }
 
 
@@ -838,31 +966,32 @@ ka_applet_create_context_menu (KaApplet *applet)
     menu_item =
         gtk_image_menu_item_new_with_mnemonic (_("Remove Credentials _Cache"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_destroy_ccache_cb), applet);
+                      G_CALLBACK (ka_applet_tray_icon_destroy_ccache_cb),
+                      applet);
     image = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_MENU);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
-    ka_applet_menu_add_separator_item (menu);
+    ka_applet_tray_icon_menu_add_separator_item (menu);
 
     /* Ticket dialog */
     menu_item = gtk_image_menu_item_new_with_mnemonic (_("_List Tickets"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_show_tickets_cb), applet);
+                      G_CALLBACK (ka_applet_tray_icon_show_tickets_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     /* Help item */
     menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_HELP, NULL);
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_show_help_cb), applet);
+                      G_CALLBACK (ka_applet_tray_icon_show_help_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
-    ka_applet_menu_add_separator_item (menu);
+    ka_applet_tray_icon_menu_add_separator_item (menu);
 
     /* Quit */
     menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
     g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (ka_applet_quit_cb), applet);
+                      G_CALLBACK (ka_applet_tray_icon_quit_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     gtk_widget_show_all (menu);
@@ -957,10 +1086,10 @@ ka_applet_get_pwdialog (const KaApplet *applet)
     return applet->priv->pwdialog;
 }
 
-GConfClient *
-ka_applet_get_gconf_client (const KaApplet *self)
+GSettings *
+ka_applet_get_settings (const KaApplet *self)
 {
-    return self->priv->gconf;
+    return self->priv->settings;
 }
 
 void
@@ -1030,11 +1159,12 @@ ka_applet_destroy (KaApplet* self)
     windows = gtk_application_get_windows (GTK_APPLICATION(self));
     if (windows) {
         first = g_list_first (windows);
-        gtk_application_remove_window(GTK_APPLICATION (self), 
+        gtk_application_remove_window(GTK_APPLICATION (self),
                                       GTK_WINDOW (first->data));
     }
 
     ka_kerberos_destroy ();
+    ka_preferences_window_destroy ();
 }
 
 
@@ -1070,8 +1200,8 @@ ka_applet_create ()
     applet->priv->pwdialog = ka_pwdialog_create (applet->priv->uixml);
     g_return_val_if_fail (applet->priv->pwdialog != NULL, NULL);
 
-    applet->priv->gconf = ka_gconf_init (applet);
-    g_return_val_if_fail (applet->priv->gconf != NULL, NULL);
+    applet->priv->settings = ka_settings_init (applet);
+    g_return_val_if_fail (applet->priv->settings != NULL, NULL);
 
     applet->priv->loader = ka_plugin_loader_create (applet);
     g_return_val_if_fail (applet->priv->loader != NULL, NULL);
