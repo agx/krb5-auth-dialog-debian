@@ -144,16 +144,11 @@
     <varlistentry>
       <term>Befehlszeile</term>
       <listitem>
-	<para>
-	  Type <command>krb5-auth-dialog</command>,
-          then press <keycap>Return</keycap>:
-        </para>
+	<para>Geben Sie <command>krb5-auth-dialog</command> ein und drücken Sie anschließend die <keycap>Eingabetaste</keycap>:</para>
       </listitem>
     </varlistentry>
   </variablelist>
-  <para>
-    The tray icon will indicate one of three states:
-  </para>
+  <para>Das Benachrichtigungssymbol zeigt einen der folgenden drei Zustände an:</para>
 
   <section id="trayicon-valid">
     <title>Gültiges Kerberos-Ticket</title>

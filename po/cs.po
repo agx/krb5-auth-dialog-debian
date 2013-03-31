@@ -9,25 +9,123 @@ msgstr ""
 "Project-Id-Version: krb5-auth-dialog master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=krb5-"
 "auth-dialog&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-09 10:02+0000\n"
+"POT-Creation-Date: 2012-10-02 20:29+0000\n"
 "PO-Revision-Date: 2011-09-05 08:42+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../src/krb5-auth-dialog.ui.h:1
+#.
+#. * vim:ts:sts=4:sw=4:et:
+#.
+#: ../src/krb5-auth-dialog.ui.h:1 ../src/krb5-auth-dialog.desktop.in.h:1
+msgid "Kerberos Authentication"
+msgstr "Autentizace Kerberos"
+
+#: ../src/krb5-auth-dialog.ui.h:2
+msgid "_Renew Ticket"
+msgstr "_Obnovit lístek"
+
+#: ../src/krb5-auth-dialog.ui.h:3
+msgid "Service Tickets"
+msgstr "Lístky služeb"
+
+#: ../src/krb5-auth-dialog.ui.h:4
+msgid "_File"
+msgstr "_Soubor"
+
+#: ../src/krb5-auth-dialog.ui.h:5
+msgid "_Edit"
+msgstr "Ú_pravy"
+
+#: ../src/krb5-auth-dialog.ui.h:6
+msgid "_Help"
+msgstr "Nápo_věda"
+
+#: ../src/krb5-auth-dialog.ui.h:7
+msgid "Kerberos User"
+msgstr "Uživatel"
+
+#: ../src/krb5-auth-dialog.ui.h:8
+msgid ""
+"The name of your Kerberos account. Leave blank to use your current username."
+msgstr ""
+"Název vašeho účtu Kerberos. Ponechte prázdné, pokud chcete použít aktuální "
+"uživatelské jméno."
+
+#: ../src/krb5-auth-dialog.ui.h:9
+msgid "Kerberos principal:"
+msgstr "Principal:"
+
+#: ../src/krb5-auth-dialog.ui.h:10
+msgid "Kerberos Ticket Options"
+msgstr "Vlastnosti lístku Kerberos"
+
+#: ../src/krb5-auth-dialog.ui.h:11
+msgid "Requested Kerberos tickets should be:"
+msgstr "Požadované lístky Kerberos mohou být:"
+
+#: ../src/krb5-auth-dialog.ui.h:12
+msgid "forwardable"
+msgstr "přenositelné"
+
+#: ../src/krb5-auth-dialog.ui.h:13
+msgid "If checked, request forwardable tickets"
+msgstr "Je-li zaškrtnuto, požadovat přenositelné (forwardable) lístky"
+
+#: ../src/krb5-auth-dialog.ui.h:14
+msgid "renewable"
+msgstr "obnovitelné"
+
+#: ../src/krb5-auth-dialog.ui.h:15
+msgid "If checked, request renewable tickets"
+msgstr "Je-li zaškrtnuto, požadovat obnovitelné (renewable) lístky"
+
+#: ../src/krb5-auth-dialog.ui.h:16
+msgid "proxiable"
+msgstr "delegovatelné"
+
+#: ../src/krb5-auth-dialog.ui.h:17
+msgid "If checked, request proxiable tickets"
+msgstr "Je-li zaškrtnuto, požadovat delegovatelné (proxiable) lístky"
+
+#: ../src/krb5-auth-dialog.ui.h:18
+msgid "Kerberos"
+msgstr "Kerberos"
+
+#: ../src/krb5-auth-dialog.ui.h:19
+msgid "Userid"
+msgstr "Id uživatele"
+
+#: ../src/krb5-auth-dialog.ui.h:20
+msgid "Use Smartcard"
+msgstr "Použít čipovou kartu"
+
+#: ../src/krb5-auth-dialog.ui.h:21
+msgid "If checked, use a security token (Smartcard) to authenticate."
+msgstr "Je-li zaškrtnuto, používat k ověřování bezpečnostní token (čipovou kartu)."
+
+#: ../src/krb5-auth-dialog.ui.h:22
 msgid "Certificate and private key used for authentication"
 msgstr "Certifikát a soukromý klíč použitý k autentizaci"
 
-#: ../src/krb5-auth-dialog.ui.h:2
+#: ../src/krb5-auth-dialog.ui.h:23
+msgid "_Browse..."
+msgstr "_Procházet..."
+
+#: ../src/krb5-auth-dialog.ui.h:24
+msgid "X509 trust anchors"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.ui.h:25
 msgid "Certificate used to verify digital signatures."
 msgstr "Certifikát použitý pro ověření digitálních podpisů."
 
-#: ../src/krb5-auth-dialog.ui.h:3
+#: ../src/krb5-auth-dialog.ui.h:26
 msgid ""
 "Configure the use of certificates and smartcards for your Kerberos network "
 "authentication."
@@ -35,137 +133,41 @@ msgstr ""
 "Nastavit použití certifikátů a čipových karet při síťové autentizaci "
 "Kerberos."
 
-#: ../src/krb5-auth-dialog.ui.h:4
-msgid "If checked, request forwardable tickets"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.ui.h:5
-msgid "If checked, request proxiable tickets"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.ui.h:6
-msgid "If checked, request renewable tickets"
-msgstr "Pokud je zaškrtnuto, požadovat obnovitelné lístky"
-
-#: ../src/krb5-auth-dialog.ui.h:7
-msgid "If checked, use a security token (Smartcard) to authenticate."
-msgstr ""
-
-#: ../src/krb5-auth-dialog.ui.h:8
-msgid "Kerberos"
-msgstr "Kerberos"
-
-#.
-#. * vim:ts:sts=4:sw=4:et:
-#.
-#: ../src/krb5-auth-dialog.ui.h:9 ../src/krb5-auth-dialog.desktop.in.h:1
-msgid "Kerberos Authentication"
-msgstr "Autentizace Kerberos"
-
-#: ../src/krb5-auth-dialog.ui.h:10
-msgid "Kerberos Ticket Options"
-msgstr "Vlastnosti lístku Kerberos"
-
-#: ../src/krb5-auth-dialog.ui.h:11
-msgid "Kerberos User"
-msgstr "Uživatel"
-
-#: ../src/krb5-auth-dialog.ui.h:12
-msgid "Kerberos principal:"
-msgstr "Principal:"
-
-#: ../src/krb5-auth-dialog.ui.h:13
-msgid "Notifications"
-msgstr "Upozornění"
-
-#: ../src/krb5-auth-dialog.ui.h:14
+#: ../src/krb5-auth-dialog.ui.h:27
 msgid "PKINIT"
 msgstr "PKINIT"
 
-#: ../src/krb5-auth-dialog.ui.h:15
-msgid "Requested Kerberos tickets should be:"
-msgstr "Požadované lístky Kerberos mohou být:"
+#: ../src/krb5-auth-dialog.ui.h:28
+msgid "Notifications"
+msgstr "Upozornění"
 
-#: ../src/krb5-auth-dialog.ui.h:16
+#. Used in combination: 'Warn x minutes before expiry'
+#: ../src/krb5-auth-dialog.ui.h:30
+msgid "Warn"
+msgstr "Upozornit"
+
+#: ../src/krb5-auth-dialog.ui.h:31
 msgid ""
 "Send notification about ticket expiry that many minutes before it finally "
 "expires"
 msgstr ""
-
-#: ../src/krb5-auth-dialog.ui.h:17
-msgid "Service Tickets"
-msgstr "Lístky služeb"
-
-#: ../src/krb5-auth-dialog.ui.h:18
-msgid ""
-"The name of your Kerberos account. Leave blank to use your current username."
-msgstr ""
-"Název vašeho účtu Kerberos. Ponechte prázdné, pokud chcete použít aktuální "
-"uživatelské jméno."
-
-#: ../src/krb5-auth-dialog.ui.h:19
-msgid "Use Smartcard"
-msgstr "Použít čipovou kartu"
-
-#: ../src/krb5-auth-dialog.ui.h:20
-msgid "Userid"
-msgstr "Id uživatele"
+"Posílat oznámení o vypršení platnosti lístku tento počet minut před končeným "
+"vypršením"
 
 #. Used in combination: 'Warn x minutes before expiry'
-#: ../src/krb5-auth-dialog.ui.h:22
-msgid "Warn"
-msgstr "Upozornit"
-
-#: ../src/krb5-auth-dialog.ui.h:23
-msgid "X509 trust anchors"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.ui.h:24
-msgid "_Browse..."
-msgstr "_Procházet..."
-
-#: ../src/krb5-auth-dialog.ui.h:25
-msgid "_Edit"
-msgstr "Ú_pravy"
-
-#: ../src/krb5-auth-dialog.ui.h:26
-msgid "_File"
-msgstr "_Soubor"
-
-#: ../src/krb5-auth-dialog.ui.h:27
-msgid "_Help"
-msgstr "Nápo_věda"
-
-#: ../src/krb5-auth-dialog.ui.h:28
-msgid "_Renew Ticket"
-msgstr "_Obnovit lístek"
-
-#: ../src/krb5-auth-dialog.ui.h:29
-msgid "forwardable"
-msgstr ""
-
-#. Used in combination: 'Warn x minutes before expiry'
-#: ../src/krb5-auth-dialog.ui.h:31
+#: ../src/krb5-auth-dialog.ui.h:33
 msgid "minutes before ticket expiry"
 msgstr "minut do vypršení lístku"
 
-#: ../src/krb5-auth-dialog.ui.h:32
-msgid "proxiable"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.ui.h:33
-msgid "renewable"
-msgstr ""
-
-#: ../src/ka-dialog.c:177
+#: ../src/ka-kerberos.c:177
 msgid "unknown error"
 msgstr "neznámá chyba"
 
-#: ../src/ka-dialog.c:317
+#: ../src/ka-kerberos.c:317
 msgid "Your ticket cache is currently empty"
 msgstr "Mezipaměť vašich přihlašovacích údajů je prázdná"
 
-#: ../src/ka-dialog.c:343
+#: ../src/ka-kerberos.c:341
 msgid "Expired"
 msgstr "Platnost vypršela"
 
@@ -174,26 +176,26 @@ msgstr "Platnost vypršela"
 msgid "Couldn't acquire kerberos ticket: '%s'"
 msgstr "Nelze získat lístek: '%s'"
 
-#: ../src/ka-pwdialog.c:217 ../src/ka-applet.c:368
+#: ../src/ka-pwdialog.c:217 ../src/ka-applet.c:466
 #, c-format
 msgid "Your credentials expire in %d minute"
 msgid_plural "Your credentials expire in %d minutes"
-msgstr[0] "Vaše přihlašovací údaje vyprší za %d minutu"
-msgstr[1] "Vaše přihlašovací údaje vyprší za %d minuty"
-msgstr[2] "Vaše přihlašovací údaje vyprší za %d minut"
+msgstr[0] "Vaše pověření údaje vyprší za %d minutu"
+msgstr[1] "Vaše pověření vyprší za %d minuty"
+msgstr[2] "Vaše pověření vyprší za %d minut"
 
-#: ../src/ka-pwdialog.c:222 ../src/ka-applet.c:373
+#: ../src/ka-pwdialog.c:222 ../src/ka-applet.c:471
 msgid "Your credentials have expired"
-msgstr "Vaše přihlašovací údaje vypršely"
+msgstr "Vaše pověření vypršelo"
 
 #: ../src/ka-pwdialog.c:245
 msgid "Please enter your Kerberos password:"
-msgstr "Vložte prosím své Kerberos heslo:"
+msgstr "Vložte prosím své heslo Kerberos:"
 
 #: ../src/ka-pwdialog.c:258
 #, c-format
 msgid "Please enter the password for '%s':"
-msgstr "Vložte prosím své heslo pro '%s':"
+msgstr "Vložte prosím své heslo pro „%s“:"
 
 #: ../src/ka-pwdialog.c:276
 msgid "The password you entered is invalid"
@@ -325,7 +327,7 @@ msgstr "Klient nebo server mají prázdný klíč"
 #. krb5_err.et:krb5:KRB5KDC_ERR_NULL_KEY
 #: ../src/dummy-strings.c:33
 msgid "Ticket is ineligible for postdating"
-msgstr ""
+msgstr "Lístek není použitelný pro odloženou platnost"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_CANNOT_POSTDATE
 #: ../src/dummy-strings.c:34
@@ -365,12 +367,12 @@ msgstr "KDC nemá podporu pro datový typ transited"
 #. krb5_err.et:krb5:KRB5KDC_ERR_TRTYPE_NOSUPP
 #: ../src/dummy-strings.c:41
 msgid "Clients credentials have been revoked"
-msgstr "Přihlašovací údaje klienta byly zneplatněny"
+msgstr "Pověření klienta bylo odvoláno"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_CLIENT_REVOKED
 #: ../src/dummy-strings.c:42
 msgid "Credentials for server have been revoked"
-msgstr "Přihlašovací údaje severu byly zneplatněny"
+msgstr "Pověření severu bylo odvoláno"
 
 #. krb5_err.et:krb5:KRB5KDC_ERR_SERVICE_REVOKED
 #: ../src/dummy-strings.c:43
@@ -475,7 +477,7 @@ msgstr "Zpráva mimo pořadí"
 #. krb5_err.et:krb5:KRB5KRB_AP_ERR_BADORDER
 #: ../src/dummy-strings.c:63
 msgid "Illegal cross-realm ticket"
-msgstr ""
+msgstr "Neplatný lístek napříč sférami"
 
 #. krb5_err.et:krb5:KRB5KRB_AP_ERR_ILL_CR_TKT
 #: ../src/dummy-strings.c:64
@@ -651,7 +653,7 @@ msgstr "Neplatný znak v názvu komponenty"
 #. krb5_err.et:krb5:KRB5_PARSE_ILLCHAR
 #: ../src/dummy-strings.c:98
 msgid "Malformed representation of principal"
-msgstr ""
+msgstr "Poškozená reprezentace principalu"
 
 #. krb5_err.et:krb5:KRB5_PARSE_MALFORMED
 #: ../src/dummy-strings.c:99
@@ -671,32 +673,32 @@ msgstr "Nedostatek místa pro vrácení úplné informace"
 #. krb5_err.et:krb5:KRB5_CONFIG_NOTENUFSPACE
 #: ../src/dummy-strings.c:102
 msgid "Invalid message type specified for encoding"
-msgstr ""
+msgstr "Neplatný typ zprávy určené pro kódování"
 
 #. krb5_err.et:krb5:KRB5_BADMSGTYPE
 #: ../src/dummy-strings.c:103
 msgid "Credential cache name malformed"
-msgstr ""
+msgstr "Chybný název mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_CC_BADNAME
 #: ../src/dummy-strings.c:104
 msgid "Unknown credential cache type"
-msgstr ""
+msgstr "Neznámý typ mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_CC_UNKNOWN_TYPE
 #: ../src/dummy-strings.c:105
 msgid "Matching credential not found"
-msgstr ""
+msgstr "Odopvídající pověření nebylo nalezeno"
 
 #. krb5_err.et:krb5:KRB5_CC_NOTFOUND
 #: ../src/dummy-strings.c:106
 msgid "End of credential cache reached"
-msgstr ""
+msgstr "Dosažen konec mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_CC_END
 #: ../src/dummy-strings.c:107
 msgid "Request did not supply a ticket"
-msgstr ""
+msgstr "Žádost neposkytla lístek"
 
 #. krb5_err.et:krb5:KRB5_NO_TKT_SUPPLIED
 #: ../src/dummy-strings.c:108
@@ -721,22 +723,22 @@ msgstr "Odpověď KDC nesplnila očekávání"
 #. krb5_err.et:krb5:KRB5_KDCREP_MODIFIED
 #: ../src/dummy-strings.c:112
 msgid "Clock skew too great in KDC reply"
-msgstr ""
+msgstr "Zkreslení hodin v odpovědi KDC je příliš velké"
 
 #. krb5_err.et:krb5:KRB5_KDCREP_SKEW
 #: ../src/dummy-strings.c:113
 msgid "Client/server realm mismatch in initial ticket request"
-msgstr ""
+msgstr "Nesouhlasí sféry klienta/serveru požadavku na počáteční tiket"
 
 #. krb5_err.et:krb5:KRB5_IN_TKT_REALM_MISMATCH
 #: ../src/dummy-strings.c:114
 msgid "Program lacks support for encryption type"
-msgstr ""
+msgstr "Program postrádá podporu pro typ šifrování"
 
 #. krb5_err.et:krb5:KRB5_PROG_ETYPE_NOSUPP
 #: ../src/dummy-strings.c:115
 msgid "Program lacks support for key type"
-msgstr ""
+msgstr "Program postrádá podporu pro typ klíče"
 
 #. krb5_err.et:krb5:KRB5_PROG_KEYTYPE_NOSUPP
 #: ../src/dummy-strings.c:116
@@ -746,12 +748,12 @@ msgstr "Ve zprávě nebyl použit požadovaný typ šifrování"
 #. krb5_err.et:krb5:KRB5_WRONG_ETYPE
 #: ../src/dummy-strings.c:117
 msgid "Program lacks support for checksum type"
-msgstr ""
+msgstr "Program postrádá podporu pro typ kontrolního součtu"
 
 #. krb5_err.et:krb5:KRB5_PROG_SUMTYPE_NOSUPP
 #: ../src/dummy-strings.c:118
 msgid "Cannot find KDC for requested realm"
-msgstr "Nelze nalézt KDC pro požadovanou doménu"
+msgstr "Nelze nalézt KDC pro požadovanou sféru"
 
 #. krb5_err.et:krb5:KRB5_REALM_UNKNOWN
 #: ../src/dummy-strings.c:119
@@ -761,17 +763,17 @@ msgstr "Neznámá služba Kerberos"
 #. krb5_err.et:krb5:KRB5_SERVICE_UNKNOWN
 #: ../src/dummy-strings.c:120
 msgid "Cannot contact any KDC for requested realm"
-msgstr "Pro požadovaný realm nelze kontaktovat žádný KDC"
+msgstr "Pro požadovanou sféru nelze kontaktovat žádný KDC"
 
 #. krb5_err.et:krb5:KRB5_KDC_UNREACH
 #: ../src/dummy-strings.c:121
 msgid "No local name found for principal name"
-msgstr ""
+msgstr "Nenalezen místní název pro název principalu"
 
 #. krb5_err.et:krb5:KRB5_MUTUAL_FAILED
 #: ../src/dummy-strings.c:123
 msgid "Replay cache type is already registered"
-msgstr ""
+msgstr "Typ mezipaměti odpovědí je již zaregistrován"
 
 #. krb5_err.et:krb5:KRB5_RC_TYPE_EXISTS
 #: ../src/dummy-strings.c:124
@@ -781,7 +783,7 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5_RC_MALLOC
 #: ../src/dummy-strings.c:125
 msgid "Replay cache type is unknown"
-msgstr ""
+msgstr "Typ mezipaměti odpovědí je neznámý"
 
 #. krb5_err.et:krb5:KRB5_RC_TYPE_NOTFOUND
 #: ../src/dummy-strings.c:126
@@ -806,12 +808,12 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5_RC_NOIO
 #: ../src/dummy-strings.c:130
 msgid "Replay cache name parse/format error"
-msgstr ""
+msgstr "Chyba zpracování/formátu názvu mezipaměti odpovědí"
 
 #. krb5_err.et:krb5:KRB5_RC_PARSE
 #: ../src/dummy-strings.c:131
 msgid "End-of-file on replay cache I/O"
-msgstr ""
+msgstr "Konec souboru při V/V operaci na mezipaměti odpovědí"
 
 #. krb5_err.et:krb5:KRB5_RC_IO_EOF
 #: ../src/dummy-strings.c:132
@@ -901,7 +903,7 @@ msgstr "Chyba zápisu do tabulky klíčů"
 #. krb5_err.et:krb5:KRB5_KT_IOERR
 #: ../src/dummy-strings.c:149
 msgid "Cannot find ticket for requested realm"
-msgstr "Pro požadovanou doménu nelze najít lístek"
+msgstr "Pro požadovanou sféru nelze najít lístek"
 
 #. krb5_err.et:krb5:KRB5_NO_TKT_IN_RLM
 #: ../src/dummy-strings.c:150
@@ -921,17 +923,17 @@ msgstr "Nesprávný způsob šifrování"
 #. krb5_err.et:krb5:KRB5_BAD_ENCTYPE
 #: ../src/dummy-strings.c:153
 msgid "Key size is incompatible with encryption type"
-msgstr ""
+msgstr "Velikost klíče je nekompatibilní s typem šifrování"
 
 #. krb5_err.et:krb5:KRB5_BAD_KEYSIZE
 #: ../src/dummy-strings.c:154
 msgid "Message size is incompatible with encryption type"
-msgstr ""
+msgstr "Velikost zprávy je nekompatibilní s typem šifrování"
 
 #. krb5_err.et:krb5:KRB5_BAD_MSIZE
 #: ../src/dummy-strings.c:155
 msgid "Credentials cache type is already registered."
-msgstr ""
+msgstr "Typ mezipaměti s pověřeními je již zaregistrován."
 
 #. krb5_err.et:krb5:KRB5_CC_TYPE_EXISTS
 #: ../src/dummy-strings.c:156
@@ -941,27 +943,27 @@ msgstr "Typ tabulky s klíči je již zaregistrován"
 #. krb5_err.et:krb5:KRB5_KT_TYPE_EXISTS
 #: ../src/dummy-strings.c:157
 msgid "Credentials cache I/O operation failed XXX"
-msgstr ""
+msgstr "V/V operace mezipaměti s pověřeními selhala XXX"
 
 #. krb5_err.et:krb5:KRB5_CC_IO
 #: ../src/dummy-strings.c:158
 msgid "Credentials cache permissions incorrect"
-msgstr "Nesprávná oprávnění mezipaměti přihlašovacích údajů"
+msgstr "Nesprávná oprávnění mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_FCC_PERM
 #: ../src/dummy-strings.c:159
 msgid "No credentials cache found"
-msgstr "Nebyla nalezena mezipaměť přihlašovacích údajů"
+msgstr "Nebyla nalezena mezipaměť s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_FCC_NOFILE
 #: ../src/dummy-strings.c:160
 msgid "Internal credentials cache error"
-msgstr ""
+msgstr "Interní chyba mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_FCC_INTERNAL
 #: ../src/dummy-strings.c:161
 msgid "Error writing to credentials cache"
-msgstr ""
+msgstr "Chyba zápisu do mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_CC_WRITE
 #: ../src/dummy-strings.c:162
@@ -971,22 +973,22 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5_CC_NOMEM
 #: ../src/dummy-strings.c:163
 msgid "Bad format in credentials cache"
-msgstr ""
+msgstr "Chybný formát v mezipaměti pověření"
 
 #. krb5_err.et:krb5:KRB5_CC_FORMAT
 #: ../src/dummy-strings.c:164
 msgid "No credentials found with supported encryption types"
-msgstr ""
+msgstr "Nebylo nalezeno žádné pověření s podporovanými typy šifrování"
 
 #. krb5_err.et:krb5:KRB5_CC_NOT_KTYPE
 #: ../src/dummy-strings.c:165
 msgid "Invalid KDC option combination (library internal error)"
-msgstr ""
+msgstr "Neplatná kombinace voleb KDC (interní chyba knihovny)"
 
 #. krb5_err.et:krb5:KRB5_INVALID_FLAGS
 #: ../src/dummy-strings.c:166
 msgid "Request missing second ticket"
-msgstr ""
+msgstr "Požadavku schází druhý lístek"
 
 #. krb5_err.et:krb5:KRB5_NO_2ND_TKT
 #: ../src/dummy-strings.c:167
@@ -1031,17 +1033,17 @@ msgstr "Obecná chyba preautentizace"
 #. krb5_err.et:krb5:KRB5_PREAUTH_FAILED
 #: ../src/dummy-strings.c:175
 msgid "Unsupported replay cache format version number"
-msgstr ""
+msgstr "Nepodporované číslo verze formátu u mezipaměti odpovědí"
 
 #. krb5_err.et:krb5:KRB5_RCACHE_BADVNO
 #: ../src/dummy-strings.c:176
 msgid "Unsupported credentials cache format version number"
-msgstr ""
+msgstr "Nepodporované číslo verze formátu mezipaměti s pověřeními"
 
 #. krb5_err.et:krb5:KRB5_CCACHE_BADVNO
 #: ../src/dummy-strings.c:177
 msgid "Unsupported key table format version number"
-msgstr ""
+msgstr "Nepodporované číslo verze formátu tabulky s klíči"
 
 #. krb5_err.et:krb5:KRB5_KEYTAB_BADVNO
 #: ../src/dummy-strings.c:178
@@ -1061,7 +1063,7 @@ msgstr "Název počítače nelze převést do kanonického tvaru"
 #. krb5_err.et:krb5:KRB5_ERR_BAD_HOSTNAME
 #: ../src/dummy-strings.c:181
 msgid "Cannot determine realm for host"
-msgstr "Nelze zjistit realm pro hosta"
+msgstr "Nelze určit sféru pro počítač"
 
 #. krb5_err.et:krb5:KRB5_ERR_HOST_REALM_UNKNOWN
 #: ../src/dummy-strings.c:182
@@ -1076,7 +1078,7 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5KRB_AP_ERR_V4_REPLY
 #: ../src/dummy-strings.c:184
 msgid "Cannot resolve network address for KDC in requested realm"
-msgstr ""
+msgstr "Nelze zjistit síťovou adresu pro KDC v požadované sféře"
 
 #. krb5_err.et:krb5:KRB5_REALM_CANT_RESOLVE
 #: ../src/dummy-strings.c:185
@@ -1086,17 +1088,17 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5_TKT_NOT_FORWARDABLE
 #: ../src/dummy-strings.c:186
 msgid "Bad principal name while trying to forward credentials"
-msgstr ""
+msgstr "Chybný název principalu při pokusu o předání pověření"
 
 #. krb5_err.et:krb5:KRB5_FWD_BAD_PRINCIPAL
 #: ../src/dummy-strings.c:187
 msgid "Looping detected inside krb5_get_in_tkt"
-msgstr ""
+msgstr "Zjištěno zacyklení v krb5_get_in_tkt"
 
 #. krb5_err.et:krb5:KRB5_GET_IN_TKT_LOOP
 #: ../src/dummy-strings.c:188
 msgid "Configuration file does not specify default realm"
-msgstr ""
+msgstr "Soubor s nastavením neurčuje výchozí sféru"
 
 #. krb5_err.et:krb5:KRB5_CONFIG_NODEFREALM
 #: ../src/dummy-strings.c:189
@@ -1121,12 +1123,12 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5_SAM_BAD_CHECKSUM
 #: ../src/dummy-strings.c:193
 msgid "Keytab name too long"
-msgstr ""
+msgstr "Název tabulky s klíči je příliš dlouhý"
 
 #. krb5_err.et:krb5:KRB5_KT_NAME_TOOLONG
 #: ../src/dummy-strings.c:194
 msgid "Key version number for principal in key table is incorrect"
-msgstr ""
+msgstr "Číslo verze klíče pro principal v tabulce klíčů je nesprávné"
 
 #. krb5_err.et:krb5:KRB5_KT_KVNONOTFOUND
 #: ../src/dummy-strings.c:195
@@ -1151,7 +1153,7 @@ msgstr "Změna hesla selhala"
 #. krb5_err.et:krb5:KRB5_CHPW_FAIL
 #: ../src/dummy-strings.c:199
 msgid "Bad format in keytab"
-msgstr ""
+msgstr "Chybný formát v tabulce klíčů"
 
 #. krb5_err.et:krb5:KRB5_KT_FORMAT
 #: ../src/dummy-strings.c:200
@@ -1176,7 +1178,7 @@ msgstr "selhání funkce getaddrinfo z neznámých příčin"
 #. krb5_err.et:krb5:KRB5_EAI_FAIL
 #: ../src/dummy-strings.c:204
 msgid "no data available for host/domain name"
-msgstr ""
+msgstr "nejsou dostupná žádná data pro název počítače/domény"
 
 #. krb5_err.et:krb5:KRB5_EAI_NODATA
 #: ../src/dummy-strings.c:205
@@ -1191,7 +1193,7 @@ msgstr "neznámé jméno služby"
 #. krb5_err.et:krb5:KRB5_EAI_SERVICE
 #: ../src/dummy-strings.c:207
 msgid "Cannot determine realm for numeric host address"
-msgstr ""
+msgstr "Nelze určit sféru pro číselnou adresu počítače"
 
 #. krb5_err.et:krb5:KRB5_ERR_NUMERIC_REALM
 #: ../src/dummy-strings.c:208
@@ -1206,12 +1208,12 @@ msgstr "služba není dostupná"
 #. krb5_err.et:krb5:KRB5_ERR_NO_SERVICE
 #: ../src/dummy-strings.c:210
 msgid "Ccache function not supported: read-only ccache type"
-msgstr ""
+msgstr "Funkce Ccache není podporována: typ ccache je ke čtení"
 
 #. krb5_err.et:krb5:KRB5_CC_READONLY
 #: ../src/dummy-strings.c:211
 msgid "Ccache function not supported: not implemented"
-msgstr ""
+msgstr "Funkce Ccache není podporována: neimplementováno"
 
 #. krb5_err.et:krb5:KRB5_CC_NOSUPP
 #: ../src/dummy-strings.c:212
@@ -1221,7 +1223,7 @@ msgstr ""
 #. krb5_err.et:krb5:KRB5_DELTAT_BADFORMAT
 #: ../src/dummy-strings.c:213
 msgid "Supplied data not handled by this plugin"
-msgstr ""
+msgstr "Dodaná data nejsou obsluhována tímto zásuvným modulem"
 
 #. krb5_err.et:krb5:KRB5_PLUGIN_NO_HANDLE
 #: ../src/dummy-strings.c:214
@@ -1231,227 +1233,227 @@ msgstr "Tato operace není modulem podporována"
 #. krb5_err.et:krb5:KRB5_PLUGIN_OP_NOTSUPP
 #: ../src/dummy-strings.c:215
 msgid "Kerberos V5 magic number table"
-msgstr ""
+msgstr "Tabulka magických čísel Kerberos V5"
 
 #. kv5m_err.et:kv5m:KV5M_NONE
 #: ../src/dummy-strings.c:216
 msgid "Bad magic number for krb5_principal structure"
-msgstr "Špatné magické číslo pro krb5_principal structure"
+msgstr "Špatné magické číslo pro strukturu krb5_principale"
 
 #. kv5m_err.et:kv5m:KV5M_PRINCIPAL
 #: ../src/dummy-strings.c:217
 msgid "Bad magic number for krb5_data structure"
-msgstr "Špatné magické číslo pro krb5_data structure"
+msgstr "Špatné magické číslo pro strukturu krb5_data"
 
 #. kv5m_err.et:kv5m:KV5M_DATA
 #: ../src/dummy-strings.c:218
 msgid "Bad magic number for krb5_keyblock structure"
-msgstr "Špatné magické číslo pro krb5_keyblock structure"
+msgstr "Špatné magické číslo pro strukturu krb5_keyblock"
 
 #. kv5m_err.et:kv5m:KV5M_KEYBLOCK
 #: ../src/dummy-strings.c:219
 msgid "Bad magic number for krb5_checksum structure"
-msgstr "Špatné magické číslo pro krb5_checksum structure"
+msgstr "Špatné magické číslo pro strukturu krb5_checksum"
 
 #. kv5m_err.et:kv5m:KV5M_CHECKSUM
 #: ../src/dummy-strings.c:220
 msgid "Bad magic number for krb5_encrypt_block structure"
-msgstr "Špatné magické číslo pro krb5_encrypt_block structure"
+msgstr "Špatné magické číslo pro strukturu krb5_encrypt_block"
 
 #. kv5m_err.et:kv5m:KV5M_ENCRYPT_BLOCK
 #: ../src/dummy-strings.c:221
 msgid "Bad magic number for krb5_enc_data structure"
-msgstr "Špatné magické číslo pro krb5_enc_data structure"
+msgstr "Špatné magické číslo pro strukturu krb5_enc_data"
 
 #. kv5m_err.et:kv5m:KV5M_ENC_DATA
 #: ../src/dummy-strings.c:222
 msgid "Bad magic number for krb5_cryptosystem_entry structure"
-msgstr "Špatné magické číslo pro krb5_cryptosystem_entry structure"
+msgstr "Špatné magické číslo pro strukturu krb5_cryptosystem_entry"
 
 #. kv5m_err.et:kv5m:KV5M_CRYPTOSYSTEM_ENTRY
 #: ../src/dummy-strings.c:223
 msgid "Bad magic number for krb5_cs_table_entry structure"
-msgstr "Špatné magické číslo pro krb5_cs_table_entry structure"
+msgstr "Špatné magické číslo pro strukturu krb5_cs_table_entry"
 
 #. kv5m_err.et:kv5m:KV5M_CS_TABLE_ENTRY
 #: ../src/dummy-strings.c:224
 msgid "Bad magic number for krb5_checksum_entry structure"
-msgstr "Špatné magické číslo pro krb5_checksum_entry structure"
+msgstr "Špatné magické číslo pro strukturu krb5_checksum_entry"
 
 #. kv5m_err.et:kv5m:KV5M_CHECKSUM_ENTRY
 #: ../src/dummy-strings.c:225
 msgid "Bad magic number for krb5_authdata structure"
-msgstr "Špatné magické číslo pro krb5_authdata structure"
+msgstr "Špatné magické číslo pro strukturu krb5_authdata"
 
 #. kv5m_err.et:kv5m:KV5M_AUTHDATA
 #: ../src/dummy-strings.c:226
 msgid "Bad magic number for krb5_transited structure"
-msgstr "Špatné magické číslo pro krb5_transited structure"
+msgstr "Špatné magické číslo pro strukturu krb5_transited"
 
 #. kv5m_err.et:kv5m:KV5M_TRANSITED
 #: ../src/dummy-strings.c:227
 msgid "Bad magic number for krb5_enc_tkt_part structure"
-msgstr "Špatné magické číslo pro krb5_enc_tkt_part structure"
+msgstr "Špatné magické číslo pro strukturu krb5_enc_tkt_part"
 
 #. kv5m_err.et:kv5m:KV5M_ENC_TKT_PART
 #: ../src/dummy-strings.c:228
 msgid "Bad magic number for krb5_ticket structure"
-msgstr "Špatné magické číslo pro krb5_ticket structure"
+msgstr "Špatné magické číslo pro strukturu krb5_ticket"
 
 #. kv5m_err.et:kv5m:KV5M_TICKET
 #: ../src/dummy-strings.c:229
 msgid "Bad magic number for krb5_authenticator structure"
-msgstr "Špatné magické číslo pro krb5_authenticator structure"
+msgstr "Špatné magické číslo pro strukturu krb5_authenticator"
 
 #. kv5m_err.et:kv5m:KV5M_AUTHENTICATOR
 #: ../src/dummy-strings.c:230
 msgid "Bad magic number for krb5_tkt_authent structure"
-msgstr "Špatné magické číslo pro krb5_tkt_authent structure"
+msgstr "Špatné magické číslo pro strukturu krb5_tkt_authent"
 
 #. kv5m_err.et:kv5m:KV5M_TKT_AUTHENT
 #: ../src/dummy-strings.c:231
 msgid "Bad magic number for krb5_creds structure"
-msgstr "Špatné magické číslo pro krb5_creds structure"
+msgstr "Špatné magické číslo pro strukturu krb5_creds"
 
 #. kv5m_err.et:kv5m:KV5M_CREDS
 #: ../src/dummy-strings.c:232
 msgid "Bad magic number for krb5_last_req_entry structure"
-msgstr "Špatné magické číslo pro krb5_last_req_entry structure"
+msgstr "Špatné magické číslo pro strukturu krb5_last_req_entry"
 
 #. kv5m_err.et:kv5m:KV5M_LAST_REQ_ENTRY
 #: ../src/dummy-strings.c:233
 msgid "Bad magic number for krb5_pa_data structure"
-msgstr "Špatné magické číslo pro krb5_pa_data structure"
+msgstr "Špatné magické číslo pro strukturu krb5_pa_data"
 
 #. kv5m_err.et:kv5m:KV5M_PA_DATA
 #: ../src/dummy-strings.c:234
 msgid "Bad magic number for krb5_kdc_req structure"
-msgstr "Špatné magické číslo pro krb5_kdc_req structure"
+msgstr "Špatné magické číslo pro strukturu krb5_kdc_req"
 
 #. kv5m_err.et:kv5m:KV5M_KDC_REQ
 #: ../src/dummy-strings.c:235
 msgid "Bad magic number for krb5_enc_kdc_rep_part structure"
-msgstr "Špatné magické číslo pro krb5_enc_kdc_rep_part structure"
+msgstr "Špatné magické číslo pro strukturu krb5_enc_kdc_rep_part"
 
 #. kv5m_err.et:kv5m:KV5M_ENC_KDC_REP_PART
 #: ../src/dummy-strings.c:236
 msgid "Bad magic number for krb5_kdc_rep structure"
-msgstr "Špatné magické číslo pro krb5_kdc_rep structure"
+msgstr "Špatné magické číslo pro strukturu krb5_kdc_rep"
 
 #. kv5m_err.et:kv5m:KV5M_KDC_REP
 #: ../src/dummy-strings.c:237
 msgid "Bad magic number for krb5_error structure"
-msgstr "Špatné magické číslo pro krb5_error structure"
+msgstr "Špatné magické číslo pro strukturu krb5_error"
 
 #. kv5m_err.et:kv5m:KV5M_ERROR
 #: ../src/dummy-strings.c:238
 msgid "Bad magic number for krb5_ap_req structure"
-msgstr "Špatné magické číslo pro krb5_ap_req structure"
+msgstr "Špatné magické číslo pro strukturu krb5_ap_req"
 
 #. kv5m_err.et:kv5m:KV5M_AP_REQ
 #: ../src/dummy-strings.c:239
 msgid "Bad magic number for krb5_ap_rep structure"
-msgstr "Špatné magické číslo pro krb5_ap_rep structure"
+msgstr "Špatné magické číslo pro strukturu krb5_ap_rep"
 
 #. kv5m_err.et:kv5m:KV5M_AP_REP
 #: ../src/dummy-strings.c:240
 msgid "Bad magic number for krb5_ap_rep_enc_part structure"
-msgstr "Špatné magické číslo pro krb5_ap_rep_enc_part structure"
+msgstr "Špatné magické číslo pro strukturu krb5_ap_rep_enc_part"
 
 #. kv5m_err.et:kv5m:KV5M_AP_REP_ENC_PART
 #: ../src/dummy-strings.c:241
 msgid "Bad magic number for krb5_response structure"
-msgstr "Špatné magické číslo pro krb5_response structure"
+msgstr "Špatné magické číslo pro strukturu krb5_response"
 
 #. kv5m_err.et:kv5m:KV5M_RESPONSE
 #: ../src/dummy-strings.c:242
 msgid "Bad magic number for krb5_safe structure"
-msgstr "Špatné magické číslo pro krb5_safe structure"
+msgstr "Špatné magické číslo pro strukturu krb5_safe"
 
 #. kv5m_err.et:kv5m:KV5M_SAFE
 #: ../src/dummy-strings.c:243
 msgid "Bad magic number for krb5_priv structure"
-msgstr "Špatné magické číslo pro krb5_priv structure"
+msgstr "Špatné magické číslo pro strukturu krb5_priv"
 
 #. kv5m_err.et:kv5m:KV5M_PRIV
 #: ../src/dummy-strings.c:244
 msgid "Bad magic number for krb5_priv_enc_part structure"
-msgstr "Špatné magické číslo pro krb5_priv_enc_part structure"
+msgstr "Špatné magické číslo pro strukturu krb5_priv_enc_part"
 
 #. kv5m_err.et:kv5m:KV5M_PRIV_ENC_PART
 #: ../src/dummy-strings.c:245
 msgid "Bad magic number for krb5_cred structure"
-msgstr "Špatné magické číslo pro krb5_cred structure"
+msgstr "Špatné magické číslo pro strukturu krb5_cred"
 
 #. kv5m_err.et:kv5m:KV5M_CRED
 #: ../src/dummy-strings.c:246
 msgid "Bad magic number for krb5_cred_info structure"
-msgstr "Špatné magické číslo pro krb5_cred_info structure"
+msgstr "Špatné magické číslo pro strukturu krb5_cred_info"
 
 #. kv5m_err.et:kv5m:KV5M_CRED_INFO
 #: ../src/dummy-strings.c:247
 msgid "Bad magic number for krb5_cred_enc_part structure"
-msgstr "Špatné magické číslo pro krb5_cred_enc_part structure"
+msgstr "Špatné magické číslo pro strukturu krb5_cred_enc_part"
 
 #. kv5m_err.et:kv5m:KV5M_CRED_ENC_PART
 #: ../src/dummy-strings.c:248
 msgid "Bad magic number for krb5_pwd_data structure"
-msgstr "Špatné magické číslo pro krb5_pwd_data structure"
+msgstr "Špatné magické číslo pro strukturu krb5_pwd_data"
 
 #. kv5m_err.et:kv5m:KV5M_PWD_DATA
 #: ../src/dummy-strings.c:249
 msgid "Bad magic number for krb5_address structure"
-msgstr "Špatné magické číslo pro krb5_address structure"
+msgstr "Špatné magické číslo pro strukturu krb5_address"
 
 #. kv5m_err.et:kv5m:KV5M_ADDRESS
 #: ../src/dummy-strings.c:250
 msgid "Bad magic number for krb5_keytab_entry structure"
-msgstr "Špatné magické číslo pro krb5_keytab_entry structure"
+msgstr "Špatné magické číslo pro strukturu krb5_keytab_entry"
 
 #. kv5m_err.et:kv5m:KV5M_KEYTAB_ENTRY
 #: ../src/dummy-strings.c:251
 msgid "Bad magic number for krb5_context structure"
-msgstr "Špatné magické číslo pro krb5_context structure"
+msgstr "Špatné magické číslo pro strukturu krb5_context"
 
 #. kv5m_err.et:kv5m:KV5M_CONTEXT
 #: ../src/dummy-strings.c:252
 msgid "Bad magic number for krb5_os_context structure"
-msgstr "Špatné magické číslo pro krb5_os_context structure"
+msgstr "Špatné magické číslo pro strukturu krb5_os_context"
 
 #. kv5m_err.et:kv5m:KV5M_OS_CONTEXT
 #: ../src/dummy-strings.c:253
 msgid "Bad magic number for krb5_alt_method structure"
-msgstr "Špatné magické číslo pro krb5_alt_method structure"
+msgstr "Špatné magické číslo pro strukturu krb5_alt_method"
 
 #. kv5m_err.et:kv5m:KV5M_ALT_METHOD
 #: ../src/dummy-strings.c:254
 msgid "Bad magic number for krb5_etype_info_entry structure"
-msgstr "Špatné magické číslo pro krb5_etype_info_entry structure"
+msgstr "Špatné magické číslo pro strukturu krb5_etype_info_entry"
 
 #. kv5m_err.et:kv5m:KV5M_ETYPE_INFO_ENTRY
 #: ../src/dummy-strings.c:255
 msgid "Bad magic number for krb5_db_context structure"
-msgstr "Špatné magické číslo pro krb5_db_context structure"
+msgstr "Špatné magické číslo pro strukturu krb5_db_context"
 
 #. kv5m_err.et:kv5m:KV5M_DB_CONTEXT
 #: ../src/dummy-strings.c:256
 msgid "Bad magic number for krb5_auth_context structure"
-msgstr "Špatné magické číslo pro krb5_auth_context structure"
+msgstr "Špatné magické číslo pro strukturu krb5_auth_context"
 
 #. kv5m_err.et:kv5m:KV5M_AUTH_CONTEXT
 #: ../src/dummy-strings.c:257
 msgid "Bad magic number for krb5_keytab structure"
-msgstr "Špatné magické číslo pro krb5_keytab structure"
+msgstr "Špatné magické číslo pro strukturu krb5_keytab"
 
 #. kv5m_err.et:kv5m:KV5M_KEYTAB
 #: ../src/dummy-strings.c:258
 msgid "Bad magic number for krb5_rcache structure"
-msgstr "Špatné magické číslo pro krb5_rcache structure"
+msgstr "Špatné magické číslo pro strukturu krb5_rcache"
 
 #. kv5m_err.et:kv5m:KV5M_RCACHE
 #: ../src/dummy-strings.c:259
 msgid "Bad magic number for krb5_ccache structure"
-msgstr "Špatné magické číslo pro krb5_ccache structure"
+msgstr "Špatné magické číslo pro strukturu krb5_ccache"
 
 #. kv5m_err.et:kv5m:KV5M_CCACHE
 #: ../src/dummy-strings.c:260
@@ -1509,57 +1511,57 @@ msgstr "Špatné magické číslo pro GSSAPI OID"
 msgid "Bad magic number for GSSAPI QUEUE"
 msgstr "Špatné magické číslo pro GSSAPI QUEUE"
 
-#: ../src/ka-applet.c:362
+#: ../src/ka-applet.c:460
 #, c-format
 msgid "Your credentials expire in %.2d:%.2dh"
-msgstr "Vaše přihlašovací údaje vyprší za %.2d:%.2dh"
+msgstr "Vaše pověření vyprší za %.2d:%.2dh"
 
-#: ../src/ka-applet.c:544
+#: ../src/ka-applet.c:642
 msgid "List Tickets"
 msgstr "Lístky služeb"
 
-#: ../src/ka-applet.c:554
+#: ../src/ka-applet.c:652
 msgid "Get Ticket"
 msgstr "Získat lístek"
 
-#: ../src/ka-applet.c:563
+#: ../src/ka-applet.c:661
 msgid "Don't show me this again"
 msgstr "Znovu nezobrazovat"
 
-#: ../src/ka-applet.c:570
+#: ../src/ka-applet.c:668
 msgid "Remove Credentials Cache"
-msgstr "Odstranit mezipaměť přihlašovacích údajů"
+msgstr "Odstranit mezipaměť s pověřeními"
 
-#: ../src/ka-applet.c:619
+#: ../src/ka-applet.c:717
 msgid "You have valid Kerberos credentials."
-msgstr "Vaše přihlašovací údaje jsou platné."
+msgstr "Vaše pověření jsou platná."
 
-#: ../src/ka-applet.c:621
+#: ../src/ka-applet.c:719
 msgid "You've refreshed your Kerberos credentials."
-msgstr "Aktualizovali jste své přihlašovací údaje."
+msgstr "Aktualizovali jste svá pověření Kerberos."
 
-#: ../src/ka-applet.c:624
+#: ../src/ka-applet.c:722
 msgid "Network credentials valid"
-msgstr "Síťové přihlašovací údaje jsou platné"
-
-#: ../src/ka-applet.c:643
-msgid "Network credentials expiring"
-msgstr "Blíží se konec platnosti síťových přihlašovacích údajů"
-
-#: ../src/ka-applet.c:661
-msgid "Network credentials expired"
-msgstr "Platnost síťových přihlašovacích údajů vypršela"
-
-#: ../src/ka-applet.c:662
-msgid "Your Kerberos credentails have expired."
-msgstr "Platnost vašich přihlašovacích údajů Kerberos vypršela."
+msgstr "Síťová pověření jsou platná"
 
 #: ../src/ka-applet.c:741
+msgid "Network credentials expiring"
+msgstr "Blíží se konec platnosti síťových pověření"
+
+#: ../src/ka-applet.c:759
+msgid "Network credentials expired"
+msgstr "Platnost síťových pověření vypršela"
+
+#: ../src/ka-applet.c:760
+msgid "Your Kerberos credentials have expired."
+msgstr "Platnost vašich pověření Kerberos vypršela."
+
+#: ../src/ka-applet.c:839
 msgid "Remove Credentials _Cache"
-msgstr "Odstranit mezipaměť přihlašova_cích údajů"
+msgstr "Odstranit _mezipaměť s pověřeními"
 
 #. Ticket dialog
-#: ../src/ka-applet.c:751
+#: ../src/ka-applet.c:849
 msgid "_List Tickets"
 msgstr "_Lístky služeb"
 
@@ -1589,19 +1591,22 @@ msgstr "Začátek platnosti"
 msgid "End Time"
 msgstr "Konec platnosti"
 
-#: ../src/ka-main-window.c:137
+#. Translators: this is an abbreviation for forwardable
+#: ../src/ka-main-window.c:138
 msgid "Fwd"
 msgstr "Předat"
 
-#: ../src/ka-main-window.c:143
+#. Translators: this is an abbreviation for proxiable
+#: ../src/ka-main-window.c:145
 msgid "Proxy"
 msgstr "Proxy"
 
-#: ../src/ka-main-window.c:149
+#. Translators: this is an abbreviation for renewable
+#: ../src/ka-main-window.c:152
 msgid "Renew"
 msgstr "Obnovit"
 
-#: ../src/ka-main-window.c:176
+#: ../src/ka-main-window.c:179
 msgid "Error displaying service ticket information"
 msgstr "Chyba zobrazení informací o lístku služby"
 
@@ -1622,104 +1627,95 @@ msgid "Kerberos Network Authentication Dialog"
 msgstr "Dialog síťové autentizace Kerberos"
 
 #: ../src/krb5-auth-dialog.schemas.in.h:1
-msgid "Enabled plugins"
-msgstr "Povolené zásuvné moduly"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:2
-msgid "Forwardable ticket"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:3
 msgid "Kerberos principal"
 msgstr "Kerberos principal"
 
-#: ../src/krb5-auth-dialog.schemas.in.h:4
-msgid "List of plugins that should be loaded and activated on startup."
-msgstr "Seznam zásuvných modulů, které budou nahrány a aktivovány při startu."
+#: ../src/krb5-auth-dialog.schemas.in.h:2
+msgid "The kerberos principal to acquire the ticket for"
+msgstr "Kerberos principal, pro který bude získán lístek"
 
-#: ../src/krb5-auth-dialog.schemas.in.h:5
-msgid "Notify user when ticket becomes valid"
-msgstr "Upozornit uživatele, když lístek začne platit"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:6
-msgid "Notify user when ticket has expired"
-msgstr "Upozornit uživatele, když lístek přestane platit"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:7
-msgid "Notify user when ticket is about to expire"
-msgstr "Upozornit uživatele na blížící se vypršení platnosti lístku"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:8
-msgid "PKINIT CA certificates"
-msgstr "Certifikát CA pro PKINIT"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:9
+#: ../src/krb5-auth-dialog.schemas.in.h:3
 msgid "PKINIT identifier"
 msgstr "Identifikátor PKINIT"
 
-#: ../src/krb5-auth-dialog.schemas.in.h:10
+#: ../src/krb5-auth-dialog.schemas.in.h:4
+msgid "The principal's public/private/certificate identifier when using PKINIT"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:5
 msgid "PKINIT trust anchors"
 msgstr ""
 
-#: ../src/krb5-auth-dialog.schemas.in.h:11
+#: ../src/krb5-auth-dialog.schemas.in.h:6
+msgid "PKINIT CA certificates"
+msgstr "Certifikát CA pro PKINIT"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:7
 msgid "Prompt minutes before expiry"
 msgstr "Počet minut připomenutí před koncem platnosti"
 
-#: ../src/krb5-auth-dialog.schemas.in.h:12
-msgid "Proxiable ticket"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:13
-msgid "Renewable ticket"
-msgstr "Obnovitelný lístek"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:14
-msgid "Requested tickets should be forwardable"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:15
-msgid "Requested tickets should be proxiable"
-msgstr ""
-
-#: ../src/krb5-auth-dialog.schemas.in.h:16
-msgid "Requested tickets should be renewable"
-msgstr "Požadované lístky by měly být obnovitelné"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:17
+#: ../src/krb5-auth-dialog.schemas.in.h:8
 msgid ""
 "Start prompting/displaying notifications that many minutes before expiry"
 msgstr ""
 
-#: ../src/krb5-auth-dialog.schemas.in.h:18
-msgid "The kerberos principal to acquire the ticket for"
-msgstr "Kerberos principal, pro který bude získán lístek"
-
-#: ../src/krb5-auth-dialog.schemas.in.h:19
-msgid "The principal's public/private/certificate identifier when using PKINIT"
+#: ../src/krb5-auth-dialog.schemas.in.h:9
+msgid "Forwardable ticket"
 msgstr ""
 
-#: ../src/krb5-auth-dialog.schemas.in.h:20
-msgid "ticket expired notification"
-msgstr "upozornění při vypršení platnosti lístku"
+#: ../src/krb5-auth-dialog.schemas.in.h:10
+msgid "Requested tickets should be forwardable"
+msgstr ""
 
-#: ../src/krb5-auth-dialog.schemas.in.h:21
+#: ../src/krb5-auth-dialog.schemas.in.h:11
+msgid "Renewable ticket"
+msgstr "Obnovitelný lístek"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:12
+msgid "Requested tickets should be renewable"
+msgstr "Požadované lístky by měly být obnovitelné"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:13
+msgid "Proxiable ticket"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:14
+msgid "Requested tickets should be proxiable"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:15
+msgid "valid ticket notification"
+msgstr ""
+
+#: ../src/krb5-auth-dialog.schemas.in.h:16
+msgid "Notify user when ticket becomes valid"
+msgstr "Upozornit uživatele, když lístek začne platit"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:17
 msgid "ticket expiring notification"
 msgstr "upozornění na blížící se vypršení platnosti lístku"
 
+#: ../src/krb5-auth-dialog.schemas.in.h:18
+msgid "Notify user when ticket is about to expire"
+msgstr "Upozornit uživatele na blížící se vypršení platnosti lístku"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:19
+msgid "ticket expired notification"
+msgstr "upozornění při vypršení platnosti lístku"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:20
+msgid "Notify user when ticket has expired"
+msgstr "Upozornit uživatele, když lístek přestane platit"
+
+#: ../src/krb5-auth-dialog.schemas.in.h:21
+msgid "Enabled plugins"
+msgstr "Povolené zásuvné moduly"
+
 #: ../src/krb5-auth-dialog.schemas.in.h:22
-msgid "valid ticket notification"
-msgstr ""
+msgid "List of plugins that should be loaded and activated on startup."
+msgstr "Seznam zásuvných modulů, které budou nahrány a aktivovány při startu."
 
 #: ../secmem/util.c:106
 #, c-format
 msgid "Warning: running q-agent setuid on this system is dangerous\n"
 msgstr "Pozor: provozovat q-agent setuid na tomto systému je nebezpečné\n"
-
-#~ msgid "There was an error launching the preferences dialog: %s"
-#~ msgstr "Při spouštění dialogového okna předvoleb došlo k chybě: %s "
-
-#~ msgid "Kerberos;Authentication"
-#~ msgstr "Kerberos;Autentizace"
-
-#~ msgid "Set your Kerberos network authentication preferences"
-#~ msgstr "Nastavte své předvolby síťové autentizace Kerberos"

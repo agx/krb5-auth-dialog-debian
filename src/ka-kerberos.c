@@ -287,7 +287,7 @@ ka_format_time (time_t t, gchar *ts, size_t len)
 
 /* fill in service tickets data */
 gboolean
-ka_get_service_tickets (GtkListStore * tickets)
+ka_get_service_tickets (GtkListStore * tickets, gboolean hide_conf_tickets)
 {
     krb5_cc_cursor cursor;
     krb5_creds creds;
@@ -324,6 +324,13 @@ ka_get_service_tickets (GtkListStore * tickets)
 
     while ((ret = krb5_cc_next_cred (kcontext, ccache, &cursor, &creds)) == 0) {
         gboolean renewable, proxiable, forwardable;
+
+
+        if (hide_conf_tickets && krb5_is_config_principal (kcontext,
+                                                           creds.server)) {
+            krb5_free_cred_contents (kcontext, &creds);
+            continue;
+        }
 
         if (creds.times.starttime)
             ka_format_time (creds.times.starttime, start_time,
@@ -531,7 +538,7 @@ credentials_expiring_once (gpointer *data)
 
 
 /*
- * set ticket options by looking at krb5.conf and gconf
+ * set ticket options by looking at krb5.conf and gsettings
  */
 static void
 ka_set_ticket_options (KaApplet *applet, krb5_context context,
@@ -546,13 +553,13 @@ ka_set_ticket_options (KaApplet *applet, krb5_context context,
                                                krb5_principal_get_realm
                                                (context, kprincipal), out);
 #endif
-    g_object_get (applet, "tgt-forwardable", &flag, NULL);
+    g_object_get (applet, KA_PROP_NAME_TGT_FORWARDABLE, &flag, NULL);
     if (flag)
         krb5_get_init_creds_opt_set_forwardable (out, flag);
-    g_object_get (applet, "tgt-proxiable", &flag, NULL);
+    g_object_get (applet, KA_PROP_NAME_TGT_PROXIABLE, &flag, NULL);
     if (flag)
         krb5_get_init_creds_opt_set_proxiable (out, flag);
-    g_object_get (applet, "tgt-renewable", &flag, NULL);
+    g_object_get (applet, KA_PROP_NAME_TGT_RENEWABLE, &flag, NULL);
     if (flag) {
         krb5_deltat r = 3600 * 24 * 30; /* 1 month */
 
@@ -640,7 +647,7 @@ ka_parse_name (KaApplet *applet, krb5_context krbcontext,
     if (*kprinc != NULL)
         krb5_free_principal (krbcontext, *kprinc);
 
-    g_object_get (applet, "principal", &principal, NULL);
+    g_object_get (applet, KA_PROP_NAME_PRINCIPAL, &principal, NULL);
     ret = krb5_parse_name (krbcontext, principal, kprinc);
 
     g_free (principal);
@@ -752,7 +759,7 @@ grab_credentials (KaApplet *applet)
     if (retval)
         goto out2;
 
-    g_object_get (applet, "pk-userid", &pk_userid,
+    g_object_get (applet, KA_PROP_NAME_PK_USERID, &pk_userid,
                   "pk-anchors", &pk_anchors, NULL);
 #if ENABLE_PKINIT && HAVE_HX509_ERR_H && HAVE_KRB5_GET_INIT_CREDS_OPT_SET_PKINIT
     /* pk_userid set: try pkinit */
@@ -960,7 +967,7 @@ ka_check_credentials (KaApplet *applet, const char *newprincipal)
     int retval;
     char *principal;
 
-    g_object_get (applet, "principal", &principal, NULL);
+    g_object_get (applet, KA_PROP_NAME_PRINCIPAL, &principal, NULL);
 
     if (strlen (newprincipal)) {
         krb5_principal knewprinc;
