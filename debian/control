@@ -18,7 +18,6 @@ Build-Depends: debhelper (>= 6),
  bison,
  flex,
  libnotify-dev (>= 0.7.1),
- libgconf2-dev,
  gnome-doc-utils,
  rarian-compat,
  libpam0g-dev,
@@ -29,7 +28,7 @@ Homepage: https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog
 
 Package: krb5-auth-dialog
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, gconf2
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: gnome-control-center
 Description: tray applet for reauthenticating kerberos tickets
  krb5-auth-dialog is a simple tray applet that monitors kerberos tickets. It
