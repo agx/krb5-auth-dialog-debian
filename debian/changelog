@@ -1,3 +1,10 @@
+krb5-auth-dialog (3.8.0-3) unstable; urgency=low
+
+  * [21a1bd6] Fix krb5_principal_compare crashes on NULL arguments.
+    Thanks to Petter Reinholdtsen (Closes: #714825)
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 05 Jul 2013 17:40:45 +0200
+
 krb5-auth-dialog (3.8.0-2) unstable; urgency=low
 
   * Upload to unstable
