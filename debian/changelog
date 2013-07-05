@@ -1,3 +1,10 @@
+krb5-auth-dialog (3.2.1-1+deb7u1) stable-proposed-updates; urgency=low
+
+  * [7b5a095] Fix krb5_principal_compare crashes on NULL arguments.
+    Thanks to Petter Reinholdtsen (Closes: #714825)
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 05 Jul 2013 17:58:44 +0200
+
 krb5-auth-dialog (3.2.1-1) unstable; urgency=low
 
   * [325b5a9] New upstream version 3.2.1
