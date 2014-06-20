@@ -1,3 +1,10 @@
+krb5-auth-dialog (3.12.0-1) unstable; urgency=medium
+
+  * [580cd32] New upstream version 3.12.0
+  * [750c510] Remove patches appplied upstream
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 20 Jun 2014 07:31:45 +0200
+
 krb5-auth-dialog (3.8.0-3) unstable; urgency=low
 
   * [21a1bd6] Fix krb5_principal_compare crashes on NULL arguments.
