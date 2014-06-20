@@ -15,8 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -221,8 +220,10 @@ credentials_expiring_real (KaApplet *applet)
     }
 
     /* copy principal from cache if any */
-    if (krb5_principal_compare (kcontext, my_creds.client, kprincipal)) {
-        krb5_free_principal (kcontext, kprincipal);
+    if (kprincipal == NULL ||
+        krb5_principal_compare (kcontext, my_creds.client, kprincipal)) {
+        if (kprincipal)
+            krb5_free_principal (kcontext, kprincipal);
         krb5_copy_principal (kcontext, my_creds.client, &kprincipal);
     }
     creds_expiry = my_creds.times.endtime;
@@ -781,6 +782,8 @@ grab_credentials (KaApplet *applet)
         switch (retval) {
         case KRB5KDC_ERR_PREAUTH_FAILED:
         case KRB5KRB_AP_ERR_BAD_INTEGRITY:
+        case KRB5KRB_AP_ERR_MODIFIED:
+        case KRB5_GET_IN_TKT_LOOP:
 #ifdef HAVE_HX509_ERR_H
         case HX509_PKCS11_LOGIN:
 #endif /* Invalid password/pin, try again. */
@@ -1026,7 +1029,9 @@ ka_grab_credentials (KaApplet *applet)
         if (retval) {
             gchar *errmsg;
 
-            errmsg = ka_get_error_message (kcontext, retval);
+            errmsg = g_strdup_printf("%s%s",
+                                     ka_get_error_message (kcontext, retval),
+                                     is_online ? "" : _(" (No network connection)"));
             ka_pwdialog_error (pwdialog, errmsg);
             g_free (errmsg);
             break;

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY GFDL SYSTEM "fdl-appendix.xml">
+<!ENTITY appversion "0.10">
+<!ENTITY manrevision "0.1">
+<!ENTITY date "May 2009">
+<!ENTITY app "Kerberos Network Authentication Dialog">
+<!ENTITY application "<application>&app;</application>">
+]>
+<!--
+      (Do not remove this comment block.)
+  Template Maintained by the GNOME Documentation Project:
+	  http://developer.gnome.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Feb 12, 2002
+-->
+<!--
+      (Do not remove this comment block.)
+  Version: 0.0.1
+  Last modified: May 22, 2009
+  Maintainers:
+               Guido Günther  <agx@sigxcpu.org>
+  Translators:
+               (translators put your name and email here)
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="cs">
+ <!-- please do not change the id; for translations, change lang to -->
+ <!-- appropriate code -->
+
+ <articleinfo>
+  <title>Příručka k apletu <application>Dialog síťového ověření Kerberos</application></title>
+  <abstract role="description">
+   <para>Dialog síťového ověření Kerberos je malý pomocník, který sleduje a obnovuje vaše lístky Kerberos.</para>
+  </abstract>
+  <copyright>
+   <year>2009</year>
+   <holder>Guido Günther</holder>
+  </copyright>
+
+  <!-- translators: uncomment this:
+
+  <copyright>
+  <year>2000</year>
+  <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+ </copyright>
+
+  -->
+  <!-- An address can be added to the publisher information.  If a role is
+  not specified, the publisher/author is the same for all versions of the
+  document.  -->
+  <publisher role="maintainer">
+   <publishername>Guido Günther</publishername>
+  </publisher>
+
+    <legalnotice id="legalnotice">
+	<para>Je povoleno kopírovat, šířit a/nebo upravovat tento dokument za podmínek GNU Free Documentation License, verze 1.1 nebo jakékoli další verze vydané nadací Free Software Foundation; bez neměnných oddílů, bez textů předních desek a bez textů zadních desek. Kopie této licence je zahrnuta v oddílu jménem <ulink type="help" url="ghelp:fdl">GNU Free Documentation License</ulink> nebo v souboru COPYING-DOCS dodávaném s touto příručkou.</para>
+         <para>Tato příručka je součástí kolekce příruček GNOME, distribuovaných pod licencí GNU FDL. Pokud chcete tento dokument šířit odděleně od kolekce, musíte přiložit kopii licence dle popisu v sekci 6 dané licence.</para>
+
+	<para>Mnoho užívaných jmen určených k zviditelnění produktů nebo služeb jsou ochranné známky. Na místech, kde jsou tato jména v dokumentaci užita a členové Dokumentačního projektu GNOME jsou si vědomi skutečnosti, že se jedná o ochrannou známku, je takové jméno psáno velkými písmeny celé nebo s velkým písmenem na začátku.</para>
+
+	<para>DOKUMENT A JEHO UPRAVENÉ VERZE JSOU ŠÍŘENY V SOULADU SE ZNĚNÍM LICENCE GNU FREE DOCUMENTATION LICENSE S NÁSLEDUJÍCÍM USTANOVENÍM: <orderedlist>
+		<listitem>
+		  <para>DOKUMENT JE POSKYTOVÁN V PODOBĚ „JAK JE“ BEZ ZÁRUKY V JAKÉKOLIV PODOBĚ, NEPOSKYTUJÍ SE ANI ODVOZENÉ ZÁRUKY, ZÁRUKY, ŽE DOKUMENT, NEBO JEHO UPRAVENÁ VERZE, JE BEZCHYBNÝ NEBO ZÁRUKY PRODEJNOSTI, VHODNOSTI PRO URČITÝ ÚČEL NEBO NEPORUŠENOSTI. RIZIKO NEKVALITY, NEPŘESNOSTI A ŠPATNÉHO PROVEDENÍ DOKUMENTU, NEBO JEHO UPRAVENÉ VERZE, LEŽÍ NA VÁS. POKUD KVŮLI TOMUTO DOKUMENTU, NEBO JEHO UPRAVENÉ VERZI, NASTANE PROBLÉM, VY (NIKOLIV PŮVODNÍ AUTOR NEBO JAKÝKOLIV PŘISPĚVATEL) PŘEBÍRÁTE JAKÉKOLIV NÁKLADY ZA NUTNÉ ÚPRAVY, OPRAVY ČI SLUŽBY. TOTO PROHLÁŠENÍ O ZÁRUCE PŘEDSTAVUJE ZÁKLADNÍ SOUČÁST TÉTO LICENCE. BEZ TOHOTO PROHLÁŠENÍ NENÍ, PODLE TÉTO DOHODY, POVOLENO UŽÍVÁNÍ ANI ÚPRAVY TOHOTO DOKUMENTU; DÁLE</para>
+		</listitem>
+		<listitem>
+		  <para>ZA ŽÁDNÝCH OKOLNOSTÍ A ŽÁDNÝCH PRÁVNÍCH PŘEDPOKLADŮ, AŤ SE JEDNÁ O PŘEČIN (VČETNĚ NEDBALOSTNÍCH), SMLOUVU NEBO JINÉ, NENÍ AUTOR, PŮVODNÍ PISATEL, KTERÝKOLIV PŘISPĚVATEL NEBO KTERÝKOLIV DISTRIBUTOR TOHOTO DOKUMENTU NEBO UPRAVENÉ VERZE DOKUMENTU NEBO KTERÝKOLIV DODAVATEL NĚKTERÉ Z TĚCHTO STRAN ODPOVĚDNÝ NĚJAKÉ OSOBĚ ZA PŘÍMÉ, NEPŘÍMÉ, SPECIÁLNÍ, NAHODILÉ NEBO NÁSLEDNÉ ŠKODY JAKÉHOKOLIV CHARAKTERU, VČETNĚ, ALE NEJEN, ZA POŠKOZENÍ ZE ZTRÁTY DOBRÉHO JMÉNA, PŘERUŠENÍ PRÁCE, PORUCHY NEBO NESPRÁVNÉ FUNKCE POČÍTAČE NEBO JINÉHO A VŠECH DALŠÍCH ŠKOD NEBO ZTRÁT VYVSTÁVAJÍCÍCH Z NEBO VZTAHUJÍCÍCH SE K POUŽÍVÁNÍ TOHOTO DOKUMENTU NEBO UPRAVENÝCH VERZÍ DOKUMENTU, I KDYŽ BY TAKOVÁTO STRANA BYLA INFORMOVANÁ O MOŽNOSTI TAKOVÉHOTO POŠKOZENÍ.</para>
+		</listitem>
+	  </orderedlist></para>
+  </legalnotice>
+
+
+
+  <authorgroup>
+   <author>
+    <firstname>Jonathan</firstname>
+    <surname>Blandford</surname>
+    <email>rjb@redhat.com</email>
+   </author>
+   <author role="maintainer">
+    <firstname>Guido</firstname>
+    <surname>Günther</surname>
+    <email>agx@sigxcpu.org</email>
+   </author>
+   <!-- This is appropriate place for other contributors: translators,
+   maintainers,  etc. Commented out by default.
+   <othercredit role="translator">
+   <firstname>Latin</firstname>
+   <surname>Translator 1</surname>
+   <affiliation>
+   <orgname>Latin Translation Team</orgname>
+   <address> <email>translator@gnome.org</email> </address>
+  </affiliation>
+   <contrib>Latin translation</contrib>
+  </othercredit>
+   -->
+  </authorgroup>
+
+  <!-- The revision numbering system for GNOME manuals is as follows: -->
+  <!-- * the revision number consists of two components -->
+  <!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
+  <!-- * the second component of the revision number is a decimal unit that is incremented with each revision of the manual. -->
+  <!-- For example, if the GNOME desktop release is V2.x, the first version of the manual that -->
+  <!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
+  <!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
+  <!-- to V3.0, and so on. -->
+
+  <revhistory>
+   <revision>
+    <revnumber>2.0</revnumber>
+    <date>Květen 2009</date>
+    <revdescription>
+     <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
+    </revdescription>
+   </revision>
+  </revhistory>
+  <releaseinfo>Tato příručka popisuje jak používat Dialog síťového ověření Kerberos ke správě svých lístků Kerberos.</releaseinfo>
+  <legalnotice>
+   <title>Ohlasy</title>
+   <para>Pokud chcete oznámit chybu nebo navrhnout vylepšení vztahující se k tomuto balíčku nebo této příručce, použijte stránky <ulink url="http://bugzilla.gnome.org" type="http">GNOME's Bugzilla</ulink>.</para>
+   <!-- Translators may also add here feedback address for translations -->
+  </legalnotice>
+ </articleinfo>
+
+ <!-- ============= Document Body ============================= -->
+ <!-- ============= Introduction ============================== -->
+ <section id="intro">
+  <title>Úvod</title>
+  <indexterm>
+    <primary><application>Dialog síťového ověření Kerberos</application></primary>
+    <secondary>Příručka</secondary>
+    <tertiary>krb5-auth-dialog</tertiary>
+  </indexterm>
+
+   <para>Dialog síťového ověření Kerberos je aplet pro <systemitem>pracovní prostředí GNOME</systemitem>, který sleduje a obnovuje lístky Kerberos. Rovněž připomíná, kdy lístkům končí platnost.</para>
+   <para>Jakmile získáte lístek Kerberos – ať už přes GDM nebo přímo přes aplet – aplet se bude starat o obnovu lístku, dokud nevyprší jeho platnost. Můžete jej také použít ke zrušení (vyprázdnění) mezipaměti pověření, abyste mohli získat lístek s jinými vlastnostmi nebo se přepnout na jiný principal.</para>
+ </section>
+
+<section id="using">
+  <title>Použití</title>
+  <para><application>Dialog síťového ověření Kerberos</application> se obvykle spouští současně s náběhem GNOME, ale můžete jej spustit i ručně a to takto:</para>
+  <variablelist>
+    <varlistentry>
+      <term>Příkazový řádek</term>
+      <listitem>
+	<para>Napište <command>krb5-auth-dialog</command> a zmáčkněte <keycap>Enter</keycap>:</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>Ikona na systémovém panelu bude signalizovat jeden ze tří stavů:</para>
+
+  <section id="trayicon-valid">
+    <title>Platný lístek Kerberos</title>
+    <para>Máte platný lístek Kerberos, který můžete použít k ověření vůči síťovým službám.</para>
+    <figure>
+      <title>Platný lístek Kerberos</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-valid.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+  <section id="trayicon-expiring">
+    <title>Lístku Kerberos brzy vyprší platnost</title>
+    <para>Platnost lístku Kerberos brzy vyprší, ale zatím jej stále můžete použít k ověření vůči síťovým službám.</para>
+    <figure>
+      <title>Lístku Kerberos brzy vyprší platnost</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-expiring.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+  <section id="trayicon-expired">
+    <title>Lístku Kerberos vypršela platnost</title>
+    <para>Váš Kerberos se stal neplatným (tj. vypršela mu platnost). Nádále jej již nelze použít k ověření vůči síťovým službám. To není žádný problém, když aplikace, která Kerberos požaduje, ví, jak si požádat o nový lístek přes <application>Dialog síťového ověření Kerberos</application>. V případě, že to neumí, stačí když kliknete na aplet a znovu zadáte heslo.</para>
+    <figure>
+      <title>Lístku Kerberos vypršela platnost</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-expired.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+</section>
+
+<section id="notify">
+  <title>Oznamovací zprávy</title>
+  <para>Až se Dialog síťového ověření Kerberos spustí, mohou se zobrazit následující oznámení.</para>
+
+ <section id="notify-valid">
+    <title>Pověření Kerberos jsou platná</title>
+    <para>Právě jste získali platný lístek Kerberos, který lze použít k ověření vůči síťovým službám.</para>
+    <figure>
+      <title>Oznámení, když pověření Kerberos nabude platnosti</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-valid.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+ <section id="notify-expiring">
+    <title>Pověřením kerberos brzy skončí platnost</title>
+    <para>Vašim pověřením Kerberos brzy vyprší platnost. Stačí, když kliknete na aplet v systémovém panelu a pověření se obnoví.</para>
+    <figure>
+      <title>Oznámení, když se pověřením Kerberos blíží vypršení platnosti</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-expiring.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+ <section id="notify-expired">
+    <title>Pověřením kerberos skončila platnost</title>
+    <para>Vašim pověřením Kerberos právě vypršela platnost. Nelze je nadále použít k ověření vůči síťovým službám.</para>
+    <figure>
+      <title>Oznámení, když pověřením Kerberos vyprší platnost</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-expired.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+</section>
+
+<section id="preferences">
+  <title>Předvolby</title>
+  <para>Předvolby můžete nastavit výběrem položky „Předvolby“ v kontextové nabídce apletu nebo nebo výběrem „Síťové ověřování“ v <application>Ovládacím centru</application>. <table frame="topbot" id="tbl-principal-prefs"><title>Předvolby principalu Kerberos</title><tgroup cols="2" colsep="1" rowsep="1"><colspec colwidth="19.21*"/><colspec colwidth="46.79*"/><thead>
+          <row>
+            <entry colsep="0" rowsep="1">
+              <para>Prvek dialogového okna</para>
+            </entry>
+            <entry colsep="0" rowsep="1">
+              <para>Popis</para>
+            </entry>
+          </row>
+        </thead><tbody>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Principal Kerberos</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Principal Kerberos, který se má použít. Když ponecháte prázdné, použije se aktuální uživatelské jméno. Pokud toto nastavení změníte, musíte vyprázdnit mezipaměť pověření, aby se nové nastavení projevilo.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>ID uživatele PKINIT</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Veřejný/soukromý/certifikační identifikátor proncipalu. Pokud nepoužíváte PKINIT, ponechte prázdné. Jestli chcete povolit používání bezpečnostního tokenu, přidejte sem cestu ke knihovně pkcs11, např. „PKCS11:/usr/lib/opensc/opensc-pkcs11.so“</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Pevné body důvěry PKINIT</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Cesta k certifikátům CA použitým jako pevné body důvěry pro pkinit. Je potřeba nastavit jen v případě, že tak nebylo učiněno globálně v <filename>/etc/krb5.conf</filename></para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>přenositelný</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Zda by požadovaný lístek Kerberos měl být přenositelný. Změna tohoto nastavení vyžaduje, abyste se znovu autentizovali kliknutím levým tlačítkem na ikonu na systémovém panelu a zadáním svého hesla.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>obnovitelný</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Zda by požadovaný lístek Kerberos měl být obnovitelný. Změna tohoto nastavení vyžaduje, abyste se znovu autentizovali kliknutím levým tlačítkem na ikonu na systémovém panelu a zadáním svého hesla.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>delegovatelný</guilabel>
+	      </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Zda by požadovaný lístek Kerberos měl být delegovatelný. Změna tohoto nastavení vyžaduje, abyste se znovu autentizovali kliknutím levým tlačítkem na ikonu na systémovém panelu a zadáním svého hesla.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Upozornit ‥ minut před koncem platnosti</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Upozornění, že vašemu pověření brzy skončí platnost, bude zasláno tento počet minut před koncem platnosti.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Zobrazit ikonu na systémovém panelu</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Zda zobrazovat ikonu v systémovém panelu. Vypnutím ikony se rovněž zakážou oznamování, dialogové okno pro heslo se ale bude i tak objevovat.</para>
+            </entry>
+          </row>
+	</tbody></tgroup></table></para>
+</section>
+
+</article>
