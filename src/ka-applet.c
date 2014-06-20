@@ -13,8 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -151,6 +150,7 @@ ka_applet_local_command_line (GApplication *application,
     GError *error = NULL;
 
     gint argc = g_strv_length (*argv);
+    gint flags;
     gboolean auto_run = FALSE;
 
     const char *help_msg =
@@ -163,6 +163,10 @@ ka_applet_local_command_line (GApplication *application,
     };
 
     KA_DEBUG ("Parsing local command line");
+#if GLIB_CHECK_VERSION(2, 40, 0)
+    flags = g_application_get_flags(application);
+    g_application_set_flags(application, flags | G_APPLICATION_HANDLES_COMMAND_LINE);
+#endif
 
     context = g_option_context_new ("- Kerberos 5 credential checking");
     g_option_context_add_main_entries (context, options, NULL);

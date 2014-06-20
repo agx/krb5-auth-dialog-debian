@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY GFDL SYSTEM "fdl-appendix.xml">
+<!ENTITY appversion "0.10">
+<!ENTITY manrevision "0.1">
+<!ENTITY date "May 2009">
+<!ENTITY app "Kerberos Network Authentication Dialog">
+<!ENTITY application "<application>&app;</application>">
+]>
+<!--
+      (Do not remove this comment block.)
+  Template Maintained by the GNOME Documentation Project:
+	  http://developer.gnome.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Feb 12, 2002
+-->
+<!--
+      (Do not remove this comment block.)
+  Version: 0.0.1
+  Last modified: May 22, 2009
+  Maintainers:
+               Guido Günther  <agx@sigxcpu.org>
+  Translators:
+               (translators put your name and email here)
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="el">
+ <!-- please do not change the id; for translations, change lang to -->
+ <!-- appropriate code -->
+
+ <articleinfo>
+  <title>Εγχειρίδιο <application>Διαλόγου πιστοποίησης δικτύου Kerberos</application></title>
+  <abstract role="description">
+   <para>Ο διάλογος πιστοποίησης δικτύου Kerberos είναι ένας μικρός βοηθός που παρακολουθεί και ανανεώνει το δελτίο του Kerberos.</para>
+  </abstract>
+  <copyright>
+   <year>2009</year>
+   <holder>Guido Günther</holder>
+  </copyright><copyright><year>2014</year><holder>Δημήτρης Σπίγγος (dmtrs32@gmail.com)</holder></copyright>
+
+  <!-- translators: uncomment this:
+
+  <copyright>
+  <year>2000</year>
+  <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+ </copyright>
+
+  -->
+  <!-- An address can be added to the publisher information.  If a role is
+  not specified, the publisher/author is the same for all versions of the
+  document.  -->
+  <publisher role="maintainer">
+   <publishername>Guido Günther</publishername>
+  </publisher>
+
+    <legalnotice id="legalnotice">
+	<para>Δίνεται άδεια για αντιγραφή, διανομή και/ή τροποποίηση του εγγράφου υπό τους όρους της Ελεύθερης Άδειας Τεκμηρίωσης GNU (GFDL), Έκδοση 1.1 ή μεταγενέστερη εκδιδόμενη από το Ίδρυμα Ελεύθερου Λογισμικού χωρίς Σταθερά Εδάφια, χωρίς Εξώφυλλα Κειμένου, και χωρίς Οπισθόφυλλα Κειμένου. Μπορείτε να βρείτε ένα αντίγραφο της GFDL σε αυτόν τον <ulink type="help" url="ghelp:fdl">σύνδεσμο</ulink> ή στο αρχείο COPYING-DOCS που διανεμήθηκε με αυτόν τον οδηγό.</para>
+         <para>Αυτή η τεκμηρίωση είναι μέρος της συλλογής τεκμηρίωσης του GNOME όπως διανέμεται υπό τους όρους της GFDL. Εάν επιθυμείτε να διανείμετε αυτή την τεκμηρίωση ξεχωριστά από την συλλογή, μπορείτε να το κάνετε εάν η τεκμηρίωση συνοδεύεται από αντίγραφο της άδειας (GFDL) όπως περιγράφεται στον τομέα 6 της άδειας.</para>
+
+	<para>Πολλά από τα ονόματα που χρησιμοποιούνται από επιχειρήσεις για να διακρίνουν τα προϊόντα τους και τις υπηρεσίες αξιώνονται ως εμπορικά σήματα. Όπου εμφανίζονται αυτά τα ονόματα σε κάποια τεκμηρίωση του GNOME και τα μέλη του έργου τεκμηρίωσης του GNOME γνωρίζουν για αυτά τα εμπορικά σήματα, τότε τα ονόματα είναι με κεφαλαία γράμματα ή με αρχικά κεφαλαία γράμματα.</para>
+
+	<para>TΟ ΕΓΓΡΑΦΟ ΚΑΙ ΟΙ ΤΡΟΠΟΙΗΜΕΝΕΣ ΕΚΔΟΣΕΙΣ ΤΟΥ ΠΑΡΕΧΟΝΤΑΙ ΥΠΟ ΤΟΥΣ ΟΡΟΥΣ ΤΗΣ ΕΛΕΥΘΕΡΗΣ ΑΔΕΙΑΣ ΤΕΚΜΗΡΙΩΣΗΣ GNU ΜΕ ΤΙΣ ΕΠΙΠΛΕΟΝ ΓΝΩΣΤΟΠΟΙΗΣΕΙΣ: <orderedlist>
+		<listitem>
+		  <para>Η ΤΕΚΜΗΡΙΩΣΗ ΑΥΤΗ ΠΑΡΕΧΕΤΑΙ "ΩΣ ΕΧΕΙ", ΧΩΡΙΣ ΚΑΜΙΑ ΕΓΓΥΗΣΗ ΚΑΝΕΝΟΣ ΕΙΔΟΥΣ, ΕΚΦΡΑΣΜΕΝΗ 'Η ΝΟΟΥΜΕΝΗ, ΠΕΡΙΛΑΜΒΑΝΟΜΕΝΩΝ, ΧΩΡΙΣ ΠΕΡΙΟΡΙΣΜΟ, ΕΓΓΥΗΣΕΩΝ ΟΤΙ ΤΟ ΕΓΓΡΑΦΟ 'Η ΠΑΡΑΛΛΑΓΕΣ ΤΟΥ ΕΓΓΡΑΦΟΥ ΕΙΝΑΙ ΕΛΕΥΘΕΡΑ ΚΑΘΕ ΕΛΑΤΤΩΜΑΤΟΣ, ΕΜΠΟΡΕΥΣΙΜΑ, ΚΑΤΑΛΛΗΛΑ ΓΙΑ ΕΝΑ ΣΥΓΚΕΚΡΙΜΕΝΟ ΣΚΟΠΟ, Η ΜΗ-ΠΑΡΑΒΑΙΝΟΝΤΑ. Η ΕΥΘΥΝΗ ΓΙΑ ΤΗΝ ΠΟΙΟΤΗΤΑ, ΑΚΡΙΒΕΙΑ, ΚΑΙ ΑΠΟΔΟΣΗ ΤΟΥ ΕΓΓΡΑΦΟΥ ΕΙΝΑΙ ΑΠΟΚΛΕΙΣΤΙΚΑ ΔΙΚΗ ΣΑΣ. ΑΝ ΟΠΟΙΟΔΗΠΟΤΕ ΕΓΓΡΑΦΟ Η ΠΑΡΑΛΛΑΓΗ ΤΟΥΑΠΟΔΕΙΚΤΟΥΝ ΕΛΑΤΤΩΜΑΤΙΚΑ ΜΕ ΟΠΟΙΟΔΗΠΟΤΕ ΤΡΟΠΟ, ΕΣΕΙΣ (ΚΑΙ ΟΧΙ Ο ΑΡΧΙΚΟΣ ΣΥΓΓΡΑΦΕΑΣ 'Η ΟΠΟΙΟΣΔΗΠΟΤΕ ΣΥΜΒΑΛΛΟΝΤΑΣ) ΑΝΑΛΑΜΒΑΝΕΤΕ ΤΟ ΚΟΣΤΟΣ ΟΠΟΙΑΣΔΗΠΟΤΕ ΑΝΑΓΚΑΙΑΣ ΥΠΗΡΕΣΙΑΣ, ΕΠΙΣΚΕΥΗΣ 'Η ΔΙΟΡΘΩΣΗΣ. Η ΑΠΑΛΛΑΓΗ ΕΥΘΥΝΗΣ ΠΟΥ ΣΥΝΟΔΕΥΕΙ ΑΥΤΗ ΤΗΝ ΤΕΚΜΗΡΙΩΣΗ ΕΙΝΑΙ ΑΝΑΠΟΣΠΑΣΤΟ ΚΟΜΜΑΤΙ ΑΥΤΗΣ. ΚΑΜΙΑ ΧΡΗΣΗ ΤΗΣ ΤΕΚΜΗΡΙΩΣΗΣ Ή ΠΑΡΑΛΛΑΓΩΝ ΑΥΤΗΣ ΔΕΝ ΕΠΙΤΡΕΠΕΤΑΙ ΠΑΡΑ ΜΟΝΟ ΕΑΝ ΣΥΝΟΔΕΥΕΤΑΙ ΑΠΟ ΤΗΝ ΑΠΑΛΛΑΓΗ ΕΥΘΥΝΗΣ. ΚΑΙ</para>
+		</listitem>
+		<listitem>
+		  <para>ΚΑΙ ΣΕ ΚΑΜΙΑ ΠΕΡΙΠΤΩΣΗ ΚΑΙ ΣΕ ΚΑΜΙΑ ΝΟΜΟΛΟΓΙΑ ΑΣΤΙΚΟΥ ΑΔΙΚΗΜΑΤΟΣ (ΠΕΡΙΛΑΜΒΑΝΟΜΕΝΗΣ ΕΚΕΙΝΟΥ ΤΗΣ ΑΜΕΛΕΙΑΣ), ΣΥΜΒΟΛΑΙΟΥ Ή ΑΛΛΟΥ, Ο ΣΥΝΤΑΚΤΗΣ, Ο ΑΡΧΙΚΟΣ ΣΥΓΓΡΑΦΕΑΣ, ΟΠΟΙΟΣΔΗΠΟΤΕ ΣΥΝΕΡΓΑΤΗΣ Ή ΟΠΟΙΟΣΔΗΠΟΤΕ ΔΙΑΝΟΜΕΑΣ ΤΟΥ ΕΓΓΡΑΦΟΥ Ή ΤΡΟΠΟΠΟΙΗΜΕΝΗΣ ΕΚΔΟΣΗΣ ΤΟΥ ΕΓΓΡΑΦΟΥ, Ή ΟΠΟΙΣΔΗΠΟΤΕ ΠΡΟΜΗΘΕΥΤΗΣ ΟΠΟΙΟΥΔΗΠΟΤΕ ΕΚ ΤΩΝ ΑΝΩΤΕΡΩ ΠΡΟΣΩΠΩΝ ΕΙΝΑΙ ΥΠΕΥΘΥΝΟΣ ΕΝΑΝΤΙ ΟΙΟΥΔΗΠΟΤΕ ΠΡΟΣΩΠΟΥ ΓΙΑ ΟΠΟΙΑΔΗΠΟΤΕ ΑΜΕΣΗ, ΕΜΜΕΣΗ, ΙΔΙΑΙΤΗΕΡΗ, ΑΤΥΧΗ Ή ΣΥΝΕΠΑΓΟΜΕΝΗ ΒΛΑΒΗ ΟΙΟΥΔΗΠΟΤΕ ΧΑΡΑΚΤΗΡΑ ΣΥΜΠΕΡΙΛΑΜΒΑΝΟΜΕΝΩΝ, ΧΩΡΙΣ ΠΕΡΙΟΡΙΣΜΟΥΣ, ΒΛΑΒΕΣ ΕΞΑΙΤΙΑΣ ΑΠΩΛΕΙΑΣ ΠΕΛΑΤΕΙΑΣ, ΣΤΑΣΗ ΕΡΓΑΣΙΑΣ, ΑΣΤΟΧΙΑ Ή ΚΑΚΗ ΛΕΙΤΟΥΡΓΙΑ ΥΠΟΛΟΓΙΣΤΗ, Ή ΟΠΟΙΑΔΗΠΟΤΕ ΚΑΙ ΚΑΘΕ ΑΛΛΗ ΒΛΑΒΗ Ή ΑΠΩΛΕΙΑ ΠΟΥ ΘΑ ΕΓΕΙΡΕΙ Ή ΣΧΕΤΙΖΕΤΑΙ ΜΕ ΤΗΝ ΧΡΗΣΗ ΤΟΥ ΕΓΓΡΑΦΟΥ ΚΑΙ ΟΠΟΙΑΣΔΗΠΟΤΕ ΤΡΟΠΟΠΟΙΗΜΕΝΗΣ ΕΚΔΟΣΗΣ ΤΟΥ ΕΓΓΡΑΦΟΥ, ΑΚΟΜΗ ΚΑΙ ΑΝ ΚΑΠΟΙΟ ΑΠΟ ΑΥΤΑ ΤΑ ΠΡΟΣΩΠΑ ΕΙΝΑΙ ΕΝΗΜΕΡΟ ΓΙΑ ΤΗΝ ΠΙΘΑΝΟΤΗΤΑ ΠΡΟΚΛΗΣΗΣ ΤΕΤΟΙΩΝ ΒΛΑΒΩΝ.</para>
+		</listitem>
+	  </orderedlist></para>
+  </legalnotice>
+
+
+
+  <authorgroup>
+   <author>
+    <firstname>Jonathan</firstname>
+    <surname>Blandford</surname>
+    <email>rjb@redhat.com</email>
+   </author>
+   <author role="maintainer">
+    <firstname>Guido</firstname>
+    <surname>Günther</surname>
+    <email>agx@sigxcpu.org</email>
+   </author>
+   <!-- This is appropriate place for other contributors: translators,
+   maintainers,  etc. Commented out by default.
+   <othercredit role="translator">
+   <firstname>Latin</firstname>
+   <surname>Translator 1</surname>
+   <affiliation>
+   <orgname>Latin Translation Team</orgname>
+   <address> <email>translator@gnome.org</email> </address>
+  </affiliation>
+   <contrib>Latin translation</contrib>
+  </othercredit>
+   -->
+  </authorgroup>
+
+  <!-- The revision numbering system for GNOME manuals is as follows: -->
+  <!-- * the revision number consists of two components -->
+  <!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
+  <!-- * the second component of the revision number is a decimal unit that is incremented with each revision of the manual. -->
+  <!-- For example, if the GNOME desktop release is V2.x, the first version of the manual that -->
+  <!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
+  <!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
+  <!-- to V3.0, and so on. -->
+
+  <revhistory>
+   <revision>
+    <revnumber>2.0</revnumber>
+    <date>Μάιος 2009</date>
+    <revdescription>
+     <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
+    </revdescription>
+   </revision>
+  </revhistory>
+  <releaseinfo>Αυτό το εγχειρίδιο περιγράφει πώς να χρησιμοποιήσετε τον διάλογο πιστοποίησης δικτύου Kerberos για να διαχειριστείτε τα δελτία Kerberos.</releaseinfo>
+  <legalnotice>
+   <title>Aνάδραση</title>
+   <para>Για να αναφέρετε ένα σφάλμα ή να κάνετε μια πρόταση σχετικά με αυτό το πακέτο ή αυτό το εγχειρίδιο, χρησιμοποιήστε το <ulink url="http://bugzilla.gnome.org" type="http">Bugzilla του GNOME</ulink>.</para>
+   <!-- Translators may also add here feedback address for translations -->
+  </legalnotice>
+ </articleinfo>
+
+ <!-- ============= Document Body ============================= -->
+ <!-- ============= Introduction ============================== -->
+ <section id="intro">
+  <title>Εισαγωγή</title>
+  <indexterm>
+    <primary><application>Διάλογος πιστοποίησης δικτύου Kerberos</application></primary>
+    <secondary>Εγχειρίδιο</secondary>
+    <tertiary>krb5-auth-dialog</tertiary>
+  </indexterm>
+
+   <para>Ο διάλογος πιστοποίησης δικτύου Kerberos είναι μια μικροεφαρμογή για την <systemitem>επιφάνεια εργασίας GNOME</systemitem> που παρακολουθεί και ανανεώνει το δελτίο του Kerberos. Αναδύει υπενθυμίσεις όταν το δελτίο πρόκειται να λήξει.</para>
+   <para>Αφού έχετε αποκτήσει ένα δελτίο Kerberos - είτε μέσα από GDM ή μέσα από την ίδια την μικροεφαρμογή - η μικροεφαρμογή διαχειρίζεται την ανανέωση του δελτίου μέχρι να λήξει. Μπορεί επίσης να χρησιμοποιηθεί για να καταστρέψει (αφαιρέσει) την κρυφή μνήμη διαπιστευτηρίου, για να αποκτήσει ένα δελτίο με διαφορετικές επιλογές ή να αλλάξει σε μια άλλη αρχή ασφάλειας.</para>
+ </section>
+
+<section id="using">
+  <title>Χρήση</title>
+  <para>Ο <application>Διάλογος πιστοποίησης δικτύου Kerberos</application> συνήθως αρχίζει με την έναρξη του GNOME, αλλά μπορείτε να ξεκινήσετε χειροκίνητα τον <application>Διάλογο πιστοποίησης δικτύου Kerberos</application> από τα εξής:</para>
+  <variablelist>
+    <varlistentry>
+      <term>Γραμμή εντολών</term>
+      <listitem>
+	<para>Πληκτρολογήστε <command>krb5-auth-dialog</command>, έπειτα πατήστε το πλήκτρο <keycap>Επιστροφή</keycap>:</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>Το εικονίδιο περιοχής ειδοποιήσεων θα δείξει μια από τις τρεις καταστάσεις:</para>
+
+  <section id="trayicon-valid">
+    <title>Έγκυρο δελτίο Kerberos</title>
+    <para>Έχετε ένα έγκυρο δελτίο Kerberos που μπορεί να χρησιμοποιηθεί για να πιστοποιήσει τις υπηρεσίες δικτύου.</para>
+    <figure>
+      <title>Έγκυρο δελτίο Kerberos</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-valid.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+  <section id="trayicon-expiring">
+    <title>Λήξη δελτίου Kerberos</title>
+    <para>Το δελτίο Kerberos πρόκειται να λήξει, αλλά μπορεί ακόμα να χρησιμοποιηθεί για να πιστοποιήσει υπηρεσίες δικτύου.</para>
+    <figure>
+      <title>Λήξη δελτίου Kerberos</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-expiring.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+  <section id="trayicon-expired">
+    <title>Το δελτίο Kerberos έληξε</title>
+    <para>Ο Kerberos σας έγινε άκυρος (π.χ. έληξε). Δεν μπορεί πια να χρησιμοποιηθεί για να πιστοποιήσει υπηρεσίες δικτύου. Αυτό δεν είναι πρόβλημα αν η εφαρμογή που απαιτεί το Kerberos ξέρει πώς να ζητήσει ένα νέο δελτίο μέσα από το <application>Διάλογος πιστοποίησης δικτύου Kerberos</application>. Σε περίπτωση που δεν ξέρει, μπορείτε απλά να πατήστε στην μικροεφαρμογή και να επανεισάγετε τον κωδικό πρόσβασης σας.</para>
+    <figure>
+      <title>Το δελτίο Kerberos έληξε</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-expired.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+</section>
+
+<section id="notify">
+  <title>Μηνύματα ειδοποίησης</title>
+  <para>Όταν ο διάλογος πιστοποίησης δικτύου Kerberos έχει αρχίσει, μπορεί να εμφανιστούν οι παρακάτω ειδοποιήσεις.</para>
+
+ <section id="notify-valid">
+    <title>Έγκυρα διαπιστευτήρια του Kerberos</title>
+    <para>Μόλις αποκτήσατε ένα έγκυρο δελτίο Kerberos που μπορεί να χρησιμοποιηθεί για να πιστοποιήσει υπηρεσίες δικτύου.</para>
+    <figure>
+      <title>Ειδοποίηση όταν τα διαπιστευτήρια του Kerberos γίνουν έγκυρα</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-valid.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+ <section id="notify-expiring">
+    <title>Λήξη διαπιστευτηρίων του Kerberos</title>
+    <para>Τα διαπιστευτήρια του Kerberos πρόκειται να λήξουν. Μπορείτε να πατήσετε στην μικροεφαρμογή περιοχής ειδοποιήσεων για να τα ανανεώσετε.</para>
+    <figure>
+      <title>Ειδοποίηση όταν τα διαπιστευτήρια του Kerberos λήγουν</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-expiring.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+ <section id="notify-expired">
+    <title>Έληξαν τα διαπιστευτήρια του Kerberos</title>
+    <para>Τα διαπιστευτήρια του Kerberos μόλις λήξαν. Δεν μπορούν να χρησιμοποιηθούν πια για πιστοποίηση των υπηρεσιών δικτύου.</para>
+    <figure>
+      <title>Ειδοποίηση όταν τα διαπιστευτήρια του Kerberos έληξαν</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-expired.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+</section>
+
+<section id="preferences">
+  <title>Προτιμήσεις</title>
+  <para>Μπορείτε να ορίσετε προτιμήσεις επιλέγοντας "Προτιμήσεις" από το μενού περιεχομένων των μικροεφαρμογών ή επιλέγοντας "Πιστοποίηση δικτύου" στο <application>Κέντρο ελέγχου</application>. <table frame="topbot" id="tbl-principal-prefs"><title>Βασικές προτιμήσεις του Kerberos</title><tgroup cols="2" colsep="1" rowsep="1"><colspec colwidth="19.21*"/><colspec colwidth="46.79*"/><thead>
+          <row>
+            <entry colsep="0" rowsep="1">
+              <para>Στοιχείο διαλόγου</para>
+            </entry>
+            <entry colsep="0" rowsep="1">
+              <para>Περιγραφή</para>
+            </entry>
+          </row>
+        </thead><tbody>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Βασικά του Kerberos</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Τα βασικά του Kerberos για χρήση. Αφήστε κενό για να χρησιμοποιήσετε το τρέχον όνομα χρήστη. Αν αλλάξετε αυτή τη ρύθμιση πρέπει να καταστρέψετε την κρυφή μνήμη του διαπιστευτηρίου πριν αυτές να εφαρμοστούν.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Αναγνωριστικό χρήστη PKINIT</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Το βασικό αναγνωριστικό δημόσιο/ιδιωτικό/πιστοποιητικό. Αφήστε κενό αν δεν χρησιμοποιείτε το PKINIT. Για να το ενεργοποιήσετε χρησιμοποιώντας ένα διακριτικό ασφαλείας προσθέστε τη διαδρομή στη βιβλιοθήκη pkcs11 εδώ, π.χ. "PKCS11:/usr/lib/opensc/opensc-pkcs11.so"</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Άγκυρες PKINIT</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Η διαδρομή στα πιστοποιητικά CA που χρησιμοποιείται ως έμπιστες άγκυρες για το pkinit. Χρειάζεστε να το ορίσετε μόνο αν δεν έχει ρυθμιστεί γενικά στο <filename>/etc/krb5.conf</filename>.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>προωθήσιμο</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Αν το ζητούμενο δελτίο Kerberos πρέπει να είναι προωθήσιμο. Η αλλαγή αυτής της ρύθμισης απαιτεί επαναπιστοποίηση αριστεροπατώντας στο εικονίδιο περιοχής ειδοποιήσεων και εισάγοντας τον κωδικό πρόσβασης σας.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>ανανεώσιμο</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Αν το ζητούμενο δελτίο Kerberos πρέπει να είναι ανανεώσιμο. Η αλλαγή αυτής της ρύθμισης απαιτεί επαναπιστοποίηση αριστεροπατώντας στο εικονίδιο περιοχής ειδοποιήσεων και εισάγοντας τον κωδικό πρόσβασης σας.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>με μεσολάβηση</guilabel>
+	      </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Αν το ζητούμενο δελτίο Kerberos πρέπει να είναι με μεσολάβηση. Η αλλαγή αυτής της ρύθμισης απαιτεί επαναπιστοποίηση αριστεροπατώντας στο εικονίδιο περιοχής ειδοποιήσεων και εισάγοντας τον κωδικό πρόσβασης σας.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Προειδοποίηση .. λεπτά πριν τη λήξη</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Ειδοποιήσεις ότι τα διαπιστευτήρια σας πρόκειται να λήξουν θα σταλούν πριν από τόσα λεπτά πριν τη λήξη.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>
+                <guilabel>Εμφάνιση εικονιδίου περιοχής ειδοποιήσεων</guilabel>
+              </para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Αν θα εμφανίζεται το εικονίδιο περιοχής ειδοποιήσεων. Η απενεργοποίηση του εικονιδίου περιοχής ειδοποιήσεων θα απενεργοποιήσει επίσης τις ειδοποιήσεις, ο διάλογος κωδικών πρόσβασης θα εμφανιστεί στη θέση του.</para>
+            </entry>
+          </row>
+	</tbody></tgroup></table></para>
+</section>
+
+</article>
