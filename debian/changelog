@@ -1,3 +1,9 @@
+krb5-auth-dialog (3.12.0-2) unstable; urgency=medium
+
+  * [a9cf1c1] Use current user name to determine principal (Closes: #762906)
+
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 20 Oct 2014 13:58:16 +0200
+
 krb5-auth-dialog (3.12.0-1) unstable; urgency=medium
 
   * [580cd32] New upstream version 3.12.0
