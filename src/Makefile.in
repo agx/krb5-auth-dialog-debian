@@ -61,6 +61,7 @@ am__make_running_with_option = \
   test $$has_opt = yes
 am__make_dryrun = (target_option=n; $(am__make_running_with_option))
 am__make_keepgoing = (target_option=k; $(am__make_running_with_option))
+pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkglibexecdir = $(libexecdir)/@PACKAGE@
@@ -96,7 +97,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" \
 	"$(DESTDIR)$(appdatadir)" "$(DESTDIR)$(autostartdir)" \
 	"$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(convertdir)" \
-	"$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(servicedir)"
+	"$(DESTDIR)$(servicedir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
 am_krb5_auth_dialog_OBJECTS = krb5_auth_dialog-ka-kerberos.$(OBJEXT) \
@@ -111,7 +112,8 @@ am_krb5_auth_dialog_OBJECTS = krb5_auth_dialog-ka-kerberos.$(OBJEXT) \
 	krb5_auth_dialog-ka-preferences.$(OBJEXT) \
 	krb5_auth_dialog-ka-closures.$(OBJEXT) \
 	krb5_auth_dialog-ka-entry-buffer.$(OBJEXT) \
-	krb5_auth_dialog-dummy-strings.$(OBJEXT) $(am__objects_1)
+	krb5_auth_dialog-dummy-strings.$(OBJEXT) \
+	krb5_auth_dialog-resources.$(OBJEXT) $(am__objects_1)
 krb5_auth_dialog_OBJECTS = $(am_krb5_auth_dialog_OBJECTS)
 am__DEPENDENCIES_1 =
 krb5_auth_dialog_DEPENDENCIES = $(top_builddir)/secmem/libsecmem.a \
@@ -199,7 +201,7 @@ man1dir = $(mandir)/man1
 NROFF = nroff
 MANS = $(man_MANS)
 DATA = $(appdata_DATA) $(autostart_DATA) $(desktop_DATA) \
-	$(dist_convert_DATA) $(pkgdata_DATA) $(service_DATA)
+	$(dist_convert_DATA) $(service_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -220,7 +222,6 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-pkgdatadir = $(datadir)/krb5-auth-dialog
 ACLOCAL = @ACLOCAL@
 ALL_LINGUAS = @ALL_LINGUAS@
 AMTAR = @AMTAR@
@@ -256,6 +257,7 @@ FGREP = @FGREP@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GLIB_COMPILE_RESOURCES = @GLIB_COMPILE_RESOURCES@
 GLIB_COMPILE_SCHEMAS = @GLIB_COMPILE_SCHEMAS@
 GMODULE_CFLAGS = @GMODULE_CFLAGS@
 GMODULE_LIBS = @GMODULE_LIBS@
@@ -447,11 +449,11 @@ krb5_auth_dialog_SOURCES = \
 	ka-entry-buffer.h	\
 	ka-entry-buffer.c	\
 	dummy-strings.c		\
+	resources.c		\
 	$(NULL)
 
 krb5_auth_dialog_CPPFLAGS = \
 	-I$(top_srcdir)/secmem \
-	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DLOCALE_DIR=\""$(localedir)/"\" \
 	-DBIN_DIR=\""$(bindir)/"\" \
@@ -483,32 +485,39 @@ krb5_auth_dialog_LDADD = \
 AM_CPPFLAGS = \
 	-I $(top_srcdir)/secmem/ \
 	$(DISABLE_DEPRECATED) \
-	$(NULL)
-
-pkgdata_DATA = \
-	krb5-auth-dialog.ui \
+	-DG_LOG_DOMAIN="\"KrbAuthDialog\"" \
 	$(NULL)
 
 EXTRA_DIST = \
-	$(pkgdata_DATA) \
 	$(schema_in_files) \
 	$(autostart_in_files) \
 	$(service_in_files) \
 	$(appdata_in_files) \
 	org.gnome.KrbAuthDialog.gschema.xml \
 	krb5-auth-dialog.1.in \
+        krb5-auth-dialog.gresource.xml \
+	resources/ui/app-menu.ui \
+	resources/ui/ka-main-window.ui \
+	resources/ui/ka-preferences.ui \
+	resources/ui/ka-pwdialog.ui \
 	$(NULL)
 
 CLEANFILES = $(schema_DATA) \
 	$(service_DATA) \
 	$(appdata_DATA) \
+	resources.c \
 	$(NULL)
 
 DISTCLEANFILES = \
 	krb5-auth-dialog.desktop \
 	$(NULL)
 
-all: all-am
+BUILT_SOURCES = \
+        resources.c \
+	$(NULL)
+
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -617,6 +626,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-pwdialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-settings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-ka-tools.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/krb5_auth_dialog-resources.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -821,6 +831,20 @@ krb5_auth_dialog-dummy-strings.obj: dummy-strings.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-dummy-strings.obj `if test -f 'dummy-strings.c'; then $(CYGPATH_W) 'dummy-strings.c'; else $(CYGPATH_W) '$(srcdir)/dummy-strings.c'; fi`
 
+krb5_auth_dialog-resources.o: resources.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-resources.o -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-resources.Tpo -c -o krb5_auth_dialog-resources.o `test -f 'resources.c' || echo '$(srcdir)/'`resources.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-resources.Tpo $(DEPDIR)/krb5_auth_dialog-resources.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='resources.c' object='krb5_auth_dialog-resources.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-resources.o `test -f 'resources.c' || echo '$(srcdir)/'`resources.c
+
+krb5_auth_dialog-resources.obj: resources.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -MT krb5_auth_dialog-resources.obj -MD -MP -MF $(DEPDIR)/krb5_auth_dialog-resources.Tpo -c -o krb5_auth_dialog-resources.obj `if test -f 'resources.c'; then $(CYGPATH_W) 'resources.c'; else $(CYGPATH_W) '$(srcdir)/resources.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/krb5_auth_dialog-resources.Tpo $(DEPDIR)/krb5_auth_dialog-resources.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='resources.c' object='krb5_auth_dialog-resources.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(krb5_auth_dialog_CPPFLAGS) $(CPPFLAGS) $(krb5_auth_dialog_CFLAGS) $(CFLAGS) -c -o krb5_auth_dialog-resources.obj `if test -f 'resources.c'; then $(CYGPATH_W) 'resources.c'; else $(CYGPATH_W) '$(srcdir)/resources.c'; fi`
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
@@ -953,27 +977,6 @@ uninstall-dist_convertDATA:
 	@list='$(dist_convert_DATA)'; test -n "$(convertdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(convertdir)'; $(am__uninstall_files_from_dir)
-install-pkgdataDATA: $(pkgdata_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgdatadir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pkgdatadir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgdatadir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgdatadir)" || exit $$?; \
-	done
-
-uninstall-pkgdataDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pkgdata_DATA)'; test -n "$(pkgdatadir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(pkgdatadir)'; $(am__uninstall_files_from_dir)
 install-serviceDATA: $(service_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(service_DATA)'; test -n "$(servicedir)" || list=; \
@@ -1079,13 +1082,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS) $(MANS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(appdatadir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(convertdir)" "$(DESTDIR)$(pkgdatadir)" "$(DESTDIR)$(servicedir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(appdatadir)" "$(DESTDIR)$(autostartdir)" "$(DESTDIR)$(desktopdir)" "$(DESTDIR)$(convertdir)" "$(DESTDIR)$(servicedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -1117,6 +1122,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
@@ -1141,7 +1147,7 @@ info-am:
 
 install-data-am: install-appdataDATA install-autostartDATA \
 	install-desktopDATA install-dist_convertDATA install-man \
-	install-pkgdataDATA install-serviceDATA
+	install-serviceDATA
 
 install-dvi: install-dvi-am
 
@@ -1189,12 +1195,11 @@ ps-am:
 
 uninstall-am: uninstall-appdataDATA uninstall-autostartDATA \
 	uninstall-binPROGRAMS uninstall-desktopDATA \
-	uninstall-dist_convertDATA uninstall-man uninstall-pkgdataDATA \
-	uninstall-serviceDATA
+	uninstall-dist_convertDATA uninstall-man uninstall-serviceDATA
 
 uninstall-man: uninstall-man1
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean \
 	clean-binPROGRAMS clean-generic clean-libtool cscopelist-am \
@@ -1205,16 +1210,15 @@ uninstall-man: uninstall-man1
 	install-data-am install-desktopDATA install-dist_convertDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
 	install-html install-html-am install-info install-info-am \
-	install-man install-man1 install-pdf install-pdf-am \
-	install-pkgdataDATA install-ps install-ps-am \
-	install-serviceDATA install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-appdataDATA uninstall-autostartDATA \
-	uninstall-binPROGRAMS uninstall-desktopDATA \
-	uninstall-dist_convertDATA uninstall-man uninstall-man1 \
-	uninstall-pkgdataDATA uninstall-serviceDATA
+	install-man install-man1 install-pdf install-pdf-am install-ps \
+	install-ps-am install-serviceDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am uninstall-appdataDATA \
+	uninstall-autostartDATA uninstall-binPROGRAMS \
+	uninstall-desktopDATA uninstall-dist_convertDATA uninstall-man \
+	uninstall-man1 uninstall-serviceDATA
 
 @INTLTOOL_DESKTOP_RULE@
 @GSETTINGS_RULES@
@@ -1223,6 +1227,10 @@ $(service_DATA): $(service_in_files) Makefile
 	sed -e "s|\@BINDIR\@|$(bindir)|" $< > $@
 
 @INTLTOOL_XML_RULE@
+
+resources.c: krb5-auth-dialog.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(srcdir)/krb5-auth-dialog.gresource.xml)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/krb5-auth-dialog.gresource.xml \
+	    --target=$@ --sourcedir=$(srcdir)/resources --generate-source
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

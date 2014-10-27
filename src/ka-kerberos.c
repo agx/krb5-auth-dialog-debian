@@ -192,15 +192,26 @@ ka_krb5_cc_clear_mcred (krb5_creds *mcred)
 /* ***************************************************************** */
 /* ***************************************************************** */
 
+/* log a kerberos error messge at the given log level */
+static void
+ka_log_error_message_at_level (GLogLevelFlags level,
+                               const char *prefix,
+                               krb5_context context,
+                               krb5_error_code err)
+{
+    char *errmsg = ka_get_error_message (context, err);
+
+    g_log (G_LOG_DOMAIN, level, "%s: %s", prefix, errmsg);
+    g_free (errmsg);
+}
+
+
 /* log a kerberos error messge */
 static void
 ka_log_error_message (const char *prefix, krb5_context context,
                       krb5_error_code err)
 {
-    char *errmsg = ka_get_error_message (context, err);
-
-    g_warning ("%s: %s", prefix, errmsg);
-    g_free (errmsg);
+    ka_log_error_message_at_level (G_LOG_LEVEL_ERROR, prefix, context, err);
 }
 
 
@@ -308,7 +319,7 @@ ka_get_service_tickets (GtkListStore * tickets, gboolean hide_conf_tickets)
 
     ret = krb5_cc_start_seq_get (kcontext, ccache, &cursor);
     if (ret) {
-        ka_log_error_message ("krb5_cc_start_seq_get", kcontext, ret);
+        ka_log_error_message_at_level (G_LOG_LEVEL_INFO, "krb5_cc_start_seq_get", kcontext, ret);
 
         /* if the file doesn't exist, it's not an error if we can't
          * parse it */
@@ -455,7 +466,7 @@ auth_dialog_prompter (krb5_context ctx G_GNUC_UNUSED,
         if (!password)
             goto cleanup;
         if (password_len + 1 > prompts[i].reply->length) {
-            g_warning ("Password too long %d/%d", password_len + 1,
+            g_warning ("Password too long %d/%zd", password_len + 1,
                        prompts[i].reply->length);
             goto cleanup;
         }
@@ -649,6 +660,10 @@ ka_parse_name (KaApplet *applet, krb5_context krbcontext,
         krb5_free_principal (krbcontext, *kprinc);
 
     g_object_get (applet, KA_PROP_NAME_PRINCIPAL, &principal, NULL);
+    if (principal[0] == '\0') {
+        g_free (principal);
+        principal = g_strdup (g_get_user_name());
+    }
     ret = krb5_parse_name (krbcontext, principal, kprinc);
 
     g_free (principal);

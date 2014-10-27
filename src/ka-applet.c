@@ -32,6 +32,8 @@
 #include "ka-closures.h"
 #include <libnotify/notify.h>
 
+#include <signal.h>
+
 #define NOTIFY_SECONDS 300
 
 enum ka_icon {
@@ -76,13 +78,13 @@ struct _KaAppletClass {
 G_DEFINE_TYPE (KaApplet, ka_applet, GTK_TYPE_APPLICATION);
 
 struct _KaAppletPrivate {
-    GtkBuilder *uixml;
     GtkStatusIcon *tray_icon;   /* the tray icon */
     GtkWidget *context_menu;    /* the tray icon's context menu */
     const char *icons[3];       /* for invalid, expiring and valid tickts */
     gboolean ns_persistence;    /* does the notification server support persistence */
 
     KaPwDialog *pwdialog;       /* the password dialog */
+    KaPreferences *prefs;       /* the prefs dialog */
     int pw_prompt_secs;         /* when to start sending notifications */
     KaPluginLoader *loader;     /* Plugin loader */
 
@@ -203,7 +205,7 @@ action_preferences (GSimpleAction *action G_GNUC_UNUSED,
 {
     KaApplet *self = userdata;
 
-    ka_preferences_window_show (self);
+    ka_preferences_run (self->priv->prefs);
 }
 
 static void
@@ -237,6 +239,30 @@ action_quit (GSimpleAction *action G_GNUC_UNUSED,
     ka_applet_destroy (self);
 }
 
+
+KaApplet *sigapplet;
+static void
+signal_handler (int signum)
+{
+    g_message ("Caught signal %d", signum);
+    if (sigapplet)
+        ka_applet_destroy (sigapplet);
+}
+
+
+static void
+setup_signal_handlers (KaApplet *applet)
+{
+    struct sigaction sa;
+
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler = signal_handler;
+    sigapplet = applet;
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGTERM, &sa, NULL);
+}
+
+
 static GActionEntry app_entries[] = {
     { "preferences", action_preferences, NULL, NULL, NULL, {0} },
     { "about", action_about, NULL, NULL, NULL, {0} },
@@ -245,19 +271,23 @@ static GActionEntry app_entries[] = {
 };
 
 static void
-ka_applet_app_menu_create(KaApplet *self,
-                          GtkBuilder *uixml)
+ka_applet_app_menu_create(KaApplet *self)
+
 {
     const gchar *debug_no_app_menu;
-    GMenuModel *model = G_MENU_MODEL(gtk_builder_get_object (uixml,
-                                                             "app-menu"));
+    GMenuModel *app_menu;
+    GtkBuilder *builder;
+
+    builder = gtk_builder_new_from_resource ("/org/gnome/krb5-auth-dialog/ui/app-menu.ui");
+    app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu"));
+
     g_action_map_add_action_entries (G_ACTION_MAP (self),
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      self);
 
-    g_assert (model != NULL);
+    g_assert (app_menu != NULL);
     gtk_application_set_app_menu (GTK_APPLICATION(self),
-                                  model);
+                                  app_menu);
 
     debug_no_app_menu = g_getenv ("KRB5_AUTH_DIALOG_DEBUG_NO_APP_MENU");
     if (debug_no_app_menu) {
@@ -266,6 +296,7 @@ ka_applet_app_menu_create(KaApplet *self,
                       "gtk-shell-shows-app-menu", FALSE,
                       NULL);
     }
+    g_object_unref (builder);
 }
 
 static void
@@ -278,10 +309,10 @@ ka_applet_startup (GApplication *application)
     G_APPLICATION_CLASS (ka_applet_parent_class)->startup (application);
 
     self->priv->startup_ccache = ka_kerberos_init (self);
-    ka_main_window_create (self, self->priv->uixml);
-    ka_preferences_window_create (self, self->priv->uixml);
+    ka_main_window_create (self);
+    self->priv->prefs = ka_preferences_new (self);
 
-    ka_applet_app_menu_create(self, self->priv->uixml);
+    ka_applet_app_menu_create(self);
 }
 
 static void
@@ -408,12 +439,8 @@ ka_applet_dispose (GObject *object)
         applet->priv->tray_icon = NULL;
     }
     if (applet->priv->pwdialog) {
-        g_object_unref (applet->priv->pwdialog);
+        gtk_widget_destroy (GTK_WIDGET(applet->priv->pwdialog));
         applet->priv->pwdialog = NULL;
-    }
-    if (applet->priv->uixml) {
-        g_object_unref (applet->priv->uixml);
-        applet->priv->uixml = NULL;
     }
     if (applet->priv->loader) {
         g_object_unref (applet->priv->loader);
@@ -604,11 +631,13 @@ ka_applet_select_icon (KaApplet *applet, int remaining)
 static gboolean
 ka_tray_icon_is_embedded (KaApplet *self)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     if (self->priv->tray_icon
         && gtk_status_icon_is_embedded (self->priv->tray_icon))
         return TRUE;
     else
         return FALSE;
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 
@@ -725,34 +754,22 @@ ka_send_event_notification (KaApplet *self,
         notify_notification_update (notification, summary, message, icon);
     } else {
         notification = self->priv->notification =
-#if HAVE_NOTIFY_NOTIFICATION_NEW_WITH_STATUS_ICON
-            notify_notification_new_with_status_icon (summary,
-                                                      message,
-                                                      icon,
-                                                      self->priv->tray_icon);
-#else
             notify_notification_new (summary, message, icon);
-#endif
         notify_notification_set_urgency (notification, NOTIFY_URGENCY_NORMAL);
     }
 
-#if HAVE_NOTIFY_NOTIFICATION_SET_HINT
     notify_notification_set_hint (notification,
                                   "desktop-entry",
                                   g_variant_new_string (PACKAGE));
-#endif
-
     if (self->priv->ns_persistence) {
         hint = "resident";
         timeout = NOTIFY_EXPIRES_NEVER;
 
         notify_notification_set_timeout (notification, timeout);
         notify_notification_clear_hints (notification);
-#if HAVE_NOTIFY_NOTIFICATION_SET_HINT
         notify_notification_set_hint (notification,
                                       hint,
                                       g_variant_new_boolean (TRUE));
-#endif
     }
 
     notify_notification_clear_actions(notification);
@@ -801,8 +818,10 @@ static void
 ka_update_tray_icon (KaApplet *self, const char *icon, const char *tooltip)
 {
     if (self->priv->tray_icon) {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         gtk_status_icon_set_from_icon_name (self->priv->tray_icon, icon);
         gtk_status_icon_set_tooltip_text (self->priv->tray_icon, tooltip);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 }
 
@@ -934,8 +953,10 @@ ka_applet_tray_icon_show_help_cb (GtkMenuItem *menuitem G_GNUC_UNUSED,
 {
     KaApplet *applet = KA_APPLET (user_data);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     ka_show_help (gtk_status_icon_get_screen (applet->priv->tray_icon), NULL,
                   NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 
@@ -962,30 +983,27 @@ ka_applet_create_context_menu (KaApplet *applet)
 {
     GtkWidget *menu;
     GtkWidget *menu_item;
-    GtkWidget *image;
 
     menu = gtk_menu_new ();
 
     /* kdestroy */
     menu_item =
-        gtk_image_menu_item_new_with_mnemonic (_("Remove Credentials _Cache"));
+        gtk_menu_item_new_with_mnemonic (_("Remove Credentials _Cache"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
                       G_CALLBACK (ka_applet_tray_icon_destroy_ccache_cb),
                       applet);
-    image = gtk_image_new_from_stock (GTK_STOCK_CANCEL, GTK_ICON_SIZE_MENU);
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     ka_applet_tray_icon_menu_add_separator_item (menu);
 
     /* Ticket dialog */
-    menu_item = gtk_image_menu_item_new_with_mnemonic (_("_List Tickets"));
+    menu_item = gtk_menu_item_new_with_mnemonic (_("_List Tickets"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
                       G_CALLBACK (ka_applet_tray_icon_show_tickets_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
     /* Help item */
-    menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_HELP, NULL);
+    menu_item = gtk_menu_item_new_with_mnemonic (_("_Help"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
                       G_CALLBACK (ka_applet_tray_icon_show_help_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
@@ -993,7 +1011,7 @@ ka_applet_create_context_menu (KaApplet *applet)
     ka_applet_tray_icon_menu_add_separator_item (menu);
 
     /* Quit */
-    menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
+    menu_item = gtk_menu_item_new_with_mnemonic (_("_Quit"));
     g_signal_connect (G_OBJECT (menu_item), "activate",
                       G_CALLBACK (ka_applet_tray_icon_quit_cb), applet);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
@@ -1014,9 +1032,11 @@ ka_tray_icon_on_menu (GtkStatusIcon *status_icon G_GNUC_UNUSED,
     KaApplet *applet = KA_APPLET (user_data);
 
     KA_DEBUG ("Trayicon right clicked: %d", applet->priv->pw_prompt_secs);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     gtk_menu_popup (GTK_MENU (applet->priv->context_menu), NULL, NULL,
                     gtk_status_icon_position_menu, applet->priv->tray_icon,
                     button, activate_time);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 
@@ -1040,17 +1060,19 @@ ka_applet_create_tray_icon (KaApplet *self)
     if (self->priv->ns_persistence)
         return FALSE;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     tray_icon = self->priv->tray_icon = gtk_status_icon_new ();
+    gtk_status_icon_set_from_icon_name (tray_icon,
+                                        self->priv->icons[exp_icon]);
+    gtk_status_icon_set_tooltip_text (tray_icon, PACKAGE);
+    gtk_status_icon_set_title (tray_icon, KA_NAME);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
     g_signal_connect (G_OBJECT (tray_icon), "activate",
                       G_CALLBACK (ka_tray_icon_on_click), self);
     g_signal_connect (G_OBJECT (tray_icon),
                       "popup-menu",
                       G_CALLBACK (ka_tray_icon_on_menu), self);
-    gtk_status_icon_set_from_icon_name (tray_icon,
-                                        self->priv->icons[exp_icon]);
-    gtk_status_icon_set_tooltip_text (tray_icon, PACKAGE);
-    gtk_status_icon_set_title (tray_icon, KA_NAME);
     return TRUE;
 }
 
@@ -1167,8 +1189,10 @@ ka_applet_destroy (KaApplet* self)
                                       GTK_WINDOW (first->data));
     }
 
+    gtk_widget_destroy (GTK_WIDGET(self->priv->prefs));
+    self->priv->prefs = NULL;
+
     ka_kerberos_destroy ();
-    ka_preferences_window_destroy ();
 }
 
 
@@ -1177,8 +1201,6 @@ KaApplet *
 ka_applet_create ()
 {
     KaApplet *applet = ka_applet_new ();
-    GError *error = NULL;
-    gboolean ret;
 
     if (!(ka_applet_setup_icons (applet)))
         g_error ("Failure to setup icons");
@@ -1190,18 +1212,7 @@ ka_applet_create ()
     ka_ns_check_persistence(applet);
     ka_applet_create_tray_icon (applet);
 
-    applet->priv->uixml = gtk_builder_new ();
-    ret = gtk_builder_add_from_file (applet->priv->uixml,
-                                     KA_DATA_DIR G_DIR_SEPARATOR_S
-                                     PACKAGE ".ui", &error);
-    if (!ret) {
-        g_assert (error);
-        g_assert (error->message);
-        g_error ("Failed to load UI XML: %s", error->message);
-    }
-    gtk_builder_connect_signals (applet->priv->uixml, NULL);
-
-    applet->priv->pwdialog = ka_pwdialog_create (applet->priv->uixml);
+    applet->priv->pwdialog = ka_pwdialog_new ();
     g_return_val_if_fail (applet->priv->pwdialog != NULL, NULL);
 
     applet->priv->settings = ka_settings_init (applet);
@@ -1232,6 +1243,7 @@ main (int argc, char *argv[])
     if (!applet)
         return 1;
 
+    setup_signal_handlers(applet);
     ret = g_application_run (G_APPLICATION(applet), argc, argv);
     g_object_unref (applet);
     return ret;
