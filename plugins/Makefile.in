@@ -265,6 +265,7 @@ FGREP = @FGREP@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GLIB_COMPILE_RESOURCES = @GLIB_COMPILE_RESOURCES@
 GLIB_COMPILE_SCHEMAS = @GLIB_COMPILE_SCHEMAS@
 GMODULE_CFLAGS = @GMODULE_CFLAGS@
 GMODULE_LIBS = @GMODULE_LIBS@
@@ -415,6 +416,12 @@ top_srcdir = @top_srcdir@
 NULL = 
 @ENABLE_PAM_PLUGIN_FALSE@PAM_PLUGIN = 
 @ENABLE_PAM_PLUGIN_TRUE@PAM_PLUGIN = libka-plugin-pam.la
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/src \
+	$(DISABLE_DEPRECATED) \
+	-DG_LOG_DOMAIN="\"KrbAuthDialog\"" \
+	$(NULL)
+
 pkglib_LTLIBRARIES = \
 	libka-plugin-dummy.la \
 	$(PAM_PLUGIN) \
@@ -430,8 +437,8 @@ libka_plugin_dummy_la_SOURCES = \
 	$(NULL)
 
 libka_plugin_dummy_la_CPPFLAGS = \
-	$(GTK_CFLAGS)       \
-	-I$(top_srcdir)/src \
+	$(AM_CPPFLAGS) \
+	$(GTK_CFLAGS)  \
 	$(NULL)
 
 libka_plugin_dummy_la_LDFLAGS = \
@@ -447,8 +454,8 @@ libka_plugin_dummy_la_LDFLAGS = \
 @ENABLE_PAM_PLUGIN_TRUE@	$(NULL)
 
 @ENABLE_PAM_PLUGIN_TRUE@libka_plugin_pam_la_CPPFLAGS = \
+@ENABLE_PAM_PLUGIN_TRUE@	$(AM_CPPFLAGS) \
 @ENABLE_PAM_PLUGIN_TRUE@	$(GTK_CFLAGS)       \
-@ENABLE_PAM_PLUGIN_TRUE@	-I$(top_srcdir)/src \
 @ENABLE_PAM_PLUGIN_TRUE@	$(NULL)
 
 @ENABLE_PAM_PLUGIN_TRUE@libka_plugin_pam_la_LDFLAGS = \
@@ -465,8 +472,8 @@ libka_plugin_afs_la_SOURCES = \
 	$(NULL)
 
 libka_plugin_afs_la_CPPFLAGS = \
-	$(GTK_CFLAGS)       \
 	-I$(top_srcdir)/src \
+	$(GTK_CFLAGS)       \
 	$(NULL)
 
 libka_plugin_afs_la_LDFLAGS = \
@@ -482,8 +489,8 @@ libka_plugin_gnomelock_la_SOURCES = \
 	$(NULL)
 
 libka_plugin_gnomelock_la_CPPFLAGS = \
-	$(GIO_CFLAGS)       \
 	-I$(top_srcdir)/src \
+	$(GIO_CFLAGS)       \
 	$(NULL)
 
 libka_plugin_gnomelock_la_LDFLAGS = \

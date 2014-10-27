@@ -1,4 +1,4 @@
-AC_INIT([krb5-auth-dialog],[3.12.0])
+AC_INIT([krb5-auth-dialog],[3.15.1])
 AC_CONFIG_SRCDIR(src/ka-kerberos.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([1.11.1 no-dist-gzip dist-xz -Wno-portability])
@@ -27,7 +27,7 @@ AM_PROG_CC_C_O
 KA_COMPILE_WARNINGS([maximum])
 GNOME_DOC_INIT
 
-GTK_REQUIRED=3.0
+GTK_REQUIRED=3.14
 GLIB_REQUIRED=2.28
 LIBNOTIFY_REQUIRED=0.7.0
 
@@ -40,6 +40,9 @@ dnl check for deprecated symbols:
 dnl GNOME_MAINTAINER_MODE_DEFINES
 
 GLIB_GSETTINGS
+
+GLIB_COMPILE_RESOURCES=`$PKG_CONFIG --variable glib_compile_resources gio-2.0`
+AC_SUBST(GLIB_COMPILE_RESOURCES)
 
 dnl --enable-debug=(yes|no)
 AC_ARG_ENABLE(debug,

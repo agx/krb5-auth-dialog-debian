@@ -57,11 +57,11 @@ krb5_auth_dialog_SOURCES =	\
 	ka-entry-buffer.h	\
 	ka-entry-buffer.c	\
 	dummy-strings.c		\
+	resources.c		\
 	$(NULL)
 
 krb5_auth_dialog_CPPFLAGS = \
 	-I$(top_srcdir)/secmem \
-	-DKA_DATA_DIR=\""$(pkgdatadir)"\" \
 	-DDATA_DIR=\""$(datadir)"\" \
 	-DLOCALE_DIR=\""$(localedir)/"\" \
 	-DBIN_DIR=\""$(bindir)/"\" \
@@ -93,29 +93,37 @@ krb5_auth_dialog_LDADD = \
 AM_CPPFLAGS = \
 	-I $(top_srcdir)/secmem/ \
 	$(DISABLE_DEPRECATED) \
-	$(NULL)
-
-pkgdatadir = $(datadir)/krb5-auth-dialog
-pkgdata_DATA = \
-	krb5-auth-dialog.ui \
+	-DG_LOG_DOMAIN="\"KrbAuthDialog\"" \
 	$(NULL)
 
 EXTRA_DIST = \
-	$(pkgdata_DATA) \
 	$(schema_in_files) \
 	$(autostart_in_files) \
 	$(service_in_files) \
 	$(appdata_in_files) \
 	org.gnome.KrbAuthDialog.gschema.xml \
 	krb5-auth-dialog.1.in \
+        krb5-auth-dialog.gresource.xml \
+	resources/ui/app-menu.ui \
+	resources/ui/ka-main-window.ui \
+	resources/ui/ka-preferences.ui \
+	resources/ui/ka-pwdialog.ui \
 	$(NULL)
 
 CLEANFILES = $(schema_DATA) \
 	$(service_DATA) \
 	$(appdata_DATA) \
+	resources.c \
 	$(NULL)
 
 DISTCLEANFILES = \
 	krb5-auth-dialog.desktop \
 	$(NULL)
 
+BUILT_SOURCES = \
+        resources.c \
+	$(NULL)
+
+resources.c: krb5-auth-dialog.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(srcdir)/krb5-auth-dialog.gresource.xml)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/krb5-auth-dialog.gresource.xml \
+	    --target=$@ --sourcedir=$(srcdir)/resources --generate-source
