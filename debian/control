@@ -29,7 +29,6 @@ Homepage: https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog
 Package: krb5-auth-dialog
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Suggests: gnome-control-center
 Description: tray applet for reauthenticating kerberos tickets
  krb5-auth-dialog is a simple tray applet that monitors kerberos tickets. It
  pops up reminders when the ticket is about to expire. Tickets can be refreshed
