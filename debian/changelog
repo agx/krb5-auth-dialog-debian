@@ -1,3 +1,13 @@
+krb5-auth-dialog (3.15.1-1) experimental; urgency=medium
+
+  * [31185d4] New upstream version 3.15.1
+  * [3e6b601] Bump required GTK+ version
+  * [f4c9b55] Don't suggest gnome-control-center. We don't ship a plugin for
+    it anymore
+  * [d40b67a] Drop all patches, all applied upstream
+
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 27 Oct 2014 21:13:48 +0100
+
 krb5-auth-dialog (3.12.0-2) unstable; urgency=medium
 
   * [a9cf1c1] Use current user name to determine principal (Closes: #762906)
