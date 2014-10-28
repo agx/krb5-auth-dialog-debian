@@ -23,7 +23,7 @@ Build-Depends: debhelper (>= 6),
  libpam0g-dev,
 Standards-Version: 3.9.2
 Vcs-Git: git://git.debian.org/git/users/agx/krb5-auth-dialog.git
-Vcs-Browser: http://git.debian.org/git/users/agx/krb5-auth-dialog.git
+Vcs-Browser: https://anonscm.debian.org/cgit/users/agx/krb5-auth-dialog.git/
 Homepage: https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog
 
 Package: krb5-auth-dialog
