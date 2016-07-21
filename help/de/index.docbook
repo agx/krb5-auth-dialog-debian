@@ -34,10 +34,7 @@
   <abstract role="description">
    <para>Der <application>Kerberos Netzwerkanmeldungsdialog</application> ist ein kleiner Helfer, der Ihre Kerberos-Tickets überwacht und auffrischt.</para>
   </abstract>
-  <copyright>
-   <year>2009</year>
-   <holder>Guido Günther</holder>
-  </copyright><copyright><year>2009</year><holder>Mario Blättermann (mariobl@gnome.org)</holder></copyright>
+  <copyright><year>2009</year> <holder>Guido Günther</holder></copyright>
 
   <!-- translators: uncomment this:
 
@@ -73,16 +70,8 @@
 
 
   <authorgroup>
-   <author>
-    <firstname>Jonathan</firstname>
-    <surname>Blandford</surname>
-    <email>rjb@redhat.com</email>
-   </author>
-   <author role="maintainer">
-    <firstname>Guido</firstname>
-    <surname>Günther</surname>
-    <email>agx@sigxcpu.org</email>
-   </author>
+   <author><firstname>Jonathan</firstname> <surname>Blandford</surname> <email>rjb@redhat.com</email></author>
+   <author role="maintainer"><firstname>Guido</firstname> <surname>Günther</surname> <email>agx@sigxcpu.org</email></author>
    <!-- This is appropriate place for other contributors: translators,
    maintainers,  etc. Commented out by default.
    <othercredit role="translator">
@@ -107,13 +96,9 @@
   <!-- to V3.0, and so on. -->
 
   <revhistory>
-   <revision>
-    <revnumber>2.0</revnumber>
-    <date>Mai 2009</date>
-    <revdescription>
+   <revision><revnumber>2.0</revnumber> <date>Mai 2009</date> <revdescription>
      <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
-    </revdescription>
-   </revision>
+    </revdescription></revision>
   </revhistory>
   <releaseinfo>Dieses Handbuch beschreibt, wie Sie den Kerberos Netzwerkanmeldungsdialog dazu verwenden können, Ihre Kerberos-Tickets zu verwalten.</releaseinfo>
   <legalnotice>
@@ -121,17 +106,54 @@
    <para>Um einen Fehler zu melden oder einen Vorschlag zu dieser Anwendung oder zu diesem Handbuch zu machen, benutzen Sie das <ulink url="http://bugzilla.gnome.org" type="http">Fehlererfassungssystem von GNOME</ulink>.</para>
    <!-- Translators may also add here feedback address for translations -->
   </legalnotice>
- </articleinfo>
+ 
+    <othercredit class="translator">
+      <personname>
+        <firstname>Mario Blättermann</firstname>
+      </personname>
+      <email>mario.blaettermann@gmail.com</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2009</year>
+      
+        <year>2016</year>
+      
+      <holder>Mario Blättermann</holder>
+    </copyright>
+  
+    <othercredit class="translator">
+      <personname>
+        <firstname>Christian Kirbach</firstname>
+      </personname>
+      <email>Christian.Kirbach@googlemail.com</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2010</year>
+      
+      <holder>Christian Kirbach</holder>
+    </copyright>
+  
+    <othercredit class="translator">
+      <personname>
+        <firstname>Daniel Winzen</firstname>
+      </personname>
+      <email>d@winzen4.de</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2012</year>
+      
+      <holder>Daniel Winzen</holder>
+    </copyright>
+  </articleinfo>
 
  <!-- ============= Document Body ============================= -->
  <!-- ============= Introduction ============================== -->
  <section id="intro">
   <title>Einführung</title>
-  <indexterm>
-    <primary><application>Kerberos Netzwerkanmeldungsdialog</application></primary>
-    <secondary>Handbuch</secondary>
-    <tertiary>krb5-auth-dialog</tertiary>
-  </indexterm>
+  <indexterm><primary><application>Kerberos Netzwerkanmeldungsdialog</application></primary>-<secondary>Handbuch</secondary> <tertiary>krb5-auth-dialog</tertiary></indexterm>
 
    <para>Der Kerberos Netzwerkanmeldungsdialog ist ein Applet für die <systemitem>GNOME-Arbeitsumgebung</systemitem>, welches Ihre Kerberos-Tickets überwacht und auffrischt. Erinnerungen werden angezeigt, sobald ein Ticket abzulaufen droht.</para>
    <para>Sobald Sie ein neues Kerberos-Ticket erhalten haben - sei es über Anmeldung via GDM oder durch das Applet selbst - wird das Applet die Erneuerung des Ticket bis zu dessen Ablaufen übernehmen. Das Applet kann außerdem zur Löschung des Ticket-Caches, zur Anforderung eines neuen Tickets mit anderen Einstellungen und zum Ändern des eingestellten Principals verwendet werden.</para>
@@ -247,7 +269,10 @@
 
 <section id="preferences">
   <title>Einstellungen</title>
-  <para>Sie können Einstellungen ändern, indem Sie  »Einstellungen« im Kontextmenü des Applets auswählen oder indem Sie  »Netzwerkanmeldung« in der  <application>Systemverwaltung</application> auswählen. <table frame="topbot" id="tbl-principal-prefs"><title>Einstellungen für Kerberos-Principal</title><tgroup cols="2" colsep="1" rowsep="1"><colspec colwidth="19.21*"/><colspec colwidth="46.79*"/><thead>
+  <para>Sie können Einstellungen ändern, indem Sie  »Einstellungen« im Kontextmenü des Applets auswählen oder indem Sie  »Netzwerkanmeldung« in der  <application>Systemverwaltung</application> auswählen. <table frame="topbot" id="tbl-principal-prefs">
+      <title>Einstellungen für Kerberos-Principal</title>
+      <tgroup cols="2" colsep="1" rowsep="1"> <colspec colwidth="19.21*"/> <colspec colwidth="46.79*"/>
+        <thead>
           <row>
             <entry colsep="0" rowsep="1">
               <para>Dialogelement</para>
@@ -256,12 +281,11 @@
               <para>Beschreibung</para>
             </entry>
           </row>
-        </thead><tbody>
+        </thead>
+        <tbody>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Kerberos-Principal</guilabel>
-              </para>
+              <para><guilabel>Kerberos-Principal</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Der Kerberos-Principal, welcher benutzt werden soll. Um Ihren aktuellen Benutzernamen zu verwenden, Feld bitte leer lassen. Falls Sie diese Einstellung ändern, müssen Sie den Ticket-Cache löschen bevor die Änderung wirksam wird.</para>
@@ -270,9 +294,7 @@
 
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>PKINIT-Benutzerkennung</guilabel>
-              </para>
+              <para><guilabel>PKINIT Userid</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Die öffentliche/private/zertifizierte Kennung des Principals. Feld bitte leer lassen, falls PKINIT nicht benutzt wird. Um die Verwendung eines Sicherheits-Token zu aktivieren, fügen Sie den Pfad zur pkcs11-Bibliothek hier ein, zum Beispiel  »PKCS11:/usr/lib/opensc/opensc-pkcs11.so«</para>
@@ -280,9 +302,7 @@
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>PKINIT-Anker</guilabel>
-              </para>
+              <para><guilabel>PKINIT anchors</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Pfad zu CA Zertifikaten, welche als »trust anchors« für pkinit verwendet werden. Sie müssen diese Einstellung nur vornehmen, falls sie nicht in <filename>/etc/krb5.conf</filename> definiert wurde.</para>
@@ -290,9 +310,7 @@
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>weiterleitbar</guilabel>
-              </para>
+              <para><guilabel>weiterleitbar</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Gibt an, ob das angeforderte Kerberos Ticket als »weiterleitbar« definiert wird. Die Änderung dieser Einstellung erfordert eine erneute Anmeldung, indem Sie mit der linken Maustaste auf das Applet klicken und Ihr Passwort eingeben.</para>
@@ -300,9 +318,7 @@
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>erneuerbar</guilabel>
-              </para>
+              <para><guilabel>erneuerbar</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Gibt an, ob das angeforderte Kerberos-Ticket als »erneuerbar« definiert wird. Die Änderung dieser Einstellung erfordert eine erneute Anmeldung, indem Sie mit der linken Maustaste auf das Applet klicken und Ihr Passwort eingeben.</para>
@@ -310,9 +326,7 @@
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>proxy-fähig</guilabel>
-	      </para>
+              <para><guilabel>als Proxy nutzbar</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Gibt an, ob das angeforderte Kerberos Ticket als »proxy-fähig« definiert wird. Die Änderung dieser Einstellung erfordert eine erneute Anmeldung, indem Sie mit der linken Maustaste auf das Applet klicken und Ihr Passwort eingeben.</para>
@@ -320,9 +334,7 @@
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Warnung … Minuten vor Ablaufen des Tickets</guilabel>
-              </para>
+              <para><guilabel>Warnung … Minuten vor Ablaufen des Tickets</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Benachrichtigungen, dass Ihre Anmeldedaten abzulaufen drohen, werden in den hier eingegebenen Minuten vor Ablaufen des Tickets verschickt.</para>
@@ -330,15 +342,15 @@
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Benachrichtigungssymbol anzeigen</guilabel>
-              </para>
+              <para><guilabel>Benachrichtigungssymbol anzeigen</guilabel></para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
               <para>Legt fest, ob das Benachrichtigungssymbol angezeigt werden soll oder nicht. Deaktivieren des Symbols deaktiviert auch die Benachrichtigungen, anstelle dessen wird ein Passwortdialog geöffnet.</para>
             </entry>
           </row>
-	</tbody></tgroup></table></para>
+	</tbody>
+      </tgroup>
+    </table></para>
 </section>
 
 </article>

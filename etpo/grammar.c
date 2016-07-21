@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -145,7 +145,7 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
+
 union YYSTYPE
 {
 #line 26 "grammar.y" /* yacc.c:355  */
@@ -155,6 +155,8 @@ union YYSTYPE
 
 #line 157 "grammar.c" /* yacc.c:355  */
 };
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -168,7 +170,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 172 "grammar.c" /* yacc.c:358  */
+#line 174 "grammar.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1245,13 +1247,13 @@ yyreduce:
         case 7:
 #line 42 "grammar.y" /* yacc.c:1646  */
     { table = (yyvsp[0].sval); }
-#line 1249 "grammar.c" /* yacc.c:1646  */
+#line 1251 "grammar.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 43 "grammar.y" /* yacc.c:1646  */
     { (yyval.sval) = g_strconcat((yyvsp[-1].sval), (yyvsp[0].sval), NULL);}
-#line 1255 "grammar.c" /* yacc.c:1646  */
+#line 1257 "grammar.c" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -1270,24 +1272,24 @@ yyreduce:
 			printf("\tN_(\"%s\"),\t/* %s:%s:%s */\n", (yyvsp[-1].sval), p, table, (yyvsp[-4].sval));
 		}
 	}
-#line 1274 "grammar.c" /* yacc.c:1646  */
+#line 1276 "grammar.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 58 "grammar.y" /* yacc.c:1646  */
     {
 	}
-#line 1281 "grammar.c" /* yacc.c:1646  */
+#line 1283 "grammar.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 60 "grammar.y" /* yacc.c:1646  */
     { table = "unknown"; }
-#line 1287 "grammar.c" /* yacc.c:1646  */
+#line 1289 "grammar.c" /* yacc.c:1646  */
     break;
 
 
-#line 1291 "grammar.c" /* yacc.c:1646  */
+#line 1293 "grammar.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

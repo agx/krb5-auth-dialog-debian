@@ -25,21 +25,21 @@
                (translators put your name and email here)
 -->
 <!-- =============Document Header ============================= -->
-<article id="index" lang="sv">
+<article id="index" lang="sl">
  <!-- please do not change the id; for translations, change lang to -->
  <!-- appropriate code -->
 
  <articleinfo>
-  <title><application>Kerberos Network Authentication Dialog</application> Manual</title>
+  <title lang="en"><application>Kerberos Network Authentication Dialog</application> Manual</title>
   <abstract role="description">
-   <para>
+   <para lang="en">
     Kerberos Network Authentication Dialog is a small helper that monitors and refreshes your Kerberos ticket.
    </para>
   </abstract>
-  <copyright>
+  <copyright lang="en">
    <year>2009</year>
    <holder>Guido Günther</holder>
-  </copyright><copyright><year>2009</year><holder>Daniel Nylander (po@danielnylander.se)</holder></copyright>
+  </copyright>
 
   <!-- translators: uncomment this:
 
@@ -57,30 +57,89 @@
   </publisher>
 
     <legalnotice id="legalnotice">
-	<para>Tillstånd att kopiera, distribuera och/eller modifiera detta dokument ges under villkoren i GNU Free Documentation License (GFDL), version 1.1 eller senare, utgivet av Free Software Foundation utan standardavsnitt och omslagstexter.  En kopia av GFDL finns att hämta på denna <ulink type="help" url="ghelp:fdl">länk</ulink> eller i filen COPYING-DOCS som medföljer denna handbok.</para>
-         <para>Denna handbok utgör en av flera GNOME-handböcker som distribueras under villkoren i GFDL.  Om du vill distribuera denna handbok separat från övriga handböcker kan du göra detta genom att lägga till en kopia av licensavtalet i handboken enligt instruktionerna i avsnitt 6 i licensavtalet.</para>
+	<para lang="en">
+	  Permission is granted to copy, distribute and/or modify this
+	  document under the terms of the GNU Free Documentation
+	  License (GFDL), Version 1.1 or any later version published
+	  by the Free Software Foundation with no Invariant Sections,
+	  no Front-Cover Texts, and no Back-Cover Texts.  You can find
+	  a copy of the GFDL at this <ulink type="help" url="ghelp:fdl">link</ulink> or in the file COPYING-DOCS
+	  distributed with this manual.
+         </para>
+         <para lang="en"> This manual is part of a collection of GNOME manuals
+          distributed under the GFDL.  If you want to distribute this
+          manual separately from the collection, you can do so by
+          adding a copy of the license to the manual, as described in
+          section 6 of the license.
+	</para>
 
-	<para>Flera namn på produkter och tjänster är registrerade varumärken. I de fall dessa namn förekommer i GNOME-dokumentation - och medlemmarna i GNOME-dokumentationsprojektet är medvetna om dessa varumärken - är de skrivna med versaler eller med inledande versal.</para>
+	<para lang="en">
+	  Many of the names used by companies to distinguish their
+	  products and services are claimed as trademarks. Where those
+	  names appear in any GNOME documentation, and the members of
+	  the GNOME Documentation Project are made aware of those
+	  trademarks, then the names are in capital letters or initial
+	  capital letters.
+	</para>
 
-	<para>DOKUMENTET OCH MODIFIERADE VERSIONER AV DOKUMENTET TILLHANDAHÅLLS UNDER VILLKOREN I GNU FREE DOCUMENTATION LICENSE ENDAST UNDER FÖLJANDE FÖRUTSÄTTNINGAR: <orderedlist>
+	<para lang="en">
+	  DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED
+	  UNDER  THE TERMS OF THE GNU FREE DOCUMENTATION LICENSE
+	  WITH THE FURTHER UNDERSTANDING THAT:
+
+	  <orderedlist>
 		<listitem>
-		  <para>DOKUMENTET TILLHANDAHÅLLS I "BEFINTLIGT SKICK" UTAN NÅGRA SOM HELST GARANTIER, VARE SIG UTTRYCKLIGA ELLER UNDERFÖRSTÅDDA, INKLUSIVE, MEN INTE BEGRÄNSAT TILL, GARANTIER ATT DOKUMENTET ELLER EN MODIFIERAD VERSION AV DOKUMENTET INTE INNEHÅLLER NÅGRA FELAKTIGHETER, ÄR LÄMPLIGT FÖR ETT VISST ÄNDAMÅL ELLER INTE STRIDER MOT LAG. HELA RISKEN VAD GÄLLER KVALITET, EXAKTHET OCH UTFÖRANDE AV DOKUMENTET OCH MODIFIERADE VERSIONER AV DOKUMENTET LIGGER HELT OCH HÅLLET PÅ ANVÄNDAREN. OM ETT DOKUMENT ELLER EN MODIFIERAD VERSION AV ETT DOKUMENT SKULLE VISA SIG INNEHÅLLA FELAKTIGHETER I NÅGOT HÄNSEENDE ÄR DET DU (INTE DEN URSPRUNGLIGA SKRIBENTEN, FÖRFATTAREN ELLER NÅGON ANNAN MEDARBETARE) SOM FÅR STÅ FÖR ALLA EVENTUELLA KOSTNADER FÖR SERVICE, REPARATIONER ELLER KORRIGERINGAR. DENNA GARANTIFRISKRIVNING UTGÖR EN VÄSENTLIG DEL AV DETTA LICENSAVTAL. DETTA INNEBÄR ATT ALL ANVÄNDNING AV ETT DOKUMENT ELLER EN MODIFIERAD VERSION AV ETT DOKUMENT BEVILJAS ENDAST UNDER DENNA ANSVARSFRISKRIVNING;</para>
+		  <para lang="en">DOCUMENT IS PROVIDED ON AN "AS IS" BASIS,
+                    WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+                    IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES
+                    THAT THE DOCUMENT OR MODIFIED VERSION OF THE
+                    DOCUMENT IS FREE OF DEFECTS MERCHANTABLE, FIT FOR
+                    A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE
+                    RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE
+                    OF THE DOCUMENT OR MODIFIED VERSION OF THE
+                    DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR
+                    MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT,
+                    YOU (NOT THE INITIAL WRITER, AUTHOR OR ANY
+                    CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY
+                    SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER
+                    OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS
+                    LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED
+                    VERSION OF THE DOCUMENT IS AUTHORIZED HEREUNDER
+                    EXCEPT UNDER THIS DISCLAIMER; AND
+		  </para>
 		</listitem>
 		<listitem>
-		  <para>UNDER INGA OMSTÄNDIGHETER ELLER INOM RAMEN FÖR NÅGON LAGSTIFTNING, OAVSETT OM DET GÄLLER KRÄNKNING (INKLUSIVE VÅRDSLÖSHET), KONTRAKT ELLER DYLIKT, SKA FÖRFATTAREN, DEN URSPRUNGLIGA SKRIBENTEN ELLER ANNAN MEDARBETARE ELLER ÅTERFÖRSÄLJARE AV DOKUMENTET ELLER AV EN MODIFIERAD VERSION AV DOKUMENTET ELLER NÅGON LEVERANTÖR TILL NÅGON AV NÄMNDA PARTER STÄLLAS ANSVARIG GENTEMOT NÅGON FÖR NÅGRA DIREKTA, INDIREKTA, SÄRSKILDA ELLER OFÖRUTSEDDA SKADOR ELLER FÖLJDSKADOR AV NÅGOT SLAG, INKLUSIVE, MEN INTE BEGRÄNSAT TILL, SKADOR BETRÄFFANDE FÖRLORAD GOODWILL, HINDER I ARBETET, DATORHAVERI ELLER NÅGRA ANDRA TÄNKBARA SKADOR ELLER FÖRLUSTER SOM KAN UPPKOMMA PÅ GRUND AV ELLER RELATERAT TILL ANVÄNDNINGEN AV DOKUMENTET ELLER MODIFIERADE VERSIONER AV DOKUMENTET, ÄVEN OM PART SKA HA BLIVIT INFORMERAD OM MÖJLIGHETEN TILL SÅDANA SKADOR.</para>
+		  <para lang="en">UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL
+                       THEORY, WHETHER IN TORT (INCLUDING NEGLIGENCE),
+                       CONTRACT, OR OTHERWISE, SHALL THE AUTHOR,
+                       INITIAL WRITER, ANY CONTRIBUTOR, OR ANY
+                       DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION
+                       OF THE DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH
+                       PARTIES, BE LIABLE TO ANY PERSON FOR ANY
+                       DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR
+                       CONSEQUENTIAL DAMAGES OF ANY CHARACTER
+                       INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS
+                       OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE OR
+                       MALFUNCTION, OR ANY AND ALL OTHER DAMAGES OR
+                       LOSSES ARISING OUT OF OR RELATING TO USE OF THE
+                       DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT,
+                       EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF
+                       THE POSSIBILITY OF SUCH DAMAGES.
+		  </para>
 		</listitem>
-	  </orderedlist></para>
+	  </orderedlist>
+	</para>
   </legalnotice>
 
 
 
   <authorgroup>
-   <author>
+   <author lang="en">
     <firstname>Jonathan</firstname>
     <surname>Blandford</surname>
     <email>rjb@redhat.com</email>
    </author>
-   <author role="maintainer">
+   <author role="maintainer" lang="en">
     <firstname>Guido</firstname>
     <surname>Günther</surname>
     <email>agx@sigxcpu.org</email>
@@ -109,20 +168,22 @@
   <!-- to V3.0, and so on. -->
 
   <revhistory>
-   <revision>
+   <revision lang="en">
     <revnumber>2.0</revnumber>
-    <date>Maj 2009</date>
+    <date>May 2009</date>
     <revdescription>
-     <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
+     <para role="author" lang="en">Guido Günther
+      <email>agx@sigxcpu.org</email>
+     </para>
     </revdescription>
    </revision>
   </revhistory>
-  <releaseinfo>This manual describes how to use the Kerberos Network Authentication Dialog
+  <releaseinfo lang="en">This manual describes how to use the Kerberos Network Authentication Dialog
    to manage your Kerberos tickets.
   </releaseinfo>
   <legalnotice>
-   <title>Återkoppling</title>
-   <para>To report a bug or make a suggestion regarding this package or
+   <title>Odziv</title>
+   <para lang="en">To report a bug or make a suggestion regarding this package or
     this manual, use
     <ulink url="http://bugzilla.gnome.org" type="http">GNOME's Bugzilla</ulink>.
    </para>
@@ -133,48 +194,48 @@
  <!-- ============= Document Body ============================= -->
  <!-- ============= Introduction ============================== -->
  <section id="intro">
-  <title>Introduktion</title>
-  <indexterm>
+  <title>Uvod</title>
+  <indexterm lang="en">
     <primary><application>Kerberos Network Authentication Dialog</application></primary>
-    <secondary>Handbok</secondary>
+    <secondary>Manual</secondary>
     <tertiary>krb5-auth-dialog</tertiary>
   </indexterm>
 
-   <para>
+   <para lang="en">
     Kerberos Network Authentication Dialog is an applet for the <systemitem>GNOME desktop</systemitem> that monitors
     and refreshes your Kerberos ticket. It pops up reminders when the ticket
     is about to expire.
    </para>
-   <para>
+   <para lang="en">
     Once you have acquired a Kerberos ticket - be it via GDM or via the applet itself - the applet will handle the ticket's renewal until it expires. It can also be used to destroy (remove) the credential cache, to acquire a ticket with different options or to switch to another principal.</para>
  </section>
 
 <section id="using">
-  <title>Användning</title>
-  <para>
+  <title lang="en">Usage</title>
+  <para lang="en">
     <application>Kerberos Network Authentication Dialog</application> is usually started in GNOME startup, but
     you can manually start <application>Kerberos Network Authentication Dialog</application> by doing:
   </para>
   <variablelist>
     <varlistentry>
-      <term>Kommandorad</term>
+      <term lang="en">Command line</term>
       <listitem>
-	<para>
+	<para lang="en">
 	  Type <command>krb5-auth-dialog</command>,
           then press <keycap>Return</keycap>:
         </para>
       </listitem>
     </varlistentry>
   </variablelist>
-  <para>
+  <para lang="en">
     The tray icon will indicate one of three states:
   </para>
 
   <section id="trayicon-valid">
-    <title>Valid Kerberos ticket</title>
-    <para>You have a valid Kerberos ticket that can be used to authenticate to network services.</para>
+    <title lang="en">Valid Kerberos ticket</title>
+    <para lang="en">You have a valid Kerberos ticket that can be used to authenticate to network services.</para>
     <figure>
-      <title>Valid Kerberos ticket</title>
+      <title lang="en">Valid Kerberos ticket</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -186,10 +247,10 @@
  </section>
 
   <section id="trayicon-expiring">
-    <title>Kerberos ticket expiring</title>
-    <para>The Kerberos ticket is about to expire but it can still be used to authenticate to network services.</para>
+    <title lang="en">Kerberos ticket expiring</title>
+    <para lang="en">The Kerberos ticket is about to expire but it can still be used to authenticate to network services.</para>
     <figure>
-      <title>Kerberos ticket expiring</title>
+      <title lang="en">Kerberos ticket expiring</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -200,11 +261,11 @@
     </figure>
  </section>
   <section id="trayicon-expired">
-    <title>Kerberos ticket expired</title>
-    <para>Your Kerberos became invalid (e.g. expired). It can no longer be used to authenticate to network services. This is not a problem if the application that requires Kerberos knows how to request a new ticket via <application>Kerberos Network Authentication Dialog</application>. In case it doesn't you can just left click on the applet an reenter your password.
+    <title lang="en">Kerberos ticket expired</title>
+    <para lang="en">Your Kerberos became invalid (e.g. expired). It can no longer be used to authenticate to network services. This is not a problem if the application that requires Kerberos knows how to request a new ticket via <application>Kerberos Network Authentication Dialog</application>. In case it doesn't you can just left click on the applet an reenter your password.
 </para>
     <figure>
-      <title>Kerberos ticket expired</title>
+      <title lang="en">Kerberos ticket expired</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -217,16 +278,16 @@
 </section>
 
 <section id="notify">
-  <title>Notification Messages</title>
-  <para>
+  <title lang="en">Notification Messages</title>
+  <para lang="en">
     When Kerberos Network Authentication Dialog has started, the following notifications may be displayed.
   </para>
 
  <section id="notify-valid">
-    <title>Kerberos credentials valid</title>
-    <para>You just acquired a valid Kerberos ticket that can be used to authenticate to network services.</para>
+    <title lang="en">Kerberos credentials valid</title>
+    <para lang="en">You just acquired a valid Kerberos ticket that can be used to authenticate to network services.</para>
     <figure>
-      <title>Notification when Kerberos credentials become valid</title>
+      <title lang="en">Notification when Kerberos credentials become valid</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -238,10 +299,10 @@
  </section>
 
  <section id="notify-expiring">
-    <title>Kerberos credentials expiring</title>
-    <para>Your Kerberos credentials are about to expire. You can left click on the tray applet to refresh them.</para>
+    <title lang="en">Kerberos credentials expiring</title>
+    <para lang="en">Your Kerberos credentials are about to expire. You can left click on the tray applet to refresh them.</para>
     <figure>
-      <title>Notification when Kerberos credentials expiring</title>
+      <title lang="en">Notification when Kerberos credentials expiring</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -253,10 +314,10 @@
  </section>
 
  <section id="notify-expired">
-    <title>Kerberos credentials expired</title>
-    <para>Your Kerberos credentials just expired. They can no longer be used to authenticate to network services.</para>
+    <title lang="en">Kerberos credentials expired</title>
+    <para lang="en">Your Kerberos credentials just expired. They can no longer be used to authenticate to network services.</para>
     <figure>
-      <title>Notification when Kerberos credentials expired</title>
+      <title lang="en">Notification when Kerberos credentials expired</title>
       <screenshot>
         <mediaobject>
           <imageobject>
@@ -269,102 +330,102 @@
 </section>
 
 <section id="preferences">
-  <title>Preferences</title>
-  <para>
+  <title lang="en">Preferences</title>
+  <para lang="en">
     You can set preferences by selecting "Preferences" from the applets context menu or by selecting "Network Authentication" in the <application>Control Center</application>.
     <table frame="topbot" id="tbl-principal-prefs">
-      <title>Kerberos Principal Preferences</title>
+      <title lang="en">Kerberos Principal Preferences</title>
       <tgroup cols="2" colsep="1" rowsep="1"> <colspec colwidth="19.21*"/> <colspec colwidth="46.79*"/>
         <thead>
           <row>
             <entry colsep="0" rowsep="1">
-              <para>Dialog Element</para>
+              <para lang="en">Dialog Element</para>
             </entry>
             <entry colsep="0" rowsep="1">
-              <para>Description</para>
+              <para lang="en">Description</para>
             </entry>
           </row>
         </thead>
         <tbody>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>Kerberos Principal</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>The Kerberos principal to use. Leave blank to use you current username. If you change this setting you have to destroy the credential cache before these setting takes effect.</para>
+              <para lang="en">The Kerberos principal to use. Leave blank to use you current username. If you change this setting you have to destroy the credential cache before these setting takes effect.</para>
             </entry>
           </row>
 
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>PKINIT Userid</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>The principals public/private/certificate identifier. Leave empty if not using PKINIT. To enable using a security token add the path to the pkcs11 Library here, e.g. "PKCS11:/usr/lib/opensc/opensc-pkcs11.so"</para>
+              <para lang="en">The principals public/private/certificate identifier. Leave empty if not using PKINIT. To enable using a security token add the path to the pkcs11 Library here, e.g. "PKCS11:/usr/lib/opensc/opensc-pkcs11.so"</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>PKINIT anchors</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Path to CA certificates used as trust anchors for pkinit. You only need to set this if it hasn't been set up globally in <filename>/etc/krb5.conf</filename></para>
+              <para lang="en">Path to CA certificates used as trust anchors for pkinit. You only need to set this if it hasn't been set up globally in <filename>/etc/krb5.conf</filename></para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>forwardable</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether the requested Kerberos ticket should be forwardable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
+              <para lang="en">Whether the requested Kerberos ticket should be forwardable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>renewable</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether the requested Kerberos ticket should be renewable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
+              <para lang="en">Whether the requested Kerberos ticket should be renewable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>proxiable</guilabel>
 	      </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether the requested Kerberos ticket should be proxiable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
+              <para lang="en">Whether the requested Kerberos ticket should be proxiable. Changing this setting requires to you to reauthenticate by left clicking on the tray icon and entering your password.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>Warn .. minutes before expiry</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Notifications that your credentials are about to expire will be sent that many minutes before expiry.</para>
+              <para lang="en">Notifications that your credentials are about to expire will be sent that many minutes before expiry.</para>
             </entry>
           </row>
           <row>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>
+              <para lang="en">
                 <guilabel>Show tray icon</guilabel>
               </para>
             </entry>
             <entry colsep="0" rowsep="0" valign="top">
-              <para>Whether to show the tray icon. Disabling the tray icon will also disable notifications, the password dialog will be brought up instead.</para>
+              <para lang="en">Whether to show the tray icon. Disabling the tray icon will also disable notifications, the password dialog will be brought up instead.</para>
             </entry>
           </row>
 	</tbody>
