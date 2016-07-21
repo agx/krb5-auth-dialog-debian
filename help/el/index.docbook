@@ -34,10 +34,7 @@
   <abstract role="description">
    <para>Ο διάλογος πιστοποίησης δικτύου Kerberos είναι ένας μικρός βοηθός που παρακολουθεί και ανανεώνει το δελτίο του Kerberos.</para>
   </abstract>
-  <copyright>
-   <year>2009</year>
-   <holder>Guido Günther</holder>
-  </copyright><copyright><year>2014</year><holder>Δημήτρης Σπίγγος (dmtrs32@gmail.com)</holder></copyright>
+  <copyright><year>2009</year> <holder>Guido Günther</holder></copyright>
 
   <!-- translators: uncomment this:
 
@@ -73,16 +70,8 @@
 
 
   <authorgroup>
-   <author>
-    <firstname>Jonathan</firstname>
-    <surname>Blandford</surname>
-    <email>rjb@redhat.com</email>
-   </author>
-   <author role="maintainer">
-    <firstname>Guido</firstname>
-    <surname>Günther</surname>
-    <email>agx@sigxcpu.org</email>
-   </author>
+   <author><firstname>Jonathan</firstname> <surname>Blandford</surname> <email>rjb@redhat.com</email></author>
+   <author role="maintainer"><firstname>Guido</firstname> <surname>Günther</surname> <email>agx@sigxcpu.org</email></author>
    <!-- This is appropriate place for other contributors: translators,
    maintainers,  etc. Commented out by default.
    <othercredit role="translator">
@@ -107,13 +96,9 @@
   <!-- to V3.0, and so on. -->
 
   <revhistory>
-   <revision>
-    <revnumber>2.0</revnumber>
-    <date>Μάιος 2009</date>
-    <revdescription>
+   <revision><revnumber>2.0</revnumber> <date>Mάιος 2009</date> <revdescription>
      <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
-    </revdescription>
-   </revision>
+    </revdescription></revision>
   </revhistory>
   <releaseinfo>Αυτό το εγχειρίδιο περιγράφει πώς να χρησιμοποιήσετε τον διάλογο πιστοποίησης δικτύου Kerberos για να διαχειριστείτε τα δελτία Kerberos.</releaseinfo>
   <legalnotice>
@@ -121,17 +106,52 @@
    <para>Για να αναφέρετε ένα σφάλμα ή να κάνετε μια πρόταση σχετικά με αυτό το πακέτο ή αυτό το εγχειρίδιο, χρησιμοποιήστε το <ulink url="http://bugzilla.gnome.org" type="http">Bugzilla του GNOME</ulink>.</para>
    <!-- Translators may also add here feedback address for translations -->
   </legalnotice>
- </articleinfo>
+ 
+    <othercredit class="translator">
+      <personname>
+        <firstname>Ελληνική μεταφραστική ομάδα του GNOME</firstname>
+      </personname>
+      <email>team@gnome.gr</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2014-2016</year>
+      
+      <holder>Ελληνική μεταφραστική ομάδα του GNOME</holder>
+    </copyright>
+  
+    <othercredit class="translator">
+      <personname>
+        <firstname> Δημήτρης Σπίγγος</firstname>
+      </personname>
+      <email>dmtrs32@gmail.com</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2014</year>
+      
+      <holder> Δημήτρης Σπίγγος</holder>
+    </copyright>
+  
+    <othercredit class="translator">
+      <personname>
+        <firstname> Γιάννης Κουτσούκος</firstname>
+      </personname>
+      <email>giankoyt@gmail.com</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2016</year>
+      
+      <holder> Γιάννης Κουτσούκος</holder>
+    </copyright>
+  </articleinfo>
 
  <!-- ============= Document Body ============================= -->
  <!-- ============= Introduction ============================== -->
  <section id="intro">
   <title>Εισαγωγή</title>
-  <indexterm>
-    <primary><application>Διάλογος πιστοποίησης δικτύου Kerberos</application></primary>
-    <secondary>Εγχειρίδιο</secondary>
-    <tertiary>krb5-auth-dialog</tertiary>
-  </indexterm>
+  <indexterm><primary><application>Διάλογος πιστοποίησης δικτύου Kerberos</application></primary> <secondary>Εγχειρίδιο</secondary> <tertiary>krb5-auth-dialog</tertiary></indexterm>
 
    <para>Ο διάλογος πιστοποίησης δικτύου Kerberos είναι μια μικροεφαρμογή για την <systemitem>επιφάνεια εργασίας GNOME</systemitem> που παρακολουθεί και ανανεώνει το δελτίο του Kerberos. Αναδύει υπενθυμίσεις όταν το δελτίο πρόκειται να λήξει.</para>
    <para>Αφού έχετε αποκτήσει ένα δελτίο Kerberos - είτε μέσα από GDM ή μέσα από την ίδια την μικροεφαρμογή - η μικροεφαρμογή διαχειρίζεται την ανανέωση του δελτίου μέχρι να λήξει. Μπορεί επίσης να χρησιμοποιηθεί για να καταστρέψει (αφαιρέσει) την κρυφή μνήμη διαπιστευτηρίου, για να αποκτήσει ένα δελτίο με διαφορετικές επιλογές ή να αλλάξει σε μια άλλη αρχή ασφάλειας.</para>
@@ -144,7 +164,7 @@
     <varlistentry>
       <term>Γραμμή εντολών</term>
       <listitem>
-	<para>Πληκτρολογήστε <command>krb5-auth-dialog</command>, έπειτα πατήστε το πλήκτρο <keycap>Επιστροφή</keycap>:</para>
+	<para>Πληκτρολογήστε <command>krb5-auth-dialog</command>, έπειτα πατήστε το πλήκτρο <keycap>Return</keycap>:</para>
       </listitem>
     </varlistentry>
   </variablelist>
@@ -247,98 +267,7 @@
 
 <section id="preferences">
   <title>Προτιμήσεις</title>
-  <para>Μπορείτε να ορίσετε προτιμήσεις επιλέγοντας "Προτιμήσεις" από το μενού περιεχομένων των μικροεφαρμογών ή επιλέγοντας "Πιστοποίηση δικτύου" στο <application>Κέντρο ελέγχου</application>. <table frame="topbot" id="tbl-principal-prefs"><title>Βασικές προτιμήσεις του Kerberos</title><tgroup cols="2" colsep="1" rowsep="1"><colspec colwidth="19.21*"/><colspec colwidth="46.79*"/><thead>
-          <row>
-            <entry colsep="0" rowsep="1">
-              <para>Στοιχείο διαλόγου</para>
-            </entry>
-            <entry colsep="0" rowsep="1">
-              <para>Περιγραφή</para>
-            </entry>
-          </row>
-        </thead><tbody>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Βασικά του Kerberos</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Τα βασικά του Kerberos για χρήση. Αφήστε κενό για να χρησιμοποιήσετε το τρέχον όνομα χρήστη. Αν αλλάξετε αυτή τη ρύθμιση πρέπει να καταστρέψετε την κρυφή μνήμη του διαπιστευτηρίου πριν αυτές να εφαρμοστούν.</para>
-            </entry>
-          </row>
-
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Αναγνωριστικό χρήστη PKINIT</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Το βασικό αναγνωριστικό δημόσιο/ιδιωτικό/πιστοποιητικό. Αφήστε κενό αν δεν χρησιμοποιείτε το PKINIT. Για να το ενεργοποιήσετε χρησιμοποιώντας ένα διακριτικό ασφαλείας προσθέστε τη διαδρομή στη βιβλιοθήκη pkcs11 εδώ, π.χ. "PKCS11:/usr/lib/opensc/opensc-pkcs11.so"</para>
-            </entry>
-          </row>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Άγκυρες PKINIT</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Η διαδρομή στα πιστοποιητικά CA που χρησιμοποιείται ως έμπιστες άγκυρες για το pkinit. Χρειάζεστε να το ορίσετε μόνο αν δεν έχει ρυθμιστεί γενικά στο <filename>/etc/krb5.conf</filename>.</para>
-            </entry>
-          </row>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>προωθήσιμο</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Αν το ζητούμενο δελτίο Kerberos πρέπει να είναι προωθήσιμο. Η αλλαγή αυτής της ρύθμισης απαιτεί επαναπιστοποίηση αριστεροπατώντας στο εικονίδιο περιοχής ειδοποιήσεων και εισάγοντας τον κωδικό πρόσβασης σας.</para>
-            </entry>
-          </row>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>ανανεώσιμο</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Αν το ζητούμενο δελτίο Kerberos πρέπει να είναι ανανεώσιμο. Η αλλαγή αυτής της ρύθμισης απαιτεί επαναπιστοποίηση αριστεροπατώντας στο εικονίδιο περιοχής ειδοποιήσεων και εισάγοντας τον κωδικό πρόσβασης σας.</para>
-            </entry>
-          </row>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>με μεσολάβηση</guilabel>
-	      </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Αν το ζητούμενο δελτίο Kerberos πρέπει να είναι με μεσολάβηση. Η αλλαγή αυτής της ρύθμισης απαιτεί επαναπιστοποίηση αριστεροπατώντας στο εικονίδιο περιοχής ειδοποιήσεων και εισάγοντας τον κωδικό πρόσβασης σας.</para>
-            </entry>
-          </row>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Προειδοποίηση .. λεπτά πριν τη λήξη</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Ειδοποιήσεις ότι τα διαπιστευτήρια σας πρόκειται να λήξουν θα σταλούν πριν από τόσα λεπτά πριν τη λήξη.</para>
-            </entry>
-          </row>
-          <row>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>
-                <guilabel>Εμφάνιση εικονιδίου περιοχής ειδοποιήσεων</guilabel>
-              </para>
-            </entry>
-            <entry colsep="0" rowsep="0" valign="top">
-              <para>Αν θα εμφανίζεται το εικονίδιο περιοχής ειδοποιήσεων. Η απενεργοποίηση του εικονιδίου περιοχής ειδοποιήσεων θα απενεργοποιήσει επίσης τις ειδοποιήσεις, ο διάλογος κωδικών πρόσβασης θα εμφανιστεί στη θέση του.</para>
-            </entry>
-          </row>
-	</tbody></tgroup></table></para>
+  <para>Μπορείτε να ορίσετε προτιμήσεις επιλέγοντας «Προτιμήσεις» από το μενού περιεχομένων των μικροεφαρμογών ή επιλέγοντας «Πιστοποίηση δικτύου» στο <application>Κέντρο ελέγχου</application>. <table-1/></para>
 </section>
 
 </article>

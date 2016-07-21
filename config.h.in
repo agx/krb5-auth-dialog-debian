@@ -111,13 +111,6 @@
 /* Define to 1 if you have the `mmap' function. */
 #undef HAVE_MMAP
 
-/* Define to 1 if you have the `notify_notification_new_with_status_icon'
-   function. */
-#undef HAVE_NOTIFY_NOTIFICATION_NEW_WITH_STATUS_ICON
-
-/* Define to 1 if you have the `notify_notification_set_hint' function. */
-#undef HAVE_NOTIFY_NOTIFICATION_SET_HINT
-
 /* Define to 1 if you have the `plock' function. */
 #undef HAVE_PLOCK
 
@@ -154,8 +147,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
 /* Define to the minimum amount of time (m) a credential will have to be valid

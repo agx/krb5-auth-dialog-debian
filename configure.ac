@@ -1,4 +1,4 @@
-AC_INIT([krb5-auth-dialog],[3.15.4])
+AC_INIT([krb5-auth-dialog],[3.20.0])
 AC_CONFIG_SRCDIR(src/ka-kerberos.c)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([1.11.1 no-dist-gzip dist-xz -Wno-portability])
@@ -25,7 +25,7 @@ AC_PROG_YACC
 AM_PROG_CC_C_O
 
 KA_COMPILE_WARNINGS([maximum])
-GNOME_DOC_INIT
+YELP_HELP_INIT
 
 GTK_REQUIRED=3.14
 GLIB_REQUIRED=2.28
@@ -158,17 +158,6 @@ fi
 AM_CONDITIONAL([ENABLE_NETWORK_MANAGER],[test "x$enable_network_manager" = "xyes"])
 
 
-dnl libnotify
-savedCFLAGS="$CFLAGS"
-savedLIBS="$LIBS"
-CFLAGS="$LIBNOTIFY_CFLAGS $CFLAGS"
-LIBS="$LIBNOTIFY_LIBS $LIBS"
-AC_CHECK_FUNCS([notify_notification_new_with_status_icon \
-                notify_notification_set_hint])
-CFLAGS="$savedCFLAGS"
-LIBS="$savedLIBS"
-
-
 dnl secmem
 dnl Checks for library functions.
 AC_CHECK_FUNCS(seteuid stpcpy mmap)
@@ -258,11 +247,7 @@ AC_MSG_NOTICE([])
 AC_MSG_NOTICE([         Kerberos: $KRB5_CFLAGS $KRB5_LIBS])
 AC_MSG_NOTICE([              GTK: $GTK_CFLAGS $GTK_LIBS])
 AC_MSG_NOTICE([         gio-unix: $GIO_UNIX_CFLAGS $GIO_UNIX_LIBS $GIO_CFLAGS $GIO_LIBS])
-if test "$with_libnotify" = "yes" ; then
 AC_MSG_NOTICE([        libnotify: $LIBNOTIFY_CFLAGS $LIBNOTIFY_LIBS])
-else
-AC_MSG_NOTICE([        libnotify: no])
-fi
 if test "$enable_network_manager" = "yes" ; then
 AC_MSG_NOTICE([  Network Manager: $NETWORK_MANAGER_CFLAGS $NETWORK_MANAGER_LIBS])
 else

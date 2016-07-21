@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY legal SYSTEM "legal.xml">
+<!ENTITY GFDL SYSTEM "fdl-appendix.xml">
+<!ENTITY appversion "0.10">
+<!ENTITY manrevision "0.1">
+<!ENTITY date "May 2009">
+<!ENTITY app "Kerberos Network Authentication Dialog">
+<!ENTITY application "<application>&app;</application>">
+]>
+<!--
+      (Do not remove this comment block.)
+  Template Maintained by the GNOME Documentation Project:
+	  http://developer.gnome.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Feb 12, 2002
+-->
+<!--
+      (Do not remove this comment block.)
+  Version: 0.0.1
+  Last modified: May 22, 2009
+  Maintainers:
+               Guido Günther  <agx@sigxcpu.org>
+  Translators:
+               (translators put your name and email here)
+-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="sv">
+ <!-- please do not change the id; for translations, change lang to -->
+ <!-- appropriate code -->
+
+ <articleinfo>
+  <title><application>Nätverksautentiseringsdialog för Kerberos</application>-handbok</title>
+  <abstract role="description">
+   <para>Kerberos-nätverksautentiseringsdialog är ett litet hjälpverktyg som övervakar och uppdaterar din Kerberos-biljett</para>
+  </abstract>
+  <copyright><year>2009</year> <holder>Guido Günther</holder></copyright>
+
+  <!-- translators: uncomment this:
+
+  <copyright>
+  <year>2000</year>
+  <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+ </copyright>
+
+  -->
+  <!-- An address can be added to the publisher information.  If a role is
+  not specified, the publisher/author is the same for all versions of the
+  document.  -->
+  <publisher role="maintainer">
+   <publishername>Guido Günther</publishername>
+  </publisher>
+
+    <legalnotice id="legalnotice">
+	<para>Tillstånd att kopiera, distribuera och/eller modifiera detta dokument ges under villkoren i GNU Free Documentation License (GFDL), version 1.1 eller senare, utgivet av Free Software Foundation utan standardavsnitt och omslagstexter. En kopia av GFDL finns att hämta på denna <ulink type="help" url="ghelp:fdl">länk</ulink> eller i filen COPYING-DOCS som medföljer denna handbok.</para>
+         <para>Denna handbok utgör en av flera GNOME-handböcker som distribueras under villkoren i GFDL. Om du vill distribuera denna handbok separat från övriga handböcker kan du göra detta genom att lägga till en kopia av licensavtalet i handboken enligt instruktionerna i avsnitt 6 i licensavtalet.</para>
+
+	<para>Flera namn på produkter och tjänster är registrerade varumärken. I de fall dessa namn förekommer i GNOME-dokumentation - och medlemmarna i GNOME-dokumentationsprojektet är medvetna om dessa varumärken - är de skrivna med versaler eller med inledande versal.</para>
+
+	<para>DOKUMENTET OCH MODIFIERADE VERSIONER AV DOKUMENTET TILLHANDAHÅLLS UNDER VILLKOREN I GNU FREE DOCUMENTATION LICENSE ENDAST UNDER FÖLJANDE FÖRUTSÄTTNINGAR: <orderedlist>
+		<listitem>
+		  <para>DOKUMENTET TILLHANDAHÅLLS I "BEFINTLIGT SKICK" UTAN NÅGRA SOM HELST GARANTIER, VARE SIG UTTRYCKLIGA ELLER UNDERFÖRSTÅDDA, INKLUSIVE, MEN INTE BEGRÄNSAT TILL, GARANTIER ATT DOKUMENTET ELLER EN MODIFIERAD VERSION AV DOKUMENTET INTE INNEHÅLLER NÅGRA FELAKTIGHETER, ÄR LÄMPLIGT FÖR ETT VISST ÄNDAMÅL ELLER INTE STRIDER MOT LAG. HELA RISKEN VAD GÄLLER KVALITET, EXAKTHET OCH UTFÖRANDE AV DOKUMENTET OCH MODIFIERADE VERSIONER AV DOKUMENTET LIGGER HELT OCH HÅLLET PÅ ANVÄNDAREN. OM ETT DOKUMENT ELLER EN MODIFIERAD VERSION AV ETT DOKUMENT SKULLE VISA SIG INNEHÅLLA FELAKTIGHETER I NÅGOT HÄNSEENDE ÄR DET DU (INTE DEN URSPRUNGLIGA SKRIBENTEN, FÖRFATTAREN ELLER NÅGON ANNAN MEDARBETARE) SOM FÅR STÅ FÖR ALLA EVENTUELLA KOSTNADER FÖR SERVICE, REPARATIONER ELLER KORRIGERINGAR. DENNA GARANTIFRISKRIVNING UTGÖR EN VÄSENTLIG DEL AV DETTA LICENSAVTAL. DETTA INNEBÄR ATT ALL ANVÄNDNING AV ETT DOKUMENT ELLER EN MODIFIERAD VERSION AV ETT DOKUMENT BEVILJAS ENDAST UNDER DENNA ANSVARSFRISKRIVNING;</para>
+		</listitem>
+		<listitem>
+		  <para>UNDER INGA OMSTÄNDIGHETER ELLER INOM RAMEN FÖR NÅGON LAGSTIFTNING, OAVSETT OM DET GÄLLER KRÄNKNING (INKLUSIVE VÅRDSLÖSHET), KONTRAKT ELLER DYLIKT, SKA FÖRFATTAREN, DEN URSPRUNGLIGA SKRIBENTEN ELLER ANNAN MEDARBETARE ELLER ÅTERFÖRSÄLJARE AV DOKUMENTET ELLER AV EN MODIFIERAD VERSION AV DOKUMENTET ELLER NÅGON LEVERANTÖR TILL NÅGON AV NÄMNDA PARTER STÄLLAS ANSVARIG GENTEMOT NÅGON FÖR NÅGRA DIREKTA, INDIREKTA, SÄRSKILDA ELLER OFÖRUTSEDDA SKADOR ELLER FÖLJDSKADOR AV NÅGOT SLAG, INKLUSIVE, MEN INTE BEGRÄNSAT TILL, SKADOR BETRÄFFANDE FÖRLORAD GOODWILL, HINDER I ARBETET, DATORHAVERI ELLER NÅGRA ANDRA TÄNKBARA SKADOR ELLER FÖRLUSTER SOM KAN UPPKOMMA PÅ GRUND AV ELLER RELATERAT TILL ANVÄNDNINGEN AV DOKUMENTET ELLER MODIFIERADE VERSIONER AV DOKUMENTET, ÄVEN OM PART SKA HA BLIVIT INFORMERAD OM MÖJLIGHETEN TILL SÅDANA SKADOR.</para>
+		</listitem>
+	  </orderedlist></para>
+  </legalnotice>
+
+
+
+  <authorgroup>
+   <author><firstname>Jonathan</firstname> <surname>Blandford</surname> <email>rjb@redhat.com</email></author>
+   <author role="maintainer"><firstname>Guido</firstname> <surname>Günther</surname> <email>agx@sigxcpu.org</email></author>
+   <!-- This is appropriate place for other contributors: translators,
+   maintainers,  etc. Commented out by default.
+   <othercredit role="translator">
+   <firstname>Latin</firstname>
+   <surname>Translator 1</surname>
+   <affiliation>
+   <orgname>Latin Translation Team</orgname>
+   <address> <email>translator@gnome.org</email> </address>
+  </affiliation>
+   <contrib>Latin translation</contrib>
+  </othercredit>
+   -->
+  </authorgroup>
+
+  <!-- The revision numbering system for GNOME manuals is as follows: -->
+  <!-- * the revision number consists of two components -->
+  <!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
+  <!-- * the second component of the revision number is a decimal unit that is incremented with each revision of the manual. -->
+  <!-- For example, if the GNOME desktop release is V2.x, the first version of the manual that -->
+  <!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
+  <!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
+  <!-- to V3.0, and so on. -->
+
+  <revhistory>
+   <revision><revnumber>2.0</revnumber> <date>Maj 2009</date> <revdescription>
+     <para role="author">Guido Günther <email>agx@sigxcpu.org</email></para>
+    </revdescription></revision>
+  </revhistory>
+  <releaseinfo>Handboken beskriver hur nätverksautentiseringsdialogen för Kerberos ska hantera dina Kerberos-biljetter.</releaseinfo>
+  <legalnotice>
+   <title>Återkoppling</title>
+   <para>För att rapportera ett fel eller för att ge ett förslag gällande detta paket eller denna handbok, använd <ulink url="http://bugzilla.gnome.org" type="http">GNOME:s Bugzilla</ulink>.</para>
+   <!-- Translators may also add here feedback address for translations -->
+  </legalnotice>
+ 
+    <othercredit class="translator">
+      <personname>
+        <firstname>Daniel Nylander</firstname>
+      </personname>
+      <email>po@danielnylander.se</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2009</year>
+      
+      <holder>Daniel Nylander</holder>
+    </copyright>
+  
+    <othercredit class="translator">
+      <personname>
+        <firstname>Josef Andersson</firstname>
+      </personname>
+      <email>josef.andersson@fripost.org</email>
+    </othercredit>
+    <copyright>
+      
+        <year>2016</year>
+      
+      <holder>Josef Andersson</holder>
+    </copyright>
+  </articleinfo>
+
+ <!-- ============= Document Body ============================= -->
+ <!-- ============= Introduction ============================== -->
+ <section id="intro">
+  <title>Introduktion</title>
+  <indexterm><primary><application>Nätverksautentiseringsdialog för Kerberos</application></primary> <secondary>Handbok</secondary> <tertiary>krb5-auth-dialog</tertiary></indexterm>
+
+   <para>Kerberos-nätverksautentiseringsdialog är ett miniprogram för <systemitem>GNOME-skrivbordet</systemitem> som övervakar och uppdaterar din Kerberos-biljett. Den visar påminnelser när biljetten håller på att gå ut.</para>
+   <para>När du har erhållit en Kerberos-biljett - må vara genom GDM eller via själva miniprogrammet - kommer miniprogrammet att hantera biljettens förnyelse tills den går ut. Det kan också användas till att förstöra (ta bort) cachen för autentiseringsuppgifter, för att kunna erhålla en biljett med andra alternativ eller för att byta till en annan principal.</para>
+ </section>
+
+<section id="using">
+  <title>Användning</title>
+  <para><application>Kerberos-nätverksautentiseringsdialog</application> startas vanligen vid GNOME-uppstart, men du kan manuellt starta <application>Kerberos-nätverksautentiseringsdialog</application> genom att utföra:</para>
+  <variablelist>
+    <varlistentry>
+      <term>Kommandorad</term>
+      <listitem>
+	<para>Skriv <command>krb5-auth-dialog</command> och tryck sedan ned <keycap>Retur</keycap>:</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  <para>Ikonen i aktivitetsfältet kommer att visa ett av tre tillstånd:</para>
+
+  <section id="trayicon-valid">
+    <title>Giltig Kerberos-biljett</title>
+    <para>Du har en giltig Kerberos-biljett som kan användas för att autentisera mot nätverkstjänster.</para>
+    <figure>
+      <title>Giltig Kerberos-biljett</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-valid.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+  <section id="trayicon-expiring">
+    <title>Kerberos-biljett förfaller</title>
+    <para>Kerberos-biljetten är på väg att förfalla men kan fortfarande användas för att autentisera mot nätverkstjänster.</para>
+    <figure>
+      <title>Kerberos-biljett förfaller</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-expiring.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+  <section id="trayicon-expired">
+    <title>Kerberos-biljett har förfallit</title>
+    <para>Din Kerberos blev ogiltig (till exempel, förföll). Den kan inte längre användas för att autentisera mot nätverkstjänster. Detta är inte ett problem om programmet som kräver Kerberos vet hur det ska begära en ny biljett via <application>Kerberos-nätverksautentiseringsdialog</application>. Om det inte vet det kan du vänsterklicka på miniprogrammet för att åter skriva in ditt lösenord.</para>
+    <figure>
+      <title>Kerberos-biljett har förfallit</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/trayicon-expired.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+</section>
+
+<section id="notify">
+  <title>Aviseringsmeddelanden</title>
+  <para>När Kerberos-nätverksautentiseringsdialog har startat kan följande aviseringar visas.</para>
+
+ <section id="notify-valid">
+    <title>Giltiga Kerberos-autentiseringsuppgifter</title>
+    <para>Du har just begärt en giltig Kerberos-biljett som kan användas för att autentisera mot nätverkstjänster.</para>
+    <figure>
+      <title>Avisering när Kerberos-autentiseringsuppgifter blir giltiga</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-valid.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+ <section id="notify-expiring">
+    <title>Kerberos-autentiseringsuppgifter förfaller</title>
+    <para>Dina Kerberos-autentiseringsuppgifter är på väg att förfalla. Du kan vänsterklicka på miniprogrammet i aktivitetsfältet för att uppdatera dem.</para>
+    <figure>
+      <title>Avisering när Kerberos-autentiseringsuppgifter förfaller</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-expiring.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+
+ <section id="notify-expired">
+    <title>Kerberos-autentiseringsuppgifter har förfallit</title>
+    <para>Dina Kerberos-autentiseringsuppgifter förföll nyss. De kan inte längre användas för att autentisera mot nätverkstjänster.</para>
+    <figure>
+      <title>Avisering när Kerberos-autentiseringsuppgifter förfallit</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/ka-expired.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+ </section>
+</section>
+
+<section id="preferences">
+  <title>Inställningar</title>
+  <para>Du kan ange inställningar genom att välja ”Inställningar” från miniprogrammets snabbmeny eller genom att välja ”Nätverksautentisering” i <application>Kontrollpanelen</application>. <table frame="topbot" id="tbl-principal-prefs">
+      <title>Inställningar för Kerberos-principal</title>
+      <tgroup cols="2" colsep="1" rowsep="1"> <colspec colwidth="19.21*"/> <colspec colwidth="46.79*"/>
+        <thead>
+          <row>
+            <entry colsep="0" rowsep="1">
+              <para>Dialogelement</para>
+            </entry>
+            <entry colsep="0" rowsep="1">
+              <para>Beskrivning</para>
+            </entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>Kerberos-principal</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Kerberos-principal att använda. Lämna tomt för att använda ditt aktuella användarnamn. Om du ändrar denna inställning måste du tömma cachen för autentiseringsuppgifter innan inställningarna ger effekt.</para>
+            </entry>
+          </row>
+
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>PKINIT-användarID</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Principalens offentlig/privat/certifikatidentifierare. Lämna tomt om du inte använder PKINIT. För att aktivera användning av en säkerhetstoken, lägg till en sökväg till pkcs11-biblioteket här, till exempel "PKCS11:/usr/lib/opensc/opensc-pkcs11.so"</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>PKINIT-ankare</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Sökväg till CA-certifikat att använda som förtroendeankare för pkinit. Du behöver bara ställa in detta om det inte angetts globalt i <filename>/etc/krb5.conf</filename></para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>vidarebefordringsbar</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Huruvida den begärda Kerberos-biljetten ska vara vidarebefordringsbar. Att ändra denna inställning kräver att du återautentiserar genom att klicka på ikonen i aktivitetsfältet och anger ditt lösenord.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>förnyelsebar</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Huruvida den begärda Kerberos-biljetten ska vara förnyelsebar. Att ändra denna inställning kräver att du återautentiserar genom att klicka på ikonen i aktivitetsfältet och anger ditt lösenord.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>proxybar</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Huruvida den begärda Kerberos-biljetten ska vara proxybar. Att ändra denna inställning kräver att du återautentiserar genom att klicka på ikonen i aktivitetsfältet och anger ditt lösenord.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>Varna .. minuter innan förfall</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Aviseringar om att dina autentiseringsuppgifter kommer att förfalla kommer att skickas ut så här många minuter innan de förfaller.</para>
+            </entry>
+          </row>
+          <row>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para><guilabel>Visa ikon i aktivitetsfältet</guilabel></para>
+            </entry>
+            <entry colsep="0" rowsep="0" valign="top">
+              <para>Huruvida en ikon i aktivitetsfältet ska visas. Att inaktivera ikonen i aktivitetsfältet kommer också att inaktivera aviseringar och lösenordsdialogen kommer att visas istället.</para>
+            </entry>
+          </row>
+	</tbody>
+      </tgroup>
+    </table></para>
+</section>
+
+</article>
