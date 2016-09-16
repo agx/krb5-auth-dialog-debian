@@ -23,7 +23,7 @@ Build-Depends:
  libpam0g-dev,
  pkg-config,
  rarian-compat,
-Standards-Version: 3.9.2
+Standards-Version: 3.9.8
 Vcs-Git: git://git.debian.org/git/users/agx/krb5-auth-dialog.git
 Vcs-Browser: https://anonscm.debian.org/cgit/users/agx/krb5-auth-dialog.git/
 Homepage: https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog
