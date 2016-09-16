@@ -1,3 +1,11 @@
+krb5-auth-dialog (3.20.0-2) unstable; urgency=medium
+
+  * [2820b4e] Use DEP-14 layout
+  * [dd89f4d] Rebuild against libkrb5-dev instead of heimdal
+    since heimdal is being removed from Debian (Closes: #806274)
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 16 Sep 2016 15:35:52 +0200
+
 krb5-auth-dialog (3.20.0-1) unstable; urgency=medium
 
   * [c344fdf] New upstream version 3.20.0 (Closes: #829779)
