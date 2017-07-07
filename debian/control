@@ -8,7 +8,7 @@ Build-Depends:
  autotools-dev,
  bison,
  cdbs,
- debhelper (>= 6),
+ debhelper (>= 10),
  flex,
  gnome-common,
  gnome-doc-utils,
