@@ -1,3 +1,15 @@
+krb5-auth-dialog (3.20.0-3) unstable; urgency=medium
+
+  * [5a7fe1c] Don't depend on unused libnm-glib-dev (Closes: #823568)
+  * [1455a30] credentials_expiring_real: check if kcontext is valid
+    (LP: #1700468)
+  * [2593f51] Bump standards version to 4.0.0
+  * [cc2b1c0] Bump standards version to 3.9.8
+  * [083647b] Switch to debhelper 10
+  * [f92d782] Use https vcs urls.
+
+ -- Guido Günther <agx@sigxcpu.org>  Fri, 07 Jul 2017 10:11:16 +0200
+
 krb5-auth-dialog (3.20.0-2) unstable; urgency=medium
 
   * [2820b4e] Use DEP-14 layout
