@@ -18,7 +18,7 @@ Build-Depends:
  libglib2.0-dev (>= 2.26.0),
  libgtk-3-dev (>= 3.14.0),
  libkrb5-dev,
- libnm-glib-dev (>= 0.8.1),
+ libnm-dev,
  libnotify-dev (>= 0.7.1),
  libpam0g-dev,
  pkg-config,
