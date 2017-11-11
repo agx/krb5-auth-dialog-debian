@@ -41,11 +41,7 @@
 #include "ka-main-window.h"
 
 #ifdef ENABLE_NETWORK_MANAGER
-#include <nm-client.h>
-
-#if !defined(NM_CHECK_VERSION)
-#define NM_CHECK_VERSION(x,y,z) 0
-#endif
+# include <NetworkManager.h>
 #endif
 
 #ifdef HAVE_HX509_ERR_H
@@ -222,6 +218,9 @@ credentials_expiring_real (KaApplet *applet)
     krb5_timestamp now;
     gboolean retval = FALSE;
 
+    if (!kcontext_valid)
+        return retval;
+
     memset (&my_creds, 0, sizeof (my_creds));
     ka_applet_set_tgt_renewable (applet, FALSE);
     if (!ka_get_tgt_from_ccache (kcontext, &my_creds)) {
@@ -318,21 +317,21 @@ ka_get_service_tickets (GtkListStore * tickets, gboolean hide_conf_tickets)
     g_return_val_if_fail (!ret, FALSE);
 
     ret = krb5_cc_start_seq_get (kcontext, ccache, &cursor);
-    if (ret) {
+    if (ret == KRB5_FCC_NOFILE) {
         ka_log_error_message_at_level (G_LOG_LEVEL_INFO, "krb5_cc_start_seq_get", kcontext, ret);
 
-        /* if the file doesn't exist, it's not an error if we can't
-         * parse it */
-        if (!g_file_test (ka_ccache_filename (), G_FILE_TEST_EXISTS))
-            gtk_list_store_append (tickets, &iter);
-            gtk_list_store_set (tickets, &iter,
-                                PRINCIPAL_COLUMN, _("Your ticket cache is currently empty"),
-                                FORWARDABLE_COLUMN, FALSE,
-                                RENEWABLE_COLUMN, FALSE,
-                                PROXIABLE_COLUMN, FALSE, -1);
-            retval = TRUE;
+        gtk_list_store_append (tickets, &iter);
+        gtk_list_store_set (tickets, &iter,
+                            PRINCIPAL_COLUMN, _("Your ticket cache is currently empty"),
+                            FORWARDABLE_COLUMN, FALSE,
+                            RENEWABLE_COLUMN, FALSE,
+                            PROXIABLE_COLUMN, FALSE, -1);
+        retval = TRUE;
+        goto out;
+    } else if (ret) {
         goto out;
     }
+
 
     while ((ret = krb5_cc_next_cred (kcontext, ccache, &cursor, &creds)) == 0) {
         gboolean renewable, proxiable, forwardable;
@@ -467,7 +466,7 @@ auth_dialog_prompter (krb5_context ctx G_GNUC_UNUSED,
             goto cleanup;
         if (password_len + 1 > prompts[i].reply->length) {
             g_warning ("Password too long %d/%zd", password_len + 1,
-                       prompts[i].reply->length);
+                       (size_t)prompts[i].reply->length);
             goto cleanup;
         }
 
@@ -500,20 +499,14 @@ ka_nm_client_state_changed_cb (NMClient * client,
         KA_DEBUG ("Network state: %d", state);
         /* do nothing */
         break;
-#if NM_CHECK_VERSION(0,8,992)
     case NM_STATE_DISCONNECTING:
-#endif
     case NM_STATE_DISCONNECTED:
         KA_DEBUG ("Network disconnected");
         *online = FALSE;
         break;
-#if NM_CHECK_VERSION(0,8,992)
     case NM_STATE_CONNECTED_LOCAL:
     case NM_STATE_CONNECTED_SITE:
     case NM_STATE_CONNECTED_GLOBAL:
-#else
-    case NM_STATE_CONNECTED:
-#endif
         KA_DEBUG ("Network connected");
         *online = TRUE;
         break;
@@ -529,7 +522,7 @@ credentials_expiring (gpointer *data)
 
     KA_DEBUG ("Checking expiry <%ds", ka_applet_get_pw_prompt_secs (applet));
     if (credentials_expiring_real (applet) && is_online) {
-        KA_DEBUG ("Expiry @ %ld", creds_expiry);
+        KA_DEBUG ("Expiry @ %ld", (long int)creds_expiry);
 
         if (!ka_renew_credentials (applet))
             KA_DEBUG ("Credentials renewed");
@@ -947,8 +940,8 @@ static gboolean
 ka_krb5_context_free ()
 {
     if (kcontext_valid) {
-        krb5_free_context (kcontext);
         kcontext_valid = FALSE;
+        krb5_free_context (kcontext);
     }
     return TRUE;
 }
@@ -1093,16 +1086,19 @@ static gboolean
 ka_nm_init (void)
 {
 #ifdef ENABLE_NETWORK_MANAGER
-    nm_client = nm_client_new ();
+    GError *error = NULL;
+
+    nm_client = nm_client_new (NULL, &error);
     if (!nm_client) {
-        g_warning ("Could not initialize nm-client");
-    } else {
-        g_signal_connect (nm_client, "notify::state",
-                          G_CALLBACK (ka_nm_client_state_changed_cb),
-                          &is_online);
-        /* Set initial state */
-        ka_nm_client_state_changed_cb (nm_client, NULL, &is_online);
+        g_warning ("Could not initialize nm-client: %s", error->message);
+        g_error_free (error);
+        return FALSE;
     }
+    g_signal_connect (nm_client, "notify::state",
+                      G_CALLBACK (ka_nm_client_state_changed_cb),
+                      &is_online);
+    /* Set initial state */
+    ka_nm_client_state_changed_cb (nm_client, NULL, &is_online);
 #endif /* ENABLE_NETWORK_MANAGER */
     return TRUE;
 }
@@ -1114,7 +1110,7 @@ ka_kerberos_init (KaApplet *applet)
     gboolean ret;
 
     ka_secmem_init ();
-    ret = ka_krb5_context_init (applet);
+    ret = ka_krb5_context_init ();
     ka_nm_init ();
     g_timeout_add_seconds (CREDENTIAL_CHECK_INTERVAL,
                            (GSourceFunc) credentials_expiring, applet);
