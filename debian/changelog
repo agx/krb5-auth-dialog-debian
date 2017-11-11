@@ -1,10 +1,15 @@
-krb5-auth-dialog (3.26.0-1~1.gbpb50107) UNRELEASED; urgency=medium
+krb5-auth-dialog (3.26.0-1~2.gbp3e8731) UNRELEASED; urgency=medium
 
-  ** SNAPSHOT build @b5010794592d62c47c267b3f9514c878325a70eb **
+  ** SNAPSHOT build @3e8731c7546aa95861e415a2fe0eb164d60a3d96 **
 
   * New upstream version 3.26.0
+  * Drop credentials_expiring_real-check-if-kcontext-is-valid.patch.
+    Fixed upstream.
+  * Bump standards version to 4.1.1
+  * Use https URI in watch file
+  * New upstream version 3.26.1
 
- -- Guido Günther <agx@sigxcpu.org>  Sat, 11 Nov 2017 14:21:34 +0100
+ -- Guido Günther <agx@sigxcpu.org>  Sat, 11 Nov 2017 14:54:25 +0100
 
 krb5-auth-dialog (3.20.0-3) unstable; urgency=medium
 
