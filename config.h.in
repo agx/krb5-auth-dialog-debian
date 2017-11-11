@@ -28,6 +28,14 @@
 /* Defined if a `byte' is typedef'd */
 #undef HAVE_BYTE_TYPEDEF
 
+/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
+   CoreFoundation framework. */
+#undef HAVE_CFLOCALECOPYCURRENT
+
+/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
+   the CoreFoundation framework. */
+#undef HAVE_CFPREFERENCESCOPYAPPVALUE
+
 /* Define to 1 if you have the `dcgettext' function. */
 #undef HAVE_DCGETTEXT
 
@@ -92,6 +100,9 @@
 
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #undef HAVE_LC_MESSAGES
+
+/* Define if libnm is available */
+#undef HAVE_LIBNM
 
 /* Define to 1 if you have the `pam' library (-lpam). */
 #undef HAVE_LIBPAM

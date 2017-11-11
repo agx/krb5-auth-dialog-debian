@@ -209,7 +209,7 @@ GtkWindow *ka_applet_last_focused_window (KaApplet *self)
 
 
 static void
-action_remove_credentails_cache (GSimpleAction *action G_GNUC_UNUSED,
+action_remove_credentials_cache (GSimpleAction *action G_GNUC_UNUSED,
                                  GVariant *parameter G_GNUC_UNUSED,
                                  gpointer userdata)
 {
@@ -255,7 +255,7 @@ action_help (GSimpleAction *action G_GNUC_UNUSED,
     KaApplet *self = KA_APPLET(userdata);
     GtkWindow *window = ka_applet_last_focused_window (self);
 
-    ka_show_help (gtk_window_get_screen (window), NULL, NULL);
+    ka_show_help (window, NULL);
 }
 
 static void
@@ -360,13 +360,17 @@ static void
 ka_applet_startup (GApplication *application)
 {
     KaApplet *self = KA_APPLET (application);
+    GtkWindow *main_window;
 
     KA_DEBUG ("Primary application");
 
     G_APPLICATION_CLASS (ka_applet_parent_class)->startup (application);
 
     self->priv->startup_ccache = ka_kerberos_init (self);
-    ka_main_window_create (self);
+    main_window = GTK_WINDOW(ka_main_window_create (self));
+    gtk_window_set_transient_for(GTK_WINDOW(self->priv->pwdialog),
+                                 main_window);
+
     self->priv->prefs = ka_preferences_new (self);
 
     ka_applet_app_menu_create(self);
@@ -649,8 +653,8 @@ ka_applet_tooltip_text (int remaining)
         if (remaining >= 3600) {
             hours = remaining / 3600;
             minutes = (remaining % 3600) / 60;
-            /* Translators: First number is hours, second number is minutes */
             tooltip_text =
+                /* Translators: First number is hours, second number is minutes */
                 g_strdup_printf (_("Your credentials expire in %.2d:%.2dh"),
                                  hours, minutes);
         } else {
@@ -983,7 +987,7 @@ ka_applet_update_status (KaApplet *applet, krb5_timestamp expiry)
 
 
 static GActionEntry trayicon_entries[] = {
-    { "remove_credentials_cache", action_remove_credentails_cache, NULL, NULL, NULL, {0} },
+    { "remove_credentials_cache", action_remove_credentials_cache, NULL, NULL, NULL, {0} },
     { "list_tickets", action_list_tickets, NULL, NULL, NULL, {0} },
     { "preferences", action_preferences, NULL, NULL, NULL, {0} },
     { "about", action_about, NULL, NULL, NULL, {0} },
@@ -1195,8 +1199,10 @@ ka_applet_destroy (KaApplet* self)
     gtk_widget_destroy (GTK_WIDGET(self->priv->prefs));
     self->priv->prefs = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET(self->priv->context_menu));
-    self->priv->context_menu = NULL;
+    if (self->priv->context_menu) {
+        gtk_widget_destroy (GTK_WIDGET(self->priv->context_menu));
+        self->priv->context_menu = NULL;
+    }
 
     ka_kerberos_destroy ();
 }
