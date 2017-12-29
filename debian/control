@@ -22,7 +22,7 @@ Build-Depends:
  libnotify-dev (>= 0.7.1),
  libpam0g-dev,
  pkg-config,
-Standards-Version: 4.1.1
+Standards-Version: 4.1.3
 Vcs-Git: https://anonscm.debian.org/git/users/agx/krb5-auth-dialog.git
 Vcs-Browser: https://anonscm.debian.org/git/users/agx/krb5-auth-dialog.git
 Homepage: https://honk.sigxcpu.org/piki/projects/krb5-auth-dialog
