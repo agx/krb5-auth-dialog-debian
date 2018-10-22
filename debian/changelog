@@ -1,3 +1,10 @@
+krb5-auth-dialog (3.26.1-2) unstable; urgency=medium
+
+  * Drop unneeded rarian-compat build-dependency (Closes: #885667)
+  * Bump standards version no changes needed
+
+ -- Guido Günther <agx@sigxcpu.org>  Mon, 22 Oct 2018 14:38:39 +0200
+
 krb5-auth-dialog (3.26.1-1) unstable; urgency=medium
 
   * New upstream version 3.26.1
